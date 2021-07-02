@@ -88,7 +88,7 @@ pipeline {
            }
         }
 
-        stage('Autodeploy ST_Large') {	
+        stage('Requirements') {	
             steps {
                 ansiblePlaybook(
                 playbook: "${WORKSPACE}/roles/KubeSpray/requirements.yaml",
