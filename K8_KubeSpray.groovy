@@ -12,7 +12,7 @@ def inventory_conf = ''' # ## Configure 'ip' variable to bind kubernetes service
 node1 ansible_host=95.54.0.12  # ip=10.3.0.1 etcd_member_name=etcd1
 node2 ansible_host=95.54.0.13  # ip=10.3.0.2 etcd_member_name=etcd2
 node3 ansible_host=95.54.0.14  # ip=10.3.0.3 etcd_member_name=etcd3
-ode4 ansible_host=95.54.0.15  # ip=10.3.0.4 etcd_member_name=etcd4
+node4 ansible_host=95.54.0.15  # ip=10.3.0.4 etcd_member_name=etcd4
 node5 ansible_host=95.54.0.16  # ip=10.3.0.5 etcd_member_name=etcd5
 node6 ansible_host=95.54.0.17  # ip=10.3.0.6 etcd_member_name=etcd6
 
