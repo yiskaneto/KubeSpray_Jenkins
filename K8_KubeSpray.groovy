@@ -5,7 +5,7 @@ def setDescription() {
 }
 setDescription()
 
-def inventory_conf = ''' # ## Configure 'ip' variable to bind kubernetes services on a
+def inventory_conf = '''# ## Configure 'ip' variable to bind kubernetes services on a
 # ## different ip than the default iface
 # ## We should set etcd_member_name for etcd cluster. The node that is not a etcd member do not need to set the value, or can set the empty string value.
 [all]
@@ -103,10 +103,10 @@ pipeline {
             }
         }
   
-    // post {
-    //     always {
-    //         echo 'Cleaning up the workspace'
-    //         deleteDir()
-    //     }
+    post {
+        always {
+            echo 'Cleaning up the workspace'
+            deleteDir()
+        }
     }
 }
