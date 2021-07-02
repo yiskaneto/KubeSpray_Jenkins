@@ -88,7 +88,7 @@ pipeline {
            }
         }
 
-        stage('Requirements') {	
+        stage('Requirements') {
             steps {
                 ansiblePlaybook(
                 playbook: "${WORKSPACE}/roles/KubeSpray/requirements.yaml",
@@ -102,6 +102,7 @@ pipeline {
                 ])
             }
         }
+    }
   
     post {
         always {
