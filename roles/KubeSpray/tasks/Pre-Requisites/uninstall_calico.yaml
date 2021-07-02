@@ -1,0 +1,20 @@
+---
+- name: clear ip route
+  shell: |
+    ip route flush proto bird
+  ignore_errors: yes  
+
+- name: Remove all calico links in all nodes
+  shell: |
+    ip link list | grep cali | awk '{print $2}' | cut -c 1-15 | xargs -I {} ip link delete {}
+  ignore_errors: yes
+
+- name: Remove ipip module 
+  shell: |
+    modprobe -r ipip
+  ignore_errors: yes
+  
+- name: Remove calico configs
+  shell: |
+    rm -rf /etc/cni/net.d/10-calico.conflist && rm /etc/cni/net.d/calico-kubeconfig
+  ignore_errors: yes

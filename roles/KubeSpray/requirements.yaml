@@ -1,0 +1,22 @@
+---
+- hosts: all
+  remote_user: root
+  gather_facts: false
+  # environment:
+  #   HTTP_PROXY: "http://web-proxy.us.softwaregrp.net:8080"
+  #   HTTPS_PROXY: "http://web-proxy.us.softwaregrp.net:8080"
+  #   NO_PROXY: "localhost,15.214.200.244,.arcsight.com,.arst.hpeswlab.net,.arst.usa.hp.com"
+  #   http_proxy: "http://web-proxy.us.softwaregrp.net:8080"
+  #   https_proxy: "http://web-proxy.us.softwaregrp.net:8080"
+  #   no_proxy: "localhost,15.214.200.244,.arcsight.com,.arst.hpeswlab.net,.arst.usa.hp.com"
+
+  tasks:
+  - authorized_key:
+      user: root
+      state: present
+      key: "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
+      
+  - name: Running tasks/requirements.yaml instead of 'main'
+    import_role:
+      name: ../
+      tasks_from: requirements.yaml

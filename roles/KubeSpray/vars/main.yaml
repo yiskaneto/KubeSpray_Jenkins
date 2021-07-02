@@ -1,0 +1,4 @@
+---
+# vars file for automation KubeSpray
+proxy_addr: "{{ proxy_addr }}"
+k8s_network_plugin: "{{ k8s_network_plugin }}"

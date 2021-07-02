@@ -1,0 +1,6 @@
+---
+- name: Adding proxy to yum
+  shell: |
+    \cp /etc/yum.conf /etc/yum.conf.original
+    sed -i "/^proxy/d" /etc/yum.conf
+    echo "proxy=http://web-proxy.am.softwaregrp.net:8080" >> /etc/yum.conf
