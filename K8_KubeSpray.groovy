@@ -82,7 +82,7 @@ pipeline {
         stage('Write Inventory file') {
            steps {
                script {
-                   writeFile(file: "${WORKSPACE}/roles/inventory.yaml", text: "${params.inventory_conf}")
+                   writeFile(file: "${WORKSPACE}/roles/inventory.yaml", text: "${params.inventory_conf}", encoding: "UTF-8")
                    sh "ls -l"
                }
            }
