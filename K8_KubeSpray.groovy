@@ -64,8 +64,8 @@ pipeline {
         text(
             name: 'inventory_conf', 
             defaultValue: "${inventory_conf}",
-            description: '<a href="https://github.com/kubernetes-sigs/kubespray/blob/master/inventory/sample/inventory.ini" target="_blank" rel="noopener noreferrer">Inventory Example</a>')
-
+            //description: '<a href="https://github.com/kubernetes-sigs/kubespray/blob/master/inventory/sample/inventory.ini" target="_blank" rel="noopener noreferrer">Inventory Example</a>'
+        )
         choice(
 		name: 'k8s_network_plugin',
 		choices: ['calico','flannel','cilium','weave','cloud'],
@@ -81,7 +81,7 @@ pipeline {
 
         stage('Write Inventory file') {
            steps {
-               echo "${params.inventory_conf}" > "${WORKSPACE}/roles/inventory.yaml"
+               echo "${params.inventory_conf}" > "${env.WORKSPACE}/roles/inventory.yaml"
             //    script {
             //        writeFile(file: "${WORKSPACE}/roles/inventory.yaml", text: "${params.inventory_conf}", encoding: "UTF-8")
             //        sh "ls -l"
