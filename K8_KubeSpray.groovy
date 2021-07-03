@@ -99,8 +99,8 @@ pipeline {
         stage('Requirements') {
             steps {
                 ansiblePlaybook(
-                playbook: '${WORKSPACE}/roles/KubeSpray/requirements.yaml',
-                inventory: '${WORKSPACE}/roles/inventory.ini',
+                playbook: "${env.WORKSPACE}/roles/KubeSpray/requirements.yaml",
+                inventory: "${env.WORKSPACE}/roles/inventory.ini",
                 colorized: true,
                 extras: '--ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"',
                 extraVars: [
