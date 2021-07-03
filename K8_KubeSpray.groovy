@@ -79,14 +79,14 @@ pipeline {
             	
     stages {
 
-        stage('Write Inventory file') {
-           steps {
-               //echo "${params.inventory_conf}" > "${env.WORKSPACE}/roles/inventory.yaml"
-               script {
-                   writeFile(file: "${env.WORKSPACE}/roles/inventory.yaml", text: "${params.inventory_conf}", encoding: "UTF-8")
-               }
-           }
-        }
+        // stage('Write Inventory file') {
+        //    steps {
+        //        //echo "${params.inventory_conf}" > "${env.WORKSPACE}/roles/inventory.yaml"
+        //        script {
+        //            writeFile(file: "${env.WORKSPACE}/roles/inventory.yaml", text: "${params.inventory_conf}", encoding: "UTF-8")
+        //        }
+        //    }
+        // }
 
         stage('CAT') {
            steps {
