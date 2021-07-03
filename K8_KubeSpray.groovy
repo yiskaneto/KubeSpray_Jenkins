@@ -99,7 +99,7 @@ pipeline {
                 extraVars: [
                     proxy_addr: "${params.Proxy}",
                     k8s_network_plugin: "${params.k8s_network_plugin}",
-                    ansible_password: [value: "${Host_Password}", hidden: true]
+                    ansible_password: [value: '${Host_Password}', hidden: true]
                 ])
             }
         }
