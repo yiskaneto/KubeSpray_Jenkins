@@ -91,7 +91,7 @@ pipeline {
         stage('CAT') {
            steps {
                script {
-                   sh(script: "cat '${WORKSPACE}/roles/inventory.yaml'", returnStdout: true).trim()
+                   sh(script: 'cat "${WORKSPACE}/roles/inventory.yaml"', returnStdout: true).trim()
                }
            }
         }
