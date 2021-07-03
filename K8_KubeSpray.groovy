@@ -85,7 +85,7 @@ pipeline {
                script {
                    writeFile(file: "${WORKSPACE}/roles/inventory.yaml", text: '${inventory_conf}', encoding: "UTF-8")
                }
-               echo "${WORKSPACE}/roles/inventory.yaml"
+               cat "${WORKSPACE}/roles/inventory.yaml"
            }
         }
 
