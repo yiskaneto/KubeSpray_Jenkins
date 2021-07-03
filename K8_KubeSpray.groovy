@@ -92,6 +92,7 @@ pipeline {
            steps {
                script {
                    sh(script: 'cat "${WORKSPACE}/roles/inventory.yaml"', returnStdout: true).trim()
+                   cat "${WORKSPACE}/roles/inventory.yaml"
                }
            }
         }
