@@ -83,7 +83,7 @@ pipeline {
            steps {
                //echo "${params.inventory_conf}" > "${env.WORKSPACE}/roles/inventory.yaml"
                script {
-                   writeFile(file: "${WORKSPACE}/roles/inventory.yaml", text: "${params.inventory_conf}", encoding: "UTF-8")
+                   writeFile(file: "${env.WORKSPACE}/roles/inventory.yaml", text: "${params.inventory_conf}", encoding: "UTF-8")
                }
            }
         }
@@ -92,7 +92,6 @@ pipeline {
            steps {
                script {
                    sh(script: 'cat "${WORKSPACE}/roles/inventory.yaml"', returnStdout: true).trim()
-                   cat "${WORKSPACE}/roles/inventory.yaml"
                }
            }
         }
