@@ -78,13 +78,23 @@ pipeline {
     }
             	
     stages {
-        stage('CAT') {
-           steps {
-               sh '''
-               echo -e ${kube_control_planes} >> ${WORKSPACE}/roles/inventory.yaml
-               '''
-           }
-        }
+        stage('Creating Inventory file') {
+			steps {
+				sh '''
+				echo -e "[all]\\n\\n[kube_control_plane]\\n\\n[etcd]\\n\\n[kube_node]\\n\\n[calico_rr]\\n\\n[k8s_cluster:children]\\nkube_control_plane\\nkube_node\\ncalico_rr" >  ${WORKSPACE}/inventory.ini | cat ${WORKSPACE}/inventory.ini
+				
+				'''
+			}
+		}
+        // stage('CAT') {
+            // echo ${Master} | sed \'s/,/\\n/g\' | while read line ; do sed -i \'/\\[master\\]/a \\\'"${line}"\'\' ${WORKSPACE}/inventory.ini ; done
+			//	echo ${Workers} | sed \'s/,/\\n/g\' | while read line ; do sed -i \'/\\[workers\\]/a \\\'"${line}"\'\' ${WORKSPACE}/inventory.ini ; done
+        //    steps {
+        //        sh '''
+        //        echo -e ${kube_control_planes} >> ${WORKSPACE}/roles/inventory.yaml
+        //        '''
+        //    }
+        // }
 
         // stage('Write Inventory file') {
         //    steps {
