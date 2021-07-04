@@ -117,7 +117,7 @@ pipeline {
                 playbook: "${env.WORKSPACE}/roles/KubeSpray/requirements.yaml",
                 inventory: "${env.WORKSPACE}/inventory.ini",
                 colorized: true,
-                extras: '-vvv --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"',
+                extras: '-v --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"',
                 extraVars: [
                     proxy_addr: "${params.Proxy}",
                     k8s_network_plugin: "${params.k8s_network_plugin}",
