@@ -1,6 +1,6 @@
 def setDescription() {
     def item = Jenkins.instance.getItemByFullName(env.JOB_NAME)
-    item.setDescription("<h5><span style=\"color:#138D75\">KubeSpray Automation Test</span></h5>")
+    item.setDescription("<h5><span style=\"color:#138D75\">KubeSpray Automation Test, the file $kubeSpray/inventory/mycluster/group_vars/all/all.ymlcontains all the parameters for k8s</span></h5>")
     item.save()
 }
 setDescription()
@@ -18,10 +18,49 @@ pipeline {
   
     parameters {
         string(
-        name: 'Proxy',
-        defaultValue: '',
-        description: '<h5>e.g http://my_proxy.com:8080</h5>'
+            name: 'proxy_addr',
+            defaultValue: '',
+            description: '<h5>e.g http://my_proxy.com:8080</h5>'
         )
+        string(
+            name: 'no_proxy_addr',
+            defaultValue: '127.0.0.1,localhost',
+            description: 'list of hostnames or range of domains to exclude from the proxy'
+        )
+        string(
+            name: 'cluster_name',
+            defaultValue: 'cluster.local',
+            description: 'Leave empty if not needed'
+        )
+        string(
+            name: 'apiserver_loadbalancer_domain_name',
+            defaultValue: '',
+            description: 'Leave empty if not needed'
+        )
+        string(
+            name: 'apiserver_loadbalancer_address',
+            defaultValue: '',
+            description: 'Leave empty if not needed'
+        )
+        string(
+            name: 'apiserver_loadbalancer_port',
+            defaultValue: '',
+            description: 'Leave empty if not needed'
+        )
+        choice(
+            name: 'use_internal_loadbalancer',
+            choices: ['nginx','haproxy'],
+            description: 'Whether or not to use internal loadbalancers for apiservers'
+		)
+        choice(
+            name: 'internal_loadbalancer_',
+            choices: ['nginx','haproxy'],
+            description: ''
+		)
+        choice(
+            name: 'internal_loadbalancer',
+            choices: ['nginx','haproxy'],
+		)
         string(
             name: 'kube_control_plane_nodes',
             defaultValue: '192.168.0.10,192.168.0.11,192.168.0.12',
@@ -43,8 +82,13 @@ pipeline {
             description: 'List of kube control planes IPs, separated by comas"'
         )
         choice(
-		name: 'k8s_network_plugin',
-		choices: ['calico','flannel','cilium','weave','cloud'],
+            name: 'k8s_network_plugin',
+            choices: ['calico','flannel','cilium','weave','cloud'],
+		)
+        choice(
+            name: 'container_runtime',
+            choices: ['calidockerco','crio','containerd'],
+            description: 'docker for docker, crio for cri-o and containerd for containerd.'
 		)
         password(
         name: 'Host_Password',
@@ -72,7 +116,7 @@ pipeline {
 			}
 		}
 
-        stage('Requirements') {
+        stage('Running Requirements') {
             steps {
                 ansiblePlaybook(
                 playbook: "${env.WORKSPACE}/roles/Requirements/main.yaml",
@@ -82,6 +126,32 @@ pipeline {
                 extraVars: [
                     proxy_addr: "${params.Proxy}",
                     k8s_network_plugin: "${params.k8s_network_plugin}",
+                    ansible_password: [value: '${Host_Password}', hidden: true]
+                ])
+            }
+        }
+
+
+        stage('Running KubeSpray') {
+            steps {
+                ansiblePlaybook(
+                playbook: "${env.WORKSPACE}/roles/kubespray-2.16.0/cluster.yml",
+                inventory: "${env.WORKSPACE}/inventory.ini",
+                colorized: true,
+                become: true,
+                becomeUser: "root",
+                extras: '-v --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"',
+                extraVars: [
+                    proxy_addr: "${params.proxy_addr}",
+                    no_proxy_addr: "${params.no_proxy_addr}",
+                    k8s_cluster_name: "${params.cluster_name}",
+                    apiserver_loadbalancer_domain_name: "${params.apiserver_loadbalancer_domain_name}",
+                    apiserver_loadbalancer_address: "${apiserver_loadbalancer_address}",
+                    apiserver_loadbalancer_port: "${apiserver_loadbalancer_port}",
+                    use_internal_loadbalancer: ${params.use_internal_loadbalancer},
+                    internal_loadbalancer: "${params.internal_loadbalancer}"
+                    k8s_network_plugin: "${params.k8s_network_plugin}",
+                    container_runtime: ${params.container_runtime},
                     ansible_password: [value: '${Host_Password}', hidden: true]
                 ])
             }
