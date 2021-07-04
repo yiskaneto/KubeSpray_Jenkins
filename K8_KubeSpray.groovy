@@ -88,14 +88,14 @@ pipeline {
            }
         }
 
-        stage('Write Inventory file') {
-           steps {
-               //echo "${params.inventory_conf}" > "${env.WORKSPACE}/roles/inventory.yaml"
-               script {
-                   writeFile(file: "${WORKSPACE}/roles/inventory.yaml", text: "${params.inventory_conf}", encoding: "UTF-8")
-               }
-           }
-        }
+        // stage('Write Inventory file') {
+        //    steps {
+        //        //echo "${params.inventory_conf}" > "${env.WORKSPACE}/roles/inventory.yaml"
+        //        script {
+        //            writeFile(file: "${WORKSPACE}/roles/inventory.yaml", text: "${params.inventory_conf}", encoding: "UTF-8")
+        //        }
+        //    }
+        // }
 
         stage('Requirements') {
             steps {
