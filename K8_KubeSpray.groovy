@@ -135,11 +135,11 @@ pipeline {
         stage('Running KubeSpray') {
             steps {
                 ansiblePlaybook(
-                playbook: "${env.WORKSPACE}/roles/kubespray-2.16.0/cluster.yml",
+                playbook: "${env.WORKSPACE}/roles/kubespray/cluster.yml",
                 inventory: "${env.WORKSPACE}/inventory.ini",
                 colorized: true,
-                // become: true,
-                // becomeUser: "root",
+                become: true,
+                becomeUser: "root",
                 extras: '-v --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"',
                 extraVars: [
                     proxy_addr: "${params.proxy_addr}",
