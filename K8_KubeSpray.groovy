@@ -62,7 +62,7 @@ pipeline {
         description: '<h5>e.g http://my_proxy.com:8080</h5>'
         )
         string(
-            name: 'Mkube_control_planeaster', 
+            name: 'kube_control_plane', 
             description: 'List of kube control planes IPs separated by comas"'
         )
         choice(
