@@ -82,6 +82,7 @@ pipeline {
 			steps {
 				sh '''
 				echo -e "[all]\\n\\n[kube_control_plane]\\n\\n[etcd]\\n\\n[kube_node]\\n\\n[calico_rr]\\n\\n[k8s_cluster:children]\\nkube_control_plane\\nkube_node\\ncalico_rr" >  ${WORKSPACE}/inventory.ini | cat ${WORKSPACE}/inventory.ini
+                echo ${kube_control_plane} | sed \'s/,/\\n/g\' | while read line ; do sed -i \'/\\[all\\]/a \\\'"${line}"\'\' ${WORKSPACE}/inventory.ini ; done
 				
 				'''
 			}
@@ -109,7 +110,7 @@ pipeline {
             steps {
                 ansiblePlaybook(
                 playbook: "${env.WORKSPACE}/roles/KubeSpray/requirements.yaml",
-                inventory: "${env.WORKSPACE}/roles/inventory.ini",
+                inventory: "${env.WORKSPACE}/inventory.ini",
                 colorized: true,
                 extras: '--ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"',
                 extraVars: [
