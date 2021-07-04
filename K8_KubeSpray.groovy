@@ -78,28 +78,16 @@ pipeline {
     }
             	
     stages {
-        // stage('Creating Inventory file') {
-		// 	steps {
-		// 		sh '''
-		// 		echo -e "[all]\\n\\n[kube_control_plane]\\n\\n[etcd]\\n\\n[kube_node]\\n\\n[calico_rr]\\n\\n[k8s_cluster:children]\\nkube_control_plane\\nkube_node\\ncalico_rr" > ${WORKSPACE}/inventory.ini
-        //         echo ${kube_control_plane} | sed \'s/,/\\n/g\' | while read line ; do sed -i \'/\\[all\\]/a \\\'"${line}"\'\' ${WORKSPACE}/inventory.ini ; done
-        //         cat ${WORKSPACE}/inventory.ini
+        stage('Creating Inventory file') {
+			steps {
+                //echo -e "[all]\\n\\n[kube_control_plane]\\n\\n[etcd]\\n\\n[kube_node]\\n\\n[calico_rr]\\n\\n[k8s_cluster:children]\\nkube_control_plane\\nkube_node\\ncalico_rr" > ${WORKSPACE}/inventory.ini
+				sh '''
+                echo ${kube_control_plane} | sed \'s/,/\\n/g\' | while read line ; do sed -i \'/\\[all\\]/a \\\'"${line}"\'\' ${WORKSPACE}/inventory.ini ; done
+                cat ${WORKSPACE}/inventory.ini
 				
-		// 		'''
-		// 	}
-		// }
-
-        stage('Write Inventory file') {
-           steps {
-               //echo "${params.inventory_conf}" > "${env.WORKSPACE}/roles/inventory.yaml"
-               script {
-                   def a = "${kube_control_plane}"
-                   def newo = a.replaceAll(",","\n")
-                   writeFile(file: "${WORKSPACE}/inventory.yaml", text: "${newo}", encoding: "UTF-8")
-                   cat ${WORKSPACE}/inventory.yaml
-               }
-           }
-        }
+				'''
+			}
+		}
 
         stage('Requirements') {
             steps {
