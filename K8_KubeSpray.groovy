@@ -82,7 +82,6 @@ pipeline {
            steps {
                sh '''
                touch "${WORKSPACE}/roles/inventory.yaml"
-               dos2unix "${WORKSPACE}/roles/inventory.yaml"
                '''
            }
         }
@@ -93,9 +92,6 @@ pipeline {
                script {
                    writeFile(file: "${env.WORKSPACE}/roles/inventory.yaml", text: "${params.inventory_conf}", encoding: "UTF-8")
                }
-               sh '''
-               dos2unix "${WORKSPACE}/roles/inventory.yaml"
-               '''
            }
         }
 
