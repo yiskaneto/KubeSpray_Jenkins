@@ -63,7 +63,7 @@ pipeline {
         )
         string(
             name: 'kube_control_plane',
-            defaultValue: '123,456,789',
+            defaultValue: '192.168.0.10,192.168.0.11,192.168.0.12',
             description: 'List of kube control planes IPs separated by comas"'
         )
         choice(
