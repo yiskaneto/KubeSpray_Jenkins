@@ -55,6 +55,7 @@ pipeline {
         choice(
             name: 'internal_loadbalancer',
             choices: ['nginx','haproxy'],
+            description: 'What load balancer provider to use, this only be consider if the paramter above was set to true'
 		)
         string(
             name: 'kube_control_plane_nodes',
