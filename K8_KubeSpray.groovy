@@ -64,7 +64,7 @@ pipeline {
         string(
             name: 'kube_control_plane',
             defaultValue: '192.168.0.10,192.168.0.11,192.168.0.12',
-            description: 'List of kube control planes IPs separated by comas"'
+            description: 'List of kube control planes IPs, separated by comas"'
         )
         choice(
 		name: 'k8s_network_plugin',
