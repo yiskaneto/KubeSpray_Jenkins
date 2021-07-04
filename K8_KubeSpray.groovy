@@ -5,7 +5,7 @@ def setDescription() {
 }
 setDescription()
 
-def inventory_conf = '''# ## Configure 'ip' variable to bind kubernetes services on a
+def default_inventory_conf = '''# ## Configure 'ip' variable to bind kubernetes services on a
 # ## different ip than the default iface
 # ## We should set etcd_member_name for etcd cluster. The node that is not a etcd member do not need to set the value, or can set the empty string value.
 [all]
@@ -63,7 +63,7 @@ pipeline {
         )
         text(
             name: 'inventory_conf', 
-            defaultValue: "${inventory_conf}",
+            defaultValue: "${default_inventory_conf}",
             //description: '<a href="https://github.com/kubernetes-sigs/kubespray/blob/master/inventory/sample/inventory.ini" target="_blank" rel="noopener noreferrer">Inventory Example</a>'
         )
         choice(
