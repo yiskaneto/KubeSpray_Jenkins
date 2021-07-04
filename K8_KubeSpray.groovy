@@ -81,7 +81,7 @@ pipeline {
         stage('CAT') {
            steps {
                sh '''
-               echo "${params.inventory_conf}"
+               echo ${inventory_conf}
                '''
            }
         }
