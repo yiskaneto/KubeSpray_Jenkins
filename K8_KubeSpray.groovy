@@ -81,7 +81,7 @@ pipeline {
         stage('CAT') {
            steps {
                sh '''
-               touch "${WORKSPACE}/roles/inventory.yaml"
+               echo "${params.inventory_conf}"
                '''
            }
         }
