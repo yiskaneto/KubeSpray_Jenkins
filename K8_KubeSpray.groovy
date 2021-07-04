@@ -93,7 +93,8 @@ pipeline {
            steps {
                //echo "${params.inventory_conf}" > "${env.WORKSPACE}/roles/inventory.yaml"
                script {
-                   def newo = ${kube_control_plane}.replaceAll(",","\n")
+                   def String a = "${params.kube_control_plane}"
+                   def newo = a.replaceAll(",","\n")
                    writeFile(file: "${WORKSPACE}/inventory.yaml", text: "${newo}", encoding: "UTF-8")
                }
            }
