@@ -78,14 +78,13 @@ pipeline {
     }
             	
     stages {
-        // stage('CAT') {
-        //    steps {
-        //        sh '''
-        //        for line in ${inventory_conf} ; do echo ${line} >> ${WORKSPACE}/roles/inventory.yaml ; done
-        //        sed -i 's/\r$//' ${WORKSPACE}/roles/inventory.yaml
-        //        '''
-        //    }
-        // }
+        stage('CAT') {
+           steps {
+               sh '''
+               echo ${kube_control_planes} >> ${WORKSPACE}/roles/inventory.yaml
+               '''
+           }
+        }
 
         // stage('Write Inventory file') {
         //    steps {
