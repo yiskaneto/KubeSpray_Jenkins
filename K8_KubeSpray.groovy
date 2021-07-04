@@ -62,22 +62,22 @@ pipeline {
         description: '<h5>e.g http://my_proxy.com:8080</h5>'
         )
         string(
-            name: 'kube_control_plane',
+            name: 'kube_control_plane_nodes',
             defaultValue: '192.168.0.10,192.168.0.11,192.168.0.12',
             description: 'List of kube control planes IPs, separated by comas"'
         )
         string(
-            name: 'etcd',
+            name: 'etcd_nodes',
             defaultValue: '192.168.0.10,192.168.0.11,192.168.0.12',
             description: 'List of kube control planes IPs, separated by comas"'
         )
         string(
-            name: 'kube_node',
+            name: 'kube_nodes',
             defaultValue: '192.168.0.10,192.168.0.11,192.168.0.12',
             description: 'List of kube control planes IPs, separated by comas"'
         )
         string(
-            name: 'calico_rr',
+            name: 'calico_rr_nodes',
             defaultValue: '192.168.0.10,192.168.0.11,192.168.0.12',
             description: 'List of kube control planes IPs, separated by comas"'
         )
@@ -97,10 +97,15 @@ pipeline {
 			steps {
                 // echo -e "[all]\\n\\n[kube_control_plane]\\n\\n[etcd]\\n\\n[kube_node]\\n\\n[calico_rr]\\n\\n[k8s_cluster:children]\\nkube_control_plane\\nkube_node\\ncalico_rr" > ${WORKSPACE}/inventory.ini
 				sh '''
-                echo ${kube_control_plane} | sed \'s/,/\\n/g\' | while read line ; do sed -i \'/\\[all\\]/a \\\'"${line}"\'\' ${WORKSPACE}/inventory.ini ; done
-                echo ${etcd} | sed \'s/,/\\n/g\' | while read line ; do sed -i \'/\\[all\\]/a \\\'"${line}"\'\' ${WORKSPACE}/inventory.ini ; done
-                echo ${kube_node} | sed \'s/,/\\n/g\' | while read line ; do sed -i \'/\\[all\\]/a \\\'"${line}"\'\' ${WORKSPACE}/inventory.ini ; done
-                echo ${calico_rr} | sed \'s/,/\\n/g\' | while read line ; do sed -i \'/\\[all\\]/a \\\'"${line}"\'\' ${WORKSPACE}/inventory.ini ; done		
+                echo ${kube_control_plane_nodes} | sed \'s/,/\\n/g\' | while read line ; do sed -i \'/\\[all\\]/a \\\'"${line}"\'\' ${WORKSPACE}/inventory.ini ; done
+                echo ${etcd_nodes} | sed \'s/,/\\n/g\' | while read line ; do sed -i \'/\\[all\\]/a \\\'"${line}"\'\' ${WORKSPACE}/inventory.ini ; done
+                echo ${kube_nodes} | sed \'s/,/\\n/g\' | while read line ; do sed -i \'/\\[all\\]/a \\\'"${line}"\'\' ${WORKSPACE}/inventory.ini ; done
+                echo ${calico_rr_nodes} | sed \'s/,/\\n/g\' | while read line ; do sed -i \'/\\[all\\]/a \\\'"${line}"\'\' ${WORKSPACE}/inventory.ini ; done
+
+                echo ${etcd_nodes} | sed \'s/,/\\n/g\' | while read line ; do sed -i \'/\\[etcd\\]/a \\\'"${line}"\'\' ${WORKSPACE}/inventory.ini ; done
+                echo ${kube_nodes} | sed \'s/,/\\n/g\' | while read line ; do sed -i \'/\\[kube_node\\]/a \\\'"${line}"\'\' ${WORKSPACE}/inventory.ini ; done
+                echo ${calico_rr_nodes} | sed \'s/,/\\n/g\' | while read line ; do sed -i \'/\\[calico_rr\\]/a \\\'"${line}"\'\' ${WORKSPACE}/inventory.ini ; done
+
                 cat ${WORKSPACE}/inventory.ini		
 				'''
 			}
