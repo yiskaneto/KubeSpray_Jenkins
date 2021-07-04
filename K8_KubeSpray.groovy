@@ -63,7 +63,7 @@ pipeline {
         )
         text(
             name: 'kube_control_planes', 
-            defaultValue: "${default_inventory_conf}",
+            defaultValue: "n15-214-145-h115.arcsight.com,n15-214-145-h121.arcsight.com,n15-214-145-h122.arcsight.com,n15-214-131-h204.arcsight.com,n15-214-131-h205.arcsight.com n15-214-131-h206.arcsight.com",
             //description: '<a href="https://github.com/kubernetes-sigs/kubespray/blob/master/inventory/sample/inventory.ini" target="_blank" rel="noopener noreferrer">Inventory Example</a>'
         )
         choice(
