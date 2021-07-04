@@ -81,8 +81,7 @@ pipeline {
         stage('CAT') {
            steps {
                sh '''
-               echo "[all]" > ${WORKSPACE}/roles/inventory.yaml
-               for ip in ${inventory_conf} ; do cat ${inventory_conf} >> ${WORKSPACE}/roles/inventory.yaml ; done
+               for line in ${inventory_conf} ; do cat ${inventory_conf} >> ${WORKSPACE}/roles/inventory.yaml ; done
                '''
            }
         }
