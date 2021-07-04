@@ -100,9 +100,9 @@ pipeline {
 				sh '''
                 do echo ${kube_control_plane} | sed \'s/,/\\n/g\' | while read line ; do sed -i \'/\\[all\\]/a \\\'"${line}"\'\' ${WORKSPACE}/inventory.ini ; done
                 cat ${WORKSPACE}/inventory.ini
-                do echo ${etcd} | sed \'s/,/\\n/g\' | while read line ; do sed -i \'/\\[all\\]/a \\\'"${line}"\'\' ${WORKSPACE}/inventory.ini ; done
-                do echo ${kube_node} | sed \'s/,/\\n/g\' | while read line ; do sed -i \'/\\[all\\]/a \\\'"${line}"\'\' ${WORKSPACE}/inventory.ini ; done
-                do echo ${calico_rr} | sed \'s/,/\\n/g\' | while read line ; do sed -i \'/\\[all\\]/a \\\'"${line}"\'\' ${WORKSPACE}/inventory.ini ; done		
+                do echo ${etcd} | sed \'s/,/\\n/g\' | while read line ; sed -i \'/\\[all\\]/a \\\'"${line}"\'\' ${WORKSPACE}/inventory.ini ; done
+                do echo ${kube_node} | sed \'s/,/\\n/g\' | while read line ; sed -i \'/\\[all\\]/a \\\'"${line}"\'\' ${WORKSPACE}/inventory.ini ; done
+                do echo ${calico_rr} | sed \'s/,/\\n/g\' | while read line ; sed -i \'/\\[all\\]/a \\\'"${line}"\'\' ${WORKSPACE}/inventory.ini ; done		
                 cat ${WORKSPACE}/inventory.ini		
 				'''
 			}
