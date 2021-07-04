@@ -136,8 +136,8 @@ pipeline {
         stage('Running KubeSpray') {
             steps {
                 ansiblePlaybook(
-                    playbook: "${env.WORKSPACE}/roles/kubespray/cluster.yml",
-                    inventory: "${env.WORKSPACE}/inventory.ini",
+                    playbook: '${WORKSPACE}/roles/kubespray/cluster.yml',
+                    inventory: '${WORKSPACE}/inventory.ini',
                     colorized: true,
                     become: true,
                     becomeUser: "root",
