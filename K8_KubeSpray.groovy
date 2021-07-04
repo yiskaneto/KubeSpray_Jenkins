@@ -136,8 +136,8 @@ pipeline {
         stage('Running KubeSpray') {
             steps {
                 ansiblePlaybook(
-                    playbook: '${WORKSPACE}/roles/kubespray/cluster.yml',
-                    inventory: '${WORKSPACE}/inventory.ini',
+                    playbook: "${WORKSPACE}/roles/kubespray/cluster.yml",
+                    inventory: "${WORKSPACE}/inventory.ini",
                     colorized: true,
                     become: true,
                     becomeUser: "root",
@@ -152,7 +152,7 @@ pipeline {
                         use_internal_loadbalancer: ${params.use_internal_loadbalancer},
                         internal_loadbalancer: "${params.internal_loadbalancer}",
                         k8s_network_plugin: "${params.k8s_network_plugin}",
-                        container_runtime: ${params.container_runtime},
+                        container_runtime: "${params.container_runtime}",
                         ansible_password: [value: '${Host_Password}', hidden: true]
                     ]
                 )
