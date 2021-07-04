@@ -81,9 +81,9 @@ pipeline {
         stage('CAT') {
            steps {
                sh '''
-               cat <<EOL>> ${WORKSPACE}/roles/inventory.yaml
+               cat <<EOT >> ${WORKSPACE}/roles/inventory.yaml
                ${inventory_conf}
-               EOL
+               EOT
                '''
            }
         }
