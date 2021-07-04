@@ -82,6 +82,7 @@ pipeline {
            steps {
                sh '''
                for line in ${inventory_conf} ; do echo ${line} >> ${WORKSPACE}/roles/inventory.yaml ; done
+               sed -i 's/\r$//' ${WORKSPACE}/roles/inventory.yaml
                '''
            }
         }
