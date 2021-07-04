@@ -62,7 +62,8 @@ pipeline {
         description: '<h5>e.g http://my_proxy.com:8080</h5>'
         )
         string(
-            name: 'kube_control_plane', 
+            name: 'kube_control_plane',
+            defaultValue: '123,456,789',
             description: 'List of kube control planes IPs separated by comas"'
         )
         choice(
