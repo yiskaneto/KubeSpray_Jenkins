@@ -116,20 +116,20 @@ pipeline {
 			}
 		}
 
-        stage('Running Requirements') {
-            steps {
-                ansiblePlaybook(
-                playbook: "${env.WORKSPACE}/roles/Requirements/main.yaml",
-                inventory: "${env.WORKSPACE}/inventory.ini",
-                colorized: true,
-                extras: '-v --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"',
-                extraVars: [
-                    proxy_addr: "${params.Proxy}",
-                    k8s_network_plugin: "${params.k8s_network_plugin}",
-                    ansible_password: [value: '${Host_Password}', hidden: true]
-                ])
-            }
-        }
+        // stage('Running Requirements') {
+        //     steps {
+        //         ansiblePlaybook(
+        //         playbook: "${env.WORKSPACE}/roles/Requirements/main.yaml",
+        //         inventory: "${env.WORKSPACE}/inventory.ini",
+        //         colorized: true,
+        //         extras: '-v --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"',
+        //         extraVars: [
+        //             proxy_addr: "${params.Proxy}",
+        //             k8s_network_plugin: "${params.k8s_network_plugin}",
+        //             ansible_password: [value: '${Host_Password}', hidden: true]
+        //         ])
+        //     }
+        // }
 
 
         stage('Running KubeSpray') {
