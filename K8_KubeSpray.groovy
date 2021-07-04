@@ -93,8 +93,8 @@ pipeline {
            steps {
                //echo "${params.inventory_conf}" > "${env.WORKSPACE}/roles/inventory.yaml"
                script {
-                   def stages = readFile('${kube_control_plane}').trim().split('\n')  
-                   writeFile(file: "${WORKSPACE}/inventory.yaml", text: "${params.kube_control_plane}", encoding: "UTF-8")
+                   def newo = ${kube_control_plane}.replaceAll(",","\n")
+                   writeFile(file: "${WORKSPACE}/inventory.yaml", text: "${newo}", encoding: "UTF-8")
                }
            }
         }
