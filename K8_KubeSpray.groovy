@@ -149,7 +149,7 @@ pipeline {
                         apiserver_loadbalancer_domain_name: "${params.apiserver_loadbalancer_domain_name}",
                         apiserver_loadbalancer_address: "${params.apiserver_loadbalancer_address}",
                         apiserver_loadbalancer_port: "${params.apiserver_loadbalancer_port}",
-                        use_internal_loadbalancer: ${params.use_internal_loadbalancer},
+                        use_internal_loadbalancer: "${params.use_internal_loadbalancer}",
                         internal_loadbalancer: "${params.internal_loadbalancer}",
                         k8s_network_plugin: "${params.k8s_network_plugin}",
                         container_runtime: "${params.container_runtime}",
