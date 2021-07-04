@@ -66,6 +66,21 @@ pipeline {
             defaultValue: '192.168.0.10,192.168.0.11,192.168.0.12',
             description: 'List of kube control planes IPs, separated by comas"'
         )
+        string(
+            name: 'etcd',
+            defaultValue: '192.168.0.10,192.168.0.11,192.168.0.12',
+            description: 'List of kube control planes IPs, separated by comas"'
+        )
+        string(
+            name: 'kube_node',
+            defaultValue: '192.168.0.10,192.168.0.11,192.168.0.12',
+            description: 'List of kube control planes IPs, separated by comas"'
+        )
+        string(
+            name: 'calico_rr',
+            defaultValue: '192.168.0.10,192.168.0.11,192.168.0.12',
+            description: 'List of kube control planes IPs, separated by comas"'
+        )
         choice(
 		name: 'k8s_network_plugin',
 		choices: ['calico','flannel','cilium','weave','cloud'],
@@ -82,9 +97,9 @@ pipeline {
 			steps {
                 //echo -e "[all]\\n\\n[kube_control_plane]\\n\\n[etcd]\\n\\n[kube_node]\\n\\n[calico_rr]\\n\\n[k8s_cluster:children]\\nkube_control_plane\\nkube_node\\ncalico_rr" > ${WORKSPACE}/inventory.ini
 				sh '''
-                echo ${kube_control_plane} | sed \'s/,/\\n/g\' | while read line ; do sed -i \'/\\[all\\]/a \\\'"${line}"\'\' ${WORKSPACE}/inventory.ini ; done
-                cat ${WORKSPACE}/inventory.ini
-				
+                def groups = "${kube_control_plane} ${etcd} ${kube_node} ${calico_rr}
+                for group in ${groups} ; do echo ${groups} | sed \'s/,/\\n/g\' | while read line ; do sed -i \'/\\[all\\]/a \\\'"${line}"\'\' ${WORKSPACE}/inventory.ini ; done
+                cat ${WORKSPACE}/inventory.ini				
 				'''
 			}
 		}
