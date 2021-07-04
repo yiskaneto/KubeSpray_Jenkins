@@ -44,7 +44,7 @@ pipeline {
         )
         string(
             name: 'apiserver_loadbalancer_port',
-            defaultValue: '',
+            defaultValue: '8443',
             description: 'Leave empty if not needed'
         )
         booleanParam(
