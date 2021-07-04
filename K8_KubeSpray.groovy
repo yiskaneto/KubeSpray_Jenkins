@@ -1,6 +1,6 @@
 def setDescription() {
     def item = Jenkins.instance.getItemByFullName(env.JOB_NAME)
-    item.setDescription("<h5><span style=\"color:#138D75\">KubeSpray Automation Test, the file $kubeSpray/inventory/mycluster/group_vars/all/all.ymlcontains all the parameters for k8s</span></h5>")
+    item.setDescription("<h5><span style=\"color:#138D75\">KubeSpray Automation Test, the file kubeSpray_home/inventory/mycluster/group_vars/all/all.ymlcontains all the parameters for k8s</span></h5>")
     item.save()
 }
 setDescription()
@@ -119,15 +119,16 @@ pipeline {
         // stage('Running Requirements') {
         //     steps {
         //         ansiblePlaybook(
-        //         playbook: "${env.WORKSPACE}/roles/Requirements/main.yaml",
-        //         inventory: "${env.WORKSPACE}/inventory.ini",
-        //         colorized: true,
-        //         extras: '-v --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"',
-        //         extraVars: [
-        //             proxy_addr: "${params.Proxy}",
-        //             k8s_network_plugin: "${params.k8s_network_plugin}",
-        //             ansible_password: [value: '${Host_Password}', hidden: true]
-        //         ])
+        //             playbook: "${env.WORKSPACE}/roles/Requirements/main.yaml",
+        //             inventory: "${env.WORKSPACE}/inventory.ini",
+        //             colorized: true,
+        //             extras: '-v --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"',
+        //             extraVars: [
+        //                 proxy_addr: "${params.Proxy}",
+        //                 k8s_network_plugin: "${params.k8s_network_plugin}",
+        //                 ansible_password: [value: '${Host_Password}', hidden: true]
+        //             ]
+        //         )    
         //     }
         // }
 
@@ -135,25 +136,26 @@ pipeline {
         stage('Running KubeSpray') {
             steps {
                 ansiblePlaybook(
-                playbook: "${env.WORKSPACE}/roles/kubespray/cluster.yml",
-                inventory: "${env.WORKSPACE}/inventory.ini",
-                colorized: true,
-                become: true,
-                becomeUser: "root",
-                extras: '-v --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"',
-                extraVars: [
-                    proxy_addr: "${params.proxy_addr}",
-                    no_proxy_addr: "${params.no_proxy_addr}",
-                    k8s_cluster_name: "${params.cluster_name}",
-                    apiserver_loadbalancer_domain_name: "${params.apiserver_loadbalancer_domain_name}",
-                    apiserver_loadbalancer_address: "${apiserver_loadbalancer_address}",
-                    apiserver_loadbalancer_port: "${apiserver_loadbalancer_port}",
-                    use_internal_loadbalancer: ${params.use_internal_loadbalancer},
-                    internal_loadbalancer: "${params.internal_loadbalancer}",
-                    k8s_network_plugin: "${params.k8s_network_plugin}",
-                    container_runtime: ${params.container_runtime},
-                    ansible_password: [value: '${Host_Password}', hidden: true]
-                ])
+                    playbook: "${env.WORKSPACE}/roles/kubespray/cluster.yml",
+                    inventory: "${env.WORKSPACE}/inventory.ini",
+                    colorized: true,
+                    become: true,
+                    becomeUser: "root",
+                    extras: '-v --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"',
+                    extraVars: [
+                        proxy_addr: "${params.proxy_addr}",
+                        no_proxy_addr: "${params.no_proxy_addr}",
+                        k8s_cluster_name: "${params.cluster_name}",
+                        apiserver_loadbalancer_domain_name: "${params.apiserver_loadbalancer_domain_name}",
+                        apiserver_loadbalancer_address: "${apiserver_loadbalancer_address}",
+                        apiserver_loadbalancer_port: "${apiserver_loadbalancer_port}",
+                        use_internal_loadbalancer: ${params.use_internal_loadbalancer},
+                        internal_loadbalancer: "${params.internal_loadbalancer}",
+                        k8s_network_plugin: "${params.k8s_network_plugin}",
+                        container_runtime: ${params.container_runtime},
+                        ansible_password: [value: '${Host_Password}', hidden: true]
+                    ]
+                )
             }
         }
     }
