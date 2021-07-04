@@ -78,21 +78,24 @@ pipeline {
     }
             	
     stages {
-
-        // stage('Write Inventory file') {
-        //    steps {
-        //        //echo "${params.inventory_conf}" > "${env.WORKSPACE}/roles/inventory.yaml"
-        //        script {
-        //            writeFile(file: "${env.WORKSPACE}/roles/inventory.yaml", text: "${params.inventory_conf}", encoding: "UTF-8")
-        //        }
-        //    }
-        // }
-
         stage('CAT') {
            steps {
+               sh '''
+               touch "${WORKSPACE}/roles/inventory.yaml"
+               dos2unix "${WORKSPACE}/roles/inventory.yaml"
+               '''
+           }
+        }
+
+        stage('Write Inventory file') {
+           steps {
+               //echo "${params.inventory_conf}" > "${env.WORKSPACE}/roles/inventory.yaml"
                script {
-                   sh(script: 'cat "${WORKSPACE}/roles/inventory.yaml"', returnStdout: true).trim()
+                   writeFile(file: "${env.WORKSPACE}/roles/inventory.yaml", text: "${params.inventory_conf}", encoding: "UTF-8")
                }
+               sh '''
+               dos2unix "${WORKSPACE}/roles/inventory.yaml"
+               '''
            }
         }
 
