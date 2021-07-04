@@ -62,7 +62,7 @@ pipeline {
         description: '<h5>e.g http://my_proxy.com:8080</h5>'
         )
         text(
-            name: 'inventory_conf', 
+            name: 'kube_control_planes', 
             defaultValue: "${default_inventory_conf}",
             //description: '<a href="https://github.com/kubernetes-sigs/kubespray/blob/master/inventory/sample/inventory.ini" target="_blank" rel="noopener noreferrer">Inventory Example</a>'
         )
@@ -78,14 +78,14 @@ pipeline {
     }
             	
     stages {
-        stage('CAT') {
-           steps {
-               sh '''
-               for line in ${inventory_conf} ; do echo ${line} >> ${WORKSPACE}/roles/inventory.yaml ; done
-               sed -i 's/\r$//' ${WORKSPACE}/roles/inventory.yaml
-               '''
-           }
-        }
+        // stage('CAT') {
+        //    steps {
+        //        sh '''
+        //        for line in ${inventory_conf} ; do echo ${line} >> ${WORKSPACE}/roles/inventory.yaml ; done
+        //        sed -i 's/\r$//' ${WORKSPACE}/roles/inventory.yaml
+        //        '''
+        //    }
+        // }
 
         // stage('Write Inventory file') {
         //    steps {
@@ -106,6 +106,7 @@ pipeline {
                 extraVars: [
                     proxy_addr: "${params.Proxy}",
                     k8s_network_plugin: "${params.k8s_network_plugin}",
+                    kube_control_planes: "${params.kube_control_planes}",
                     ansible_password: [value: '${Host_Password}', hidden: true]
                 ])
             }
