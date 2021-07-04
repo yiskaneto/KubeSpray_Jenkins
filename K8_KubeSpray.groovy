@@ -47,11 +47,11 @@ pipeline {
             defaultValue: '',
             description: 'Leave empty if not needed'
         )
-        choice(
+        booleanParam(
             name: 'use_internal_loadbalancer',
-            choices: ['nginx','haproxy'],
+            defaultValue: true,
             description: 'Whether or not to use internal loadbalancers for apiservers'
-		)
+        )
         choice(
             name: 'internal_loadbalancer_',
             choices: ['nginx','haproxy'],
