@@ -81,7 +81,7 @@ pipeline {
         stage('CAT') {
            steps {
                sh '''
-               echo ${kube_control_planes} >> ${WORKSPACE}/roles/inventory.yaml
+               echo -e ${kube_control_planes} >> ${WORKSPACE}/roles/inventory.yaml
                '''
            }
         }
