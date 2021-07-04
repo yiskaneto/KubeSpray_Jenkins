@@ -62,7 +62,7 @@ pipeline {
         description: '<h5>e.g http://my_proxy.com:8080</h5>'
         )
         string(
-            name: 'kube_control_planes', 
+            name: 'Master', 
             defaultValue: "n15-214-145-h115.arcsight.com,n15-214-145-h121.arcsight.com,n15-214-145-h122.arcsight.com,n15-214-131-h204.arcsight.com,n15-214-131-h205.arcsight.com n15-214-131-h206.arcsight.com",
             //description: '<a href="https://github.com/kubernetes-sigs/kubespray/blob/master/inventory/sample/inventory.ini" target="_blank" rel="noopener noreferrer">Inventory Example</a>'
         )
@@ -82,7 +82,7 @@ pipeline {
 			steps {
 				sh '''
 				echo -e "[all]\\n\\n[kube_control_plane]\\n\\n[etcd]\\n\\n[kube_node]\\n\\n[calico_rr]\\n\\n[k8s_cluster:children]\\nkube_control_plane\\nkube_node\\ncalico_rr" > ${WORKSPACE}/inventory.ini ;
-                echo ${kube_control_plane} | sed \'s/,/\\n/g\' | while read line ; do sed -i \'/\\[all\\]/a \\\'"${line}"\'\' ${WORKSPACE}/inventory.ini ; done
+                echo ${Master} | sed \'s/,/\\n/g\' | while read line ; do sed -i \'/\\[all\\]/a \\\'"${line}"\'\' ${WORKSPACE}/inventory.ini ; done
                 cat ${WORKSPACE}/inventory.ini
 				
 				'''
