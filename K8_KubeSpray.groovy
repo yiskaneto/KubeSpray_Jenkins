@@ -137,7 +137,7 @@ pipeline {
                     inventory: "${WORKSPACE}/inventory.ini",
                     colorized: true,
                     become: true,
-                    becomeUser: "root",
+                    becomeUser: root,
                     extras: '-v --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"',
                     extraVars: [
                         proxy_addr: "${params.proxy_addr}",
