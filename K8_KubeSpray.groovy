@@ -96,9 +96,9 @@ pipeline {
         stage('Creating Inventory file') {
 			steps {
                 //echo -e "[all]\\n\\n[kube_control_plane]\\n\\n[etcd]\\n\\n[kube_node]\\n\\n[calico_rr]\\n\\n[k8s_cluster:children]\\nkube_control_plane\\nkube_node\\ncalico_rr" > ${WORKSPACE}/inventory.ini
-				sh '''
                 def groups = "${kube_control_plane} ${etcd} ${kube_node} ${calico_rr}"
-                for group in ${groups} ; do echo ${groups} | sed \'s/,/\\n/g\' | while read line ; do sed -i \'/\\[all\\]/a \\\'"${line}"\'\' ${WORKSPACE}/inventory.ini ; done
+				sh '''
+                for group in ${groups} ; do echo ${group} | sed \'s/,/\\n/g\' | while read line ; do sed -i \'/\\[all\\]/a \\\'"${line}"\'\' ${WORKSPACE}/inventory.ini ; done
                 cat ${WORKSPACE}/inventory.ini				
 				'''
 			}
