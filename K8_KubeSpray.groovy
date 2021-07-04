@@ -117,7 +117,6 @@ pipeline {
                 extraVars: [
                     proxy_addr: "${params.Proxy}",
                     k8s_network_plugin: "${params.k8s_network_plugin}",
-                    kube_control_planes: "${params.kube_control_planes}",
                     ansible_password: [value: '${Host_Password}', hidden: true]
                 ])
             }
