@@ -53,11 +53,6 @@ pipeline {
             description: 'Whether or not to use internal loadbalancers for apiservers'
         )
         choice(
-            name: 'internal_loadbalancer_',
-            choices: ['nginx','haproxy'],
-            description: ''
-		)
-        choice(
             name: 'internal_loadbalancer',
             choices: ['nginx','haproxy'],
 		)
