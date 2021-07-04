@@ -63,8 +63,7 @@ pipeline {
         )
         string(
             name: 'Master', 
-            defaultValue: "n15-214-145-h115.arcsight.com,n15-214-145-h121.arcsight.com,n15-214-145-h122.arcsight.com,n15-214-131-h204.arcsight.com,n15-214-131-h205.arcsight.com n15-214-131-h206.arcsight.com",
-            //description: '<a href="https://github.com/kubernetes-sigs/kubespray/blob/master/inventory/sample/inventory.ini" target="_blank" rel="noopener noreferrer">Inventory Example</a>'
+            description: 'List of kube control planes IPs separated by comas"'
         )
         choice(
 		name: 'k8s_network_plugin',
