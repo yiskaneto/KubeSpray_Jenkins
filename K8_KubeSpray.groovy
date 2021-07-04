@@ -114,7 +114,7 @@ pipeline {
         stage('Requirements') {
             steps {
                 ansiblePlaybook(
-                playbook: "${env.WORKSPACE}/roles/KubeSpray/requirements.yaml",
+                playbook: "${env.WORKSPACE}/roles/Requirements/main.yaml",
                 inventory: "${env.WORKSPACE}/inventory.ini",
                 colorized: true,
                 extras: '-v --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"',
