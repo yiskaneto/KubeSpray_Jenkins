@@ -87,7 +87,7 @@ pipeline {
 		)
         choice(
             name: 'container_runtime',
-            choices: ['calidockerco','crio','containerd'],
+            choices: ['docker','crio','containerd'],
             description: 'docker for docker, crio for cri-o and containerd for containerd.'
 		)
         password(
