@@ -144,31 +144,30 @@ pipeline {
         // }
 
 
-        // stage('Running KubeSpray') {
-        //     steps {
-        //         ansiblePlaybook(
-        //             playbook: "${WORKSPACE}/roles/kubespray/cluster.yml",
-        //             inventory: "${WORKSPACE}/inventory.ini",
-        //             colorized: true,
-        //             become: true,
-        //             becomeUser: "root",
-        //             extras: '-v --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"',
-        //             extraVars: [
-        //                 proxy_addr: "${params.proxy_addr}",
-        //                 no_proxy_addr: "${params.no_proxy_addr}",
-        //                 k8s_cluster_name: "${params.cluster_name}",
-        //                 apiserver_loadbalancer_domain_name: "${params.apiserver_loadbalancer_domain_name}",
-        //                 apiserver_loadbalancer_address: "${params.apiserver_loadbalancer_address}",
-        //                 apiserver_loadbalancer_port: "${params.apiserver_loadbalancer_port}",
-        //                 use_internal_loadbalancer: "${params.use_internal_loadbalancer}",
-        //                 internal_loadbalancer: "${params.internal_loadbalancer}",
-        //                 k8s_network_plugin: "${params.k8s_network_plugin}",
-        //                 container_runtime: "${params.container_runtime}",
-        //                 ansible_password: [value: '${Host_Password}', hidden: true]
-        //             ]
-        //         )
-        //     }
-        // }
+        stage('Running KubeSpray') {
+            steps {
+                ansiblePlaybook(
+                    playbook: "${WORKSPACE}/roles/kubespray/cluster.yml",
+                    inventory: "${WORKSPACE}/inventory.ini",
+                    colorized: true,
+                    become: true,
+                    becomeUser: "root",
+                    extras: '-v --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"',
+                    extraVars: [
+                        proxy_addr: "${params.proxy_addr}",
+                        no_proxy_addr: "${params.no_proxy_addr}",
+                        k8s_cluster_name: "${params.cluster_name}",
+                        apiserver_loadbalancer_domain_name: "${params.apiserver_loadbalancer_domain_name}",
+                        apiserver_loadbalancer_address: "${params.apiserver_loadbalancer_address}",
+                        apiserver_loadbalancer_port: "${params.apiserver_loadbalancer_port}",
+                        use_internal_loadbalancer: "${params.use_internal_loadbalancer}",
+                        internal_loadbalancer: "${params.internal_loadbalancer}",
+                        k8s_network_plugin: "${params.k8s_network_plugin}",
+                        container_runtime: "${params.container_runtime}"
+                    ]
+                )
+            }
+        }
     }
   
     // post {
