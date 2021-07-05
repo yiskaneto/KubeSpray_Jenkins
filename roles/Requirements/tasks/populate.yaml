@@ -1,3 +1,4 @@
 ---
-- import_tasks: populate/copy_template.yaml
+- import_tasks: populate/copy_all_template.yaml
+- import_tasks: populate/copy_k8s_template.yaml
 - import_tasks: populate/print_variables.yaml
