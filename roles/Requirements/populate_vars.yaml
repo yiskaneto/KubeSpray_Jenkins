@@ -1,6 +1,7 @@
 ---
 - hosts: localhost
   remote_user: root
+  gather_facts: false
   connection: local
   tasks:
     - name: Running tasks/populate.yaml instead of 'main'
