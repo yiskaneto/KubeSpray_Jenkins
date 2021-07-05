@@ -27,4 +27,4 @@ default_kubelet_config_dir: ""
 inventory_dir: inventory/local-dind/
 
 # template files
-template_files: "all/all.yml k8s_cluster/k8s-cluster.yml"
+template_files: "all/all.yml, k8s_cluster/k8s-cluster.yml"
