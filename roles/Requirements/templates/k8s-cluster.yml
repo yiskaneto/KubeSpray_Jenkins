@@ -69,7 +69,7 @@ kube_network_plugin: "{{ k8s_network_plugin }}"
 kube_network_plugin_multus: false
 
 # Kubernetes internal network for services, unused block of space.
-kube_service_addresses: 10.233.0.0/18
+kube_service_addresses: "{{ kube_service_addresses }}"
 
 # internal network. When used, it will assign IP
 # addresses from this range to individual pods.
