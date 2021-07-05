@@ -1,7 +1,7 @@
 ---
 - name: Move k8cluster template file
   template:
-    src: "{{ jenkins_workspace }}roles/Requirements/templates/testo.jinja"
-    dest: "{{ jenkins_workspace }}roles/kubespray-2.16.0/inventory/mycluster/group_vars/k8s_cluster/k8s-cluster.yml"
+    src: "{{ jenkins_workspace }}roles/Requirements/templates/k8s-cluster_init.yml"
+    dest: "{{ jenkins_workspace }}roles/kubespray-2.16.0/inventory/mycluster/group_vars/k8s_cluster/k8s-cluster_init.yml"
 
     #  dest: "{{ jenkins_workspace }}roles/kubespray-2.16.0/inventory/mycluster/group_vars/k8s_cluster/k8s-cluster.yml"
