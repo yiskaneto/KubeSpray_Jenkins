@@ -1,4 +1,12 @@
 ---
+- name: cat template
+  shell: "cat {{ jenkins_workspace }}roles/Requirements/templates/all.yml"
+  register: catu
+
+- name: print catu
+  debug:
+    msg: "catu.stdout"
+
 - name: print variables
   debug:
     msg: "proxy_addr: {{ proxy_addr }}, no_proxy_addr: {{ no_proxy_addr }}"
