@@ -1,5 +1,5 @@
 ---
-- name: generate SSH key
+- name: Generating SSH key pair (if they don't exist)
   hosts: 127.0.0.1
   connection: local
   tasks:
