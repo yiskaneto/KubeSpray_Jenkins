@@ -11,5 +11,5 @@ internal_loadbalancer: "{{ internal_loadbalancer }}"
 k8s_network_plugin: "{{ k8s_network_plugin }}"
 container_runtime: "{{ container_runtime }}"
 
-# From KubeSpray kubeSpray/inventory/mycluster/group_vars/all/all.yaml
+# file from KubeSpray kubeSpray/inventory/mycluster/group_vars/all/all.yaml
 bin_dir: "{{ bin_dir | default('/usr/local/bin') }}"
