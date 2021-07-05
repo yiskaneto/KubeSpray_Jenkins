@@ -1,5 +1,5 @@
 ---
 - name: Move k8cluster template f
   template:
-    src: "{{ jenkins_workspace }}roles/Requirements/templates/k8s-cluster.yml"
+    src: k8s-cluster.yml
     dest: "{{ jenkins_workspace }}roles/kubespray-2.16.0/inventory/mycluster/group_vars/k8s_cluster/k8s-cluster.yml"
