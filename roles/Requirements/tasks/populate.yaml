@@ -3,8 +3,8 @@
   debug:
     msg: "proxy_addr: {{ proxy_addr }}, no_proxy_addr: {{ no_proxy_addr }}"
 
-- name: sleep
-  shell: "sleep 10"
+# - name: sleep
+#   shell: "sleep 10"
 
 - name: copy template file
   copy:
