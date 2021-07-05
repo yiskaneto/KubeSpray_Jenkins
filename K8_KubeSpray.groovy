@@ -102,6 +102,11 @@ pipeline {
             description: 'Kubernetes internal network for services, unused block of space.'
         )
         string(
+            name: 'kube_pods_subnet',
+            defaultValue: '10.233.64.0/18',
+            description: 'Internal network. When used, it will assign IP addresses from this range to individual pods. This network must be unused in your network infrastructure!'
+        )
+        string(
             name: 'kubespray_temp_dir',
             defaultValue: '/tmp/kubespray_temp_dir',
             description: "Where the binaries will be downloaded. Note: ensure that you've enough disk space (about 1G)"
@@ -170,6 +175,7 @@ pipeline {
                         bin_dir: "${params.bin_dir}",
                         local_release_dir: "${params.kubespray_temp_dir}",
                         kube_service_addresses: "${params.kube_service_addresses}",
+                        kube_pods_subnet: "${params.kube_pods_subnet}",
                         ansible_password: [value: '${Host_Password}', hidden: true]
                     ]
                 )    
@@ -186,6 +192,7 @@ pipeline {
                     becomeUser: "root",
                     extras: '-v -u root --become --become-user=root --flush-cache --ssh-extra-args="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"',
                     extraVars: [
+                        jenkins_workspace: "${env.WORKSPACE}/",
                         proxy_addr: "${params.proxy_addr}",
                         no_proxy_addr: "${params.no_proxy_addr}",
                         k8s_cluster_name: "${params.cluster_name}",
@@ -195,7 +202,12 @@ pipeline {
                         use_internal_loadbalancer: "${params.use_internal_loadbalancer}",
                         internal_loadbalancer: "${params.internal_loadbalancer}",
                         k8s_network_plugin: "${params.k8s_network_plugin}",
-                        container_runtime: "${params.container_runtime}"
+                        container_runtime: "${params.container_runtime}",
+                        etcd_data_dir: "${params.etcd_data_dir}",
+                        bin_dir: "${params.bin_dir}",
+                        local_release_dir: "${params.kubespray_temp_dir}",
+                        kube_service_addresses: "${params.kube_service_addresses}",
+                        kube_pods_subnet: "${params.kube_pods_subnet}"
                     ]
                 )
             }
