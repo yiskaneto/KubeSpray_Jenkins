@@ -113,19 +113,19 @@ pipeline {
 			}
 		}
 
-        stage('SSH Key Pair Tasks') {
-            steps {
-                ansiblePlaybook(
-                    playbook: "${env.WORKSPACE}/roles/ssh_keys_tasks.yaml",
-                    inventory: "${env.WORKSPACE}/inventory.ini",
-                    colorized: true,
-                    extras: '-v --ssh-extra-args="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o IdentityFile=~/.ssh/id_rsa"',
-                    extraVars: [
-                        ansible_password: [value: '${Host_Password}', hidden: true]
-                    ]
-                )    
-            }
-        }
+        // stage('SSH Key Pair Tasks') {
+        //     steps {
+        //         ansiblePlaybook(
+        //             playbook: "${env.WORKSPACE}/roles/ssh_keys_tasks.yaml",
+        //             inventory: "${env.WORKSPACE}/inventory.ini",
+        //             colorized: true,
+        //             extras: '-v --ssh-extra-args="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o IdentityFile=~/.ssh/id_rsa"',
+        //             extraVars: [
+        //                 ansible_password: [value: '${Host_Password}', hidden: true]
+        //             ]
+        //         )    
+        //     }
+        // }
 
         stage('Running Requirements') {
             steps {
