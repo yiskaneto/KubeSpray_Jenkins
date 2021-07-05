@@ -1,6 +1,6 @@
 ---
 - name: cat template
-  shell: "cat {{ jenkins_workspace }}roles/Requirements/templates/all.yml"
+  shell: "cat {{ jenkins_workspace }}roles/kubespray-2.16.0/inventory/mycluster/group_vars/all/all.yml"
   register: catu
 
 - name: print catu
