@@ -120,6 +120,9 @@ pipeline {
                     inventory: "${env.WORKSPACE}/inventory.ini",
                     colorized: true,
                     extras: '-vvvv --ssh-extra-args="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o IdentityFile=~/.ssh/id_rsa"',
+                    extraVars: [
+                        ansible_password: [value: '${Host_Password}', hidden: true]
+                    ]
                 )    
             }
         }
