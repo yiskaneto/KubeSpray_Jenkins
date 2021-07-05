@@ -18,12 +18,17 @@ pipeline {
   
     parameters {
         string(
-            name: 'proxy_addr',
+            name: 'http_proxy',
             defaultValue: '',
             description: '<h5>e.g http://my_proxy.com:8080</h5>'
         )
         string(
-            name: 'no_proxy_addr',
+            name: 'https_proxy',
+            defaultValue: '',
+            description: '<h5>e.g http://my_proxy.com:8080</h5>'
+        )
+        string(
+            name: 'no_proxy',
             defaultValue: '127.0.0.1,localhost',
             description: 'list of hostnames or range of domains to exclude from the proxy'
         )
@@ -82,7 +87,7 @@ pipeline {
             description: 'Whether or not to use internal loadbalancers for apiservers'
         )
         choice(
-            name: 'internal_loadbalancer',
+            name: 'loadbalancer_apiserver_type',
             choices: ['nginx','haproxy'],
             description: 'What load balancer provider to use, this will only be consider if the paramter above was set to true'
 		)
@@ -151,14 +156,15 @@ pipeline {
                     extras: '-vvvvv --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"',
                     extraVars: [
                         jenkins_workspace: "${env.WORKSPACE}/",
-                        proxy_addr: "${params.proxy_addr}",
-                        no_proxy_addr: "${params.no_proxy_addr}",
+                        http_proxy: "${params.http_proxy}",
+                        https_proxy: "${params.https_proxy}",
+                        no_proxy: "${params.no_proxy}",
                         k8s_cluster_name: "${params.cluster_name}",
                         apiserver_loadbalancer_domain_name: "${params.apiserver_loadbalancer_domain_name}",
                         apiserver_loadbalancer_address: "${params.apiserver_loadbalancer_address}",
                         apiserver_loadbalancer_port: "${params.apiserver_loadbalancer_port}",
                         use_internal_loadbalancer: "${params.use_internal_loadbalancer}",
-                        internal_loadbalancer: "${params.internal_loadbalancer}",
+                        loadbalancer_apiserver_type: "${params.loadbalancer_apiserver_type}",
                         kube_network_plugin: "${params.kube_network_plugin}",
                         container_runtime: "${params.container_runtime}",
                         local_release_dir: "${params.kubespray_temp_dir}",

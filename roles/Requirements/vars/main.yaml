@@ -1,12 +1,13 @@
 ---
 # File from KubeSpray kubeSpray/inventory/mycluster/group_vars/all/all.yaml
-proxy_addr: "{{ proxy_addr }}"
-no_proxy_addr: "{{ no_proxy_addr }}"
 apiserver_loadbalancer_domain_name: "{{ apiserver_loadbalancer_domain_name }}"
 apiserver_loadbalancer_address: "{{ apiserver_loadbalancer_address }}"
 apiserver_loadbalancer_port: "{{ apiserver_loadbalancer_port }}"
 use_internal_loadbalancer: "{{ use_internal_loadbalancer }}"
-internal_loadbalancer: "{{ internal_loadbalancer }}"
+loadbalancer_apiserver_type: "{{ loadbalancer_apiserver_type }}"
+http_proxy: "{{ http_proxy }}"
+https_proxy: "{{ https_proxy }}"
+no_proxy: "{{ no_proxy }}"
 
 # File from KubeSpray kubeSpray/inventory/mycluster/group_vars/k8s_cluster/k8s_cluster.yaml
 k8s_cluster_name: "{{ k8s_cluster_name }}"
