@@ -4,7 +4,7 @@
   connection: local
   gather_facts: false
   tasks:
-    - name: Running tasks/requirements.yaml instead of 'main'
+    - name: Running tasks/populate.yaml instead of 'main'
       import_role:
         name: ../
         tasks_from: populate.yaml

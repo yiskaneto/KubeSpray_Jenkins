@@ -1,4 +1,4 @@
 ---
-- import_task: populate/sleep.yaml
-- import_task: populate/print_variables.yaml
-- import_task: populate/copy_template.yaml
+- import_tasks: populate/sleep.yaml
+- import_tasks: populate/print_variables.yaml
+- import_tasks: populate/copy_template.yaml
