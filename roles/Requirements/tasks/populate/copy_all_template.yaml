@@ -3,4 +3,5 @@
   template:
     src: "{{ jenkins_workspace }}roles/Requirements/templates/{{ item }}"
     dest: "{{ jenkins_workspace }}roles/kubespray-2.16.0/inventory/mycluster/group_vars/{{ item }}"
-  with_items: "{{ template_files }}"
+  with_items:
+    - "{{ template_files }}"
