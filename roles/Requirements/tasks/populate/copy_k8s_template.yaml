@@ -3,4 +3,6 @@
   become: yes
   template:
     src: k8s/k8s.yml
-    dest: "{{ jenkins_workspace }}roles/kubespray-2.16.0/inventory/mycluster/group_vars/k8s_cluster/k8s-cluster.yml"
+    dest: ../files/
+
+    #  dest: "{{ jenkins_workspace }}roles/kubespray-2.16.0/inventory/mycluster/group_vars/k8s_cluster/k8s-cluster.yml"
