@@ -192,22 +192,7 @@ pipeline {
                     becomeUser: "root",
                     extras: '-v -u root --become --become-user=root --flush-cache --ssh-extra-args="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"',
                     extraVars: [
-                        jenkins_workspace: "${env.WORKSPACE}/",
-                        proxy_addr: "${params.proxy_addr}",
-                        no_proxy_addr: "${params.no_proxy_addr}",
-                        k8s_cluster_name: "${params.cluster_name}",
-                        apiserver_loadbalancer_domain_name: "${params.apiserver_loadbalancer_domain_name}",
-                        apiserver_loadbalancer_address: "${params.apiserver_loadbalancer_address}",
-                        apiserver_loadbalancer_port: "${params.apiserver_loadbalancer_port}",
-                        use_internal_loadbalancer: "${params.use_internal_loadbalancer}",
-                        internal_loadbalancer: "${params.internal_loadbalancer}",
-                        k8s_network_plugin: "${params.k8s_network_plugin}",
-                        container_runtime: "${params.container_runtime}",
-                        etcd_data_dir: "${params.etcd_data_dir}",
-                        bin_dir: "${params.bin_dir}",
-                        local_release_dir: "${params.kubespray_temp_dir}",
-                        kube_service_addresses: "${params.kube_service_addresses}",
-                        kube_pods_subnet: "${params.kube_pods_subnet}"
+                        jenkins_workspace: "${env.WORKSPACE}/"
                     ]
                 )
             }
