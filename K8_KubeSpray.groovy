@@ -143,7 +143,6 @@ pipeline {
         //     }
         // }
 
-
         stage('Running KubeSpray') {
             steps {
                 ansiblePlaybook(
