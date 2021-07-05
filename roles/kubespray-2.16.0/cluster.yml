@@ -5,6 +5,23 @@
 - name: Ensure compatibility with old groups
   import_playbook: legacy_groups.yml
 
+- hosts: all
+  vars:
+    - proxy_addr: "{{ proxy_addr }}"
+    - proxy_addr: "{{ no_proxy_addr }}"
+    - k8s_cluster_name: "{{ k8s_cluster_name }}"
+    - apiserver_loadbalancer_domain_name: "{{ apiserver_loadbalancer_domain_name }}"
+    - apiserver_loadbalancer_address: "{{ apiserver_loadbalancer_address }}"
+    - apiserver_loadbalancer_port: "{{ apiserver_loadbalancer_port }}"
+    - use_internal_loadbalancer: "{{ use_internal_loadbalancer }}"
+    - internal_loadbalancer: "{{ internal_loadbalancer }}"
+    - k8s_network_plugin: "{{ k8s_network_plugin }}"
+    - container_runtime: "{{ container_runtime }}"
+  tasks:
+    - name: print variables
+      debug:
+        msg: "proxy_addr: {{ proxy_addr }}, proxy_addr: {{ proxy_addr }}"
+
 - hosts: bastion[0]
   gather_facts: False
   environment: "{{ proxy_disable_env }}"
@@ -19,7 +36,7 @@
   environment: "{{ proxy_disable_env }}"
   roles:
     - { role: kubespray-defaults }
-    - { role: bootstrap-os, tags: bootstrap-os}
+    - { role: bootstrap-os, tags: bootstrap-os }
 
 - name: Gather facts
   tags: always
@@ -32,7 +49,11 @@
   roles:
     - { role: kubespray-defaults }
     - { role: kubernetes/preinstall, tags: preinstall }
-    - { role: "container-engine", tags: "container-engine", when: deploy_container_engine|default(true) }
+    - {
+        role: "container-engine",
+        tags: "container-engine",
+        when: deploy_container_engine|default(true),
+      }
     - { role: download, tags: download, when: "not skip_downloads" }
 
 - hosts: etcd
@@ -85,7 +106,7 @@
   environment: "{{ proxy_disable_env }}"
   roles:
     - { role: kubespray-defaults }
-    - { role: kubernetes/kubeadm, tags: kubeadm}
+    - { role: kubernetes/kubeadm, tags: kubeadm }
     - { role: network_plugin, tags: network }
     - { role: kubernetes/node-label, tags: node-label }
 
@@ -95,7 +116,7 @@
   environment: "{{ proxy_disable_env }}"
   roles:
     - { role: kubespray-defaults }
-    - { role: network_plugin/calico/rr, tags: ['network', 'calico_rr'] }
+    - { role: network_plugin/calico/rr, tags: ["network", "calico_rr"] }
 
 - hosts: kube_control_plane[0]
   gather_facts: False
@@ -111,7 +132,10 @@
   environment: "{{ proxy_disable_env }}"
   roles:
     - { role: kubespray-defaults }
-    - { role: kubernetes-apps/external_cloud_controller, tags: external-cloud-controller }
+    - {
+        role: kubernetes-apps/external_cloud_controller,
+        tags: external-cloud-controller,
+      }
     - { role: kubernetes-apps/network_plugin, tags: network }
     - { role: kubernetes-apps/policy_controller, tags: policy-controller }
     - { role: kubernetes-apps/ingress_controller, tags: ingress-controller }
@@ -131,4 +155,9 @@
   environment: "{{ proxy_disable_env }}"
   roles:
     - { role: kubespray-defaults }
-    - { role: kubernetes/preinstall, when: "dns_mode != 'none' and resolvconf_mode == 'host_resolvconf'", tags: resolvconf, dns_late: true }
+    - {
+        role: kubernetes/preinstall,
+        when: "dns_mode != 'none' and resolvconf_mode == 'host_resolvconf'",
+        tags: resolvconf,
+        dns_late: true,
+      }
