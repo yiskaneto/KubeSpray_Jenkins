@@ -19,3 +19,6 @@ bin_dir: "{{ bin_dir | default('/usr/local/bin') }}"
 kube_config_dir: /etc/kubernetes
 
 inventory_dir: inventory/local-dind
+
+# VAlue can be found at kubeSpray/kubespray-defaults/defaults/main.yaml
+kube_config_dir: /etc/kubernetes
