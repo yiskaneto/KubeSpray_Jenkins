@@ -1,7 +1,8 @@
 ---
-- name: Move k8cluster template file
-  template:
-    src: "{{ jenkins_workspace }}roles/Requirements/templates/k8s-cluster_init.yml"
-    dest: "{{ jenkins_workspace }}roles/kubespray-2.16.0/inventory/mycluster/group_vars/k8s_cluster/k8s-cluster_init.yml"
+- name: Replace cluster_name variable
+  ansible.builtin.lineinfile:
+    path: "{{ jenkins_workspace }}roles/kubespray-2.16.0/inventory/mycluster/group_vars/k8s_cluster/k8s-cluster.yml"
+    regexp: '^cluster_name: '
+    line: cluster_name: "{{ k8s_cluster_name }}"
 
     #  dest: "{{ jenkins_workspace }}roles/kubespray-2.16.0/inventory/mycluster/group_vars/k8s_cluster/k8s-cluster.yml"
