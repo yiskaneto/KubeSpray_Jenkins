@@ -158,7 +158,7 @@ pipeline {
                     playbook: "${env.WORKSPACE}/roles/Requirements/populate_vars.yaml",
                     inventory: "${env.WORKSPACE}/inventory.ini",
                     colorized: true,
-                    extras: '-vvvv -u root --become --become-user=root  --flush-cache --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"',
+                    extras: '-vvvv -u root --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"',
                     extraVars: [
                         jenkins_workspace: "${env.WORKSPACE}/",
                         proxy_addr: "${params.proxy_addr}",
