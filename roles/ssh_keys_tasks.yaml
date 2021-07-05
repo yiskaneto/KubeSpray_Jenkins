@@ -2,9 +2,8 @@
 - name: generate SSH key
   hosts: 127.0.0.1
   connection: local
-  #current_ansible_user: "{{ current_ansible_user }}"
   tasks:
-    - name: Getting current user
+    - name: Getting current use running ansible
       shell: "whoami"
       register: current_ansible_user
 
