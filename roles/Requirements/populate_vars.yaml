@@ -1,6 +1,7 @@
 ---
-- hosts: all
+- hosts: 127.0.0.1
   remote_user: root
+  connection: local
   gather_facts: false
   tasks:
     - name: Running tasks/requirements.yaml instead of 'main'
