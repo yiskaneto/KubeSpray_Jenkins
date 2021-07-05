@@ -17,6 +17,11 @@
         # ssh_key_passphrase: "{{ ssh_key_passphrase }}"
         force: no
 
+    - name: Move k8cluster template file
+      template:
+        src: Requirements/templates/kubernetes.yaml
+        dest: ../
+
 - hosts: all
   remote_user: root
   gather_facts: false
