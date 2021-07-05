@@ -5,7 +5,7 @@
 
 - name: print catu
   debug:
-    msg: "catu.stdout_lines"
+    msg: "{{ catu.stdout_lines }}"
 
 - name: print variables
   debug:
