@@ -162,7 +162,7 @@ pipeline {
             }
         }
 
-        stage('Running Requirements') {
+        stage('Updating Templates') {
             steps {
                 ansiblePlaybook(
                     playbook: "${env.WORKSPACE}/roles/Requirements/populate_vars.yaml",
