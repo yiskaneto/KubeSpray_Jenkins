@@ -96,6 +96,16 @@ pipeline {
             defaultValue: '/usr/local/bin',
             description: 'Directory where the binaries will be installed'
         )
+        string(
+            name: 'kube_service_addresses',
+            defaultValue: '10.233.0.0/18',
+            description: 'Kubernetes internal network for services, unused block of space.'
+        )
+        string(
+            name: 'kubespray_temp_dir',
+            defaultValue: '/tmp/kubespray_temp_dir',
+            description: "Where the binaries will be downloaded. Note: ensure that you've enough disk space (about 1G)"
+        )
         password(
         name: 'Host_Password',
         defaultValue: 'empty',
@@ -158,6 +168,8 @@ pipeline {
                         container_runtime: "${params.container_runtime}",
                         etcd_data_dir: "${params.etcd_data_dir}",
                         bin_dir: "${params.bin_dir}",
+                        local_release_dir: "${params.kubespray_temp_dir}",
+                        kube_service_addresses: "${params.kube_service_addresses}",
                         ansible_password: [value: '${Host_Password}', hidden: true]
                     ]
                 )    
