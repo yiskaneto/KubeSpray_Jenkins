@@ -2,6 +2,37 @@
 - hosts: 127.0.0.1
   connection: local
   gather_facts: false
+  vars:
+    # vars file for automation KubeSpray
+    proxy_addr: "{{ proxy_addr }}"
+    no_proxy_addr: "{{ no_proxy_addr }}"
+    cluster_name: "{{ k8s_cluster_name }}"
+    apiserver_loadbalancer_domain_name: "{{ apiserver_loadbalancer_domain_name }}"
+    apiserver_loadbalancer_address: "{{ apiserver_loadbalancer_address }}"
+    apiserver_loadbalancer_port: "{{ apiserver_loadbalancer_port }}"
+    use_internal_loadbalancer: "{{ use_internal_loadbalancer }}"
+    internal_loadbalancer: "{{ internal_loadbalancer }}"
+    k8s_network_plugin: "{{ k8s_network_plugin }}"
+    container_runtime: "{{ container_runtime }}"
+
+    # File from KubeSpray kubeSpray/inventory/mycluster/group_vars/all/all.yaml
+    etcd_data_dir: "{{ etcd_data_dir | default('/var/lib/etcd') }}"
+    bin_dir: "{{ bin_dir | default('/usr/local/bin') }}"
+
+    # File from KubeSpray kubeSpray/inventory/mycluster/group_vars/k8s_cluster/k8s_cluster.yaml
+    kube_config_dir: /etc/kubernetes/
+    kube_cert_dir: ""
+    local_release_dir: "{{ local_release_dir }}"
+    kube_service_addresses: "{{ kube_service_addresses }}"
+    kube_pods_subnet: "{{ kube_pods_subnet }}"
+    credentials_dir: ""
+    default_kubelet_config_dir: ""
+
+    inventory_dir: inventory/local-dind/
+
+    # template files
+    template_files: ["all/all.yml", "k8s_cluster/k8s-cluster.yml"]
+
   tasks:
     - name: Getting current use running ansible
       shell: "whoami"
