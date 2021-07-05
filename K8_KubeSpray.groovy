@@ -87,16 +87,6 @@ pipeline {
             description: 'What load balancer provider to use, this will only be consider if the paramter above was set to true'
 		)
         string(
-            name: 'etcd_data_dir',
-            defaultValue: '/var/lib/etcd',
-            description: 'etcd data directory'
-        )
-        string(
-            name: 'bin_dir',
-            defaultValue: '/usr/local/bin',
-            description: 'Directory where the binaries will be installed'
-        )
-        string(
             name: 'kube_service_addresses',
             defaultValue: '10.233.0.0/18',
             description: 'Kubernetes internal network for services, unused block of space.'
@@ -171,8 +161,6 @@ pipeline {
                         internal_loadbalancer: "${params.internal_loadbalancer}",
                         k8s_network_plugin: "${params.k8s_network_plugin}",
                         container_runtime: "${params.container_runtime}",
-                        etcd_data_dir: "${params.etcd_data_dir}",
-                        bin_dir: "${params.bin_dir}",
                         local_release_dir: "${params.kubespray_temp_dir}",
                         kube_service_addresses: "${params.kube_service_addresses}",
                         kube_pods_subnet: "${params.kube_pods_subnet}",
