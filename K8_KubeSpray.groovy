@@ -116,7 +116,7 @@ pipeline {
         stage('SSH Key Pair Tasks') {
             steps {
                 ansiblePlaybook(
-                    playbook: "${env.WORKSPACE}/roles/Requirements/ssh_keys_tasks.yaml",
+                    playbook: "${env.WORKSPACE}/roles/ssh_keys_tasks.yaml",
                     inventory: "${env.WORKSPACE}/inventory.ini",
                     colorized: true,
                     extras: '-vv --ssh-extra-args="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"',
