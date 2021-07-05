@@ -2,7 +2,7 @@
 - name: Move k8cluster template f
   become: yes
   template:
-    src: k8s/k8s.yml
+    src: kubernetes.yaml
     dest: ../files/
 
     #  dest: "{{ jenkins_workspace }}roles/kubespray-2.16.0/inventory/mycluster/group_vars/k8s_cluster/k8s-cluster.yml"
