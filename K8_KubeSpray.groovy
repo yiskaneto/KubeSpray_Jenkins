@@ -53,7 +53,7 @@ pipeline {
             description: 'List of kube control planes IPs, separated by comas"'
         )
         choice(
-            name: 'k8s_network_plugin',
+            name: 'kube_network_plugin',
             choices: ['calico','flannel','cilium','weave','cloud'],
 		)
         choice(
@@ -159,7 +159,7 @@ pipeline {
                         apiserver_loadbalancer_port: "${params.apiserver_loadbalancer_port}",
                         use_internal_loadbalancer: "${params.use_internal_loadbalancer}",
                         internal_loadbalancer: "${params.internal_loadbalancer}",
-                        k8s_network_plugin: "${params.k8s_network_plugin}",
+                        kube_network_plugin: "${params.kube_network_plugin}",
                         container_runtime: "${params.container_runtime}",
                         local_release_dir: "${params.kubespray_temp_dir}",
                         kube_service_addresses: "${params.kube_service_addresses}",
