@@ -164,6 +164,17 @@
   gather_facts: False
   any_errors_fatal: "{{ any_errors_fatal | default(true) }}"
   environment: "{{ proxy_disable_env }}"
+  vars:
+    - proxy_addr: "{{ proxy_addr }}"
+    - no_proxy_addr: "{{ no_proxy_addr }}"
+    - k8s_cluster_name: "{{ k8s_cluster_name }}"
+    - apiserver_loadbalancer_domain_name: "{{ apiserver_loadbalancer_domain_name }}"
+    - apiserver_loadbalancer_address: "{{ apiserver_loadbalancer_address }}"
+    - apiserver_loadbalancer_port: "{{ apiserver_loadbalancer_port }}"
+    - use_internal_loadbalancer: "{{ use_internal_loadbalancer }}"
+    - internal_loadbalancer: "{{ internal_loadbalancer }}"
+    - k8s_network_plugin: "{{ k8s_network_plugin }}"
+    - container_runtime: "{{ container_runtime }}"
   roles:
     - { role: kubespray-defaults }
     - {
