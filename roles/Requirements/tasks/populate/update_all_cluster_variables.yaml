@@ -8,13 +8,13 @@
 - name: Updating loadbalancer_apiserver address on inventory/mycluster/group_vars/all/all.yml
   ansible.builtin.lineinfile:
     path: "{{ jenkins_workspace }}roles/kubespray-2.16.0/inventory/mycluster/group_vars/all/all.yml"
-    search_string: "address: 1.2.3.4"
+    regexp: "^  address: 1.2.3.4"
     line: "  address: {{ apiserver_loadbalancer_address }}"
 
 - name: Updating loadbalancer_apiserver port on inventory/mycluster/group_vars/all/all.yml
   ansible.builtin.lineinfile:
     path: "{{ jenkins_workspace }}roles/kubespray-2.16.0/inventory/mycluster/group_vars/all/all.yml"
-    search_string: "port: 1234"
+    regexp: "^  port: 1234"
     line: "  port: {{ apiserver_loadbalancer_port }}"
 
 - name: Updating loadbalancer_apiserver_localhost on inventory/mycluster/group_vars/all/all.yml
