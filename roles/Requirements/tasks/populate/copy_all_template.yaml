@@ -1,5 +1,5 @@
 ---
-- name: copying all.yml template file
+- name: Copying all.yml template file
   template:
     src: "{{ jenkins_workspace }}roles/Requirements/templates/all/all.yml"
     dest: "{{ jenkins_workspace }}roles/kubespray-2.16.0/inventory/mycluster/group_vars/all/all.yml"
