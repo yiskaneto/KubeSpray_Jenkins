@@ -152,7 +152,7 @@ pipeline {
                     colorized: true,
                     // become: true,
                     // becomeUser: "root",
-                    extras: '-v --become --become-user=root --ssh-extra-args="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o IdentityFile=~/.ssh/id_rsa"',
+                    extras: '-v --become --become-user=root --flush-cache --ssh-extra-args="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o IdentityFile=~/.ssh/id_rsa"',
                     extraVars: [
                         proxy_addr: "${params.proxy_addr}",
                         no_proxy_addr: "${params.no_proxy_addr}",
