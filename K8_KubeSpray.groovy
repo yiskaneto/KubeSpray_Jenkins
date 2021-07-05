@@ -119,7 +119,7 @@ pipeline {
                     playbook: "${env.WORKSPACE}/roles/ssh_keys_tasks.yaml",
                     inventory: "${env.WORKSPACE}/inventory.ini",
                     colorized: true,
-                    extras: '-vvvv --ssh-extra-args="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"',
+                    extras: '-vvvv --ssh-extra-args="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o IdentityFile=.ssh/id_rsa"',
                 )    
             }
         }
