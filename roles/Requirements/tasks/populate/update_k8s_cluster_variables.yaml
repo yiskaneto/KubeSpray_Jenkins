@@ -28,3 +28,9 @@
     path: "{{ jenkins_workspace }}roles/kubespray-2.16.0/inventory/mycluster/group_vars/k8s_cluster/k8s-cluster.yml"
     regexp: "^container_manager: "
     line: "container_manager: {{ container_runtime }}"
+
+- name: Updating kube_network_plugin inventory/mycluster/group_vars/k8s_cluster/k8s-cluster.yml
+  ansible.builtin.lineinfile:
+    path: "{{ jenkins_workspace }}roles/kubespray-2.16.0/inventory/mycluster/group_vars/k8s_cluster/k8s-cluster.yml"
+    regexp: "^kube_network_plugin: "
+    line: "kube_network_plugin: {{ kube_network_plugin }}"
