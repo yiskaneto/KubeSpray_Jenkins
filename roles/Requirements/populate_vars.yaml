@@ -1,7 +1,5 @@
 ---
 - hosts: localhost
-  become: yes
-  become_user: root
   remote_user: root
   gather_facts: false
   connection: local
