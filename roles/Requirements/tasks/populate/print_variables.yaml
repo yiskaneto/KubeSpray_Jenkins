@@ -1,16 +1,15 @@
 ---
 - name: cat all.yaml template
   shell: "cat {{ jenkins_workspace }}roles/kubespray-2.16.0/inventory/mycluster/group_vars/all/all.yml"
-  register: allu
-
-- name: cat k8s-cluster.yml template
-  shell: "cat {{ jenkins_workspace }}roles/kubespray-2.16.0/inventory/mycluster/group_vars/k8s_cluster/k8s-cluster.yml"
-  register: kcluster
+  register: all_yaml
 
 - name: print all.yaml template
   debug:
-    msg: "{{ allu.stdout_lines }}"
+    msg: "{{ all_yaml.stdout_lines }}"
+# - name: cat k8s-cluster.yml template
+#   shell: "cat {{ jenkins_workspace }}roles/kubespray-2.16.0/inventory/mycluster/group_vars/k8s_cluster/k8s-cluster.yml"
+#   register: kcluster
 
-- name: print k8s-cluster.yml template
-  debug:
-    msg: "{{ kcluster.stdout_lines }}"
+# - name: print k8s-cluster.yml template
+#   debug:
+#     msg: "{{ kcluster.stdout_lines }}"
