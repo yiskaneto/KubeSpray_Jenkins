@@ -8,7 +8,7 @@
 - hosts: all
   vars:
     - proxy_addr: "{{ proxy_addr }}"
-    - proxy_addr: "{{ no_proxy_addr }}"
+    - no_proxy_addr: "{{ no_proxy_addr }}"
     - k8s_cluster_name: "{{ k8s_cluster_name }}"
     - apiserver_loadbalancer_domain_name: "{{ apiserver_loadbalancer_domain_name }}"
     - apiserver_loadbalancer_address: "{{ apiserver_loadbalancer_address }}"
