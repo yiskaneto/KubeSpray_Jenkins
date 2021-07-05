@@ -130,7 +130,7 @@ pipeline {
         stage('Running Requirements') {
             steps {
                 ansiblePlaybook(
-                    playbook: "${env.WORKSPACE}/roles/Requirements/pupulate_vars.yaml",
+                    playbook: "${env.WORKSPACE}/roles/Requirements/populate_vars.yaml",
                     inventory: "${env.WORKSPACE}/inventory.ini",
                     colorized: true,
                     extras: '-v --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"',
