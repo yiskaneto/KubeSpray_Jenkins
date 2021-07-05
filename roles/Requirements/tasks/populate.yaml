@@ -2,3 +2,9 @@
 - name: print variables
   debug:
     msg: "proxy_addr: {{ proxy_addr }}, no_proxy_addr: {{ no_proxy_addr }}"
+
+- name: copy template file
+  copy:
+    src: "{{ jenkins_workspace }}roles/Requirements/templates/all.yml"
+    dest: "{{ jenkins_workspace }}roles/kubespray-2.16.0/all.yml"
+    flat: yes
