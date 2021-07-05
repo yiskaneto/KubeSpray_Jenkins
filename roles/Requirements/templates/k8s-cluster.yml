@@ -150,7 +150,7 @@ kube_encrypt_secret_data: false
 
 # DNS configuration.
 # Kubernetes cluster name, also will be used as DNS domain
-cluster_name: "{{ k8s_cluster_name }}"
+cluster_name: "{{ cluster_name }}"
 # Subdomains of DNS domain to be resolved via /etc/resolv.conf for hostnet pods
 ndots: 2
 # Can be coredns, coredns_dual, manual or none
