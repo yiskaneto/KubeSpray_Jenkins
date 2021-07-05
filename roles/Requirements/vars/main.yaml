@@ -12,4 +12,5 @@ k8s_network_plugin: "{{ k8s_network_plugin }}"
 container_runtime: "{{ container_runtime }}"
 
 # File from KubeSpray kubeSpray/inventory/mycluster/group_vars/all/all.yaml
+etcd_data_dir: "{{ etcd_data_dir | default('/var/lib/etcd') }}"
 bin_dir: "{{ bin_dir | default('/usr/local/bin') }}"

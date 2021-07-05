@@ -1,6 +1,6 @@
 ---
 ## Directory where etcd data stored
-etcd_data_dir: /var/lib/etcd
+etcd_data_dir: "{{ etcd_data_dir }}"
 
 ## Experimental kubeadm etcd deployment mode. Available only for new deployment
 etcd_kubeadm_enabled: false
@@ -62,7 +62,7 @@ http_proxy: "{{ proxy_addr }}"
 https_proxy: "{{ proxy_addr }}"
 
 ## Refer to roles/kubespray-defaults/defaults/main.yml before modifying no_proxy
-no_proxy: no_proxy_addr
+no_proxy: "{{ no_proxy_addr }}"
 
 ## Some problems may occur when downloading files over https proxy due to ansible bug
 ## https://github.com/ansible/ansible/issues/32750. Set this variable to False to disable

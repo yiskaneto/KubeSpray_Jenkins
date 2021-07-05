@@ -33,31 +33,6 @@ pipeline {
             description: 'Leave empty if not needed'
         )
         string(
-            name: 'apiserver_loadbalancer_domain_name',
-            defaultValue: '',
-            description: 'Leave empty if not needed'
-        )
-        string(
-            name: 'apiserver_loadbalancer_address',
-            defaultValue: '',
-            description: 'Leave empty if not needed'
-        )
-        string(
-            name: 'apiserver_loadbalancer_port',
-            defaultValue: '8443',
-            description: 'Leave empty if not needed'
-        )
-        booleanParam(
-            name: 'use_internal_loadbalancer',
-            defaultValue: true,
-            description: 'Whether or not to use internal loadbalancers for apiservers'
-        )
-        choice(
-            name: 'internal_loadbalancer',
-            choices: ['nginx','haproxy'],
-            description: 'What load balancer provider to use, this will only be consider if the paramter above was set to true'
-		)
-        string(
             name: 'kube_control_plane_nodes',
             defaultValue: '192.168.0.10,192.168.0.11,192.168.0.12',
             description: 'List of kube control planes IPs, separated by comas"'
@@ -86,6 +61,41 @@ pipeline {
             choices: ['docker','crio','containerd'],
             description: 'docker for docker, crio for cri-o and containerd for containerd.'
 		)
+        string(
+            name: 'apiserver_loadbalancer_domain_name',
+            defaultValue: '',
+            description: 'Leave empty if not needed'
+        )
+        string(
+            name: 'apiserver_loadbalancer_address',
+            defaultValue: '',
+            description: 'Leave empty if not needed'
+        )
+        string(
+            name: 'apiserver_loadbalancer_port',
+            defaultValue: '8443',
+            description: 'Leave empty if not needed'
+        )        
+        booleanParam(
+            name: 'use_internal_loadbalancer',
+            defaultValue: true,
+            description: 'Whether or not to use internal loadbalancers for apiservers'
+        )
+        choice(
+            name: 'internal_loadbalancer',
+            choices: ['nginx','haproxy'],
+            description: 'What load balancer provider to use, this will only be consider if the paramter above was set to true'
+		)
+        string(
+            name: 'etcd_data_dir',
+            defaultValue: '/var/lib/etcd',
+            description: 'etcd data directory'
+        )
+        string(
+            name: 'bin_dir',
+            defaultValue: '/usr/local/bin',
+            description: 'Directory where the binaries will be installed'
+        )
         password(
         name: 'Host_Password',
         defaultValue: 'empty',
@@ -146,6 +156,8 @@ pipeline {
                         internal_loadbalancer: "${params.internal_loadbalancer}",
                         k8s_network_plugin: "${params.k8s_network_plugin}",
                         container_runtime: "${params.container_runtime}",
+                        etcd_data_dir: "${params.etcd_data_dir}",
+                        bin_dir: "${params.bin_dir}",
                         ansible_password: [value: '${Host_Password}', hidden: true]
                     ]
                 )    
