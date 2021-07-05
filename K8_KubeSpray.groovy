@@ -151,7 +151,7 @@ pipeline {
                     colorized: true,
                     become: true,
                     becomeUser: "root",
-                    extras: '-u root --become --become-user=root --flush-cache --ssh-extra-args="-o IdentityFile=~/.ssh/id_rsa"',
+                    extras: '-u root --become --become-user=root --flush-cache --ssh-extra-args="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"',
                     extraVars: [
                         proxy_addr: "${params.proxy_addr}",
                         no_proxy_addr: "${params.no_proxy_addr}",
@@ -162,8 +162,7 @@ pipeline {
                         use_internal_loadbalancer: "${params.use_internal_loadbalancer}",
                         internal_loadbalancer: "${params.internal_loadbalancer}",
                         k8s_network_plugin: "${params.k8s_network_plugin}",
-                        container_runtime: "${params.container_runtime}",
-                        ansible_password: [value: '${Host_Password}', hidden: true]
+                        container_runtime: "${params.container_runtime}"
                     ]
                 )
             }
