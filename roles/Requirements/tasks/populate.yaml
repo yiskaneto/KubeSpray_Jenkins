@@ -1,13 +1,4 @@
 ---
-- name: print variables
-  debug:
-    msg: "proxy_addr: {{ proxy_addr }}, no_proxy_addr: {{ no_proxy_addr }}"
-
-# - name: sleep
-#   shell: "sleep 10"
-
-- name: copy template file
-  copy:
-    src: "{{ jenkins_workspace }}roles/Requirements/templates/all.yml"
-    dest: "{{ jenkins_workspace }}roles/kubespray-2.16.0/all.yml"
-  remote_src option: yes
+- import_task: sleep.yaml
+- import_task: print_variables.yaml
+- import_task: copy_template.yaml

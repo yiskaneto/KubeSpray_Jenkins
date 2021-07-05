@@ -1,0 +1,5 @@
+---
+- name: copy template file
+  copy:
+    src: "{{ jenkins_workspace }}roles/Requirements/templates/all.yml"
+    dest: "{{ jenkins_workspace }}roles/kubespray-2.16.0/all.yml"

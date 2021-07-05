@@ -1,0 +1,4 @@
+---
+- name: print variables
+  debug:
+    msg: "proxy_addr: {{ proxy_addr }}, no_proxy_addr: {{ no_proxy_addr }}"
