@@ -135,7 +135,7 @@ pipeline {
                     colorized: true,
                     extras: '-v --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"',
                     extraVars: [
-                        jenkins_workspace: "${env.WORKSPACE}",
+                        jenkins_workspace: "${env.WORKSPACE}/",
                         proxy_addr: "${params.proxy_addr}",
                         no_proxy_addr: "${params.no_proxy_addr}",
                         k8s_cluster_name: "${params.cluster_name}",
