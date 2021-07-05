@@ -21,4 +21,4 @@ kube_cert_dir: "{{ kube_config_dir }}/ssl"
 local_release_dir: "{{ local_release_dir }}"
 kube_service_addresses: "{{ kube_service_addresses }}"
 
-inventory_dir: inventory
+inventory_dir: inventory/
