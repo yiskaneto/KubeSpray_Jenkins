@@ -17,6 +17,6 @@ bin_dir: "{{ bin_dir | default('/usr/local/bin') }}"
 
 # File from KubeSpray kubeSpray/inventory/mycluster/group_vars/k8s_cluster/k8s_cluster.yaml
 kube_config_dir: /etc/kubernetes/
-#kube_cert_dir: "{{ kube_config_dir }}/ssl"
+kube_cert_dir: "{{ kube_config_dir }}/ssl"
 
 inventory_dir: inventory/local-dind
