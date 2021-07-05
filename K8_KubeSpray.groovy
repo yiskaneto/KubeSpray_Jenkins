@@ -164,6 +164,7 @@ pipeline {
                         internal_loadbalancer: "${params.internal_loadbalancer}",
                         k8s_network_plugin: "${params.k8s_network_plugin}",
                         container_runtime: "${params.container_runtime}"
+                        ansible_password: [value: '${Host_Password}', hidden: true]
                     ]
                 )
             }
