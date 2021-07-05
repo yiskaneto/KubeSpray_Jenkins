@@ -1,0 +1,30 @@
+---
+- name: Updating cluster_name inventory/mycluster/group_vars/k8s_cluster/k8s-cluster.yml
+  ansible.builtin.lineinfile:
+    path: "{{ jenkins_workspace }}roles/kubespray-2.16.0/inventory/mycluster/group_vars/k8s_cluster/k8s-cluster.yml"
+    regexp: "^cluster_name: "
+    line: "cluster_name: {{ k8s_cluster_name }}"
+
+- name: Updating local_release_dir on inventory/mycluster/group_vars/k8s_cluster/k8s-cluster.yml
+  ansible.builtin.lineinfile:
+    path: "{{ jenkins_workspace }}roles/kubespray-2.16.0/inventory/mycluster/group_vars/k8s_cluster/k8s-cluster.yml"
+    regexp: "^local_release_dir: "
+    line: "local_release_dir: {{ local_release_dir }}"
+
+- name: Updating kube_service_addresses inventory/mycluster/group_vars/k8s_cluster/k8s-cluster.yml
+  ansible.builtin.lineinfile:
+    path: "{{ jenkins_workspace }}roles/kubespray-2.16.0/inventory/mycluster/group_vars/k8s_cluster/k8s-cluster.yml"
+    regexp: "^kube_service_addresses: "
+    line: "kube_service_addresses: {{ kube_service_addresses }}"
+
+- name: Updating kube_pods_subnet inventory/mycluster/group_vars/k8s_cluster/k8s-cluster.yml
+  ansible.builtin.lineinfile:
+    path: "{{ jenkins_workspace }}roles/kubespray-2.16.0/inventory/mycluster/group_vars/k8s_cluster/k8s-cluster.yml"
+    regexp: "^kube_pods_subnet: "
+    line: "kube_pods_subnet: {{ kube_pods_subnet }}"
+
+- name: Updating container_manager inventory/mycluster/group_vars/k8s_cluster/k8s-cluster.yml
+  ansible.builtin.lineinfile:
+    path: "{{ jenkins_workspace }}roles/kubespray-2.16.0/inventory/mycluster/group_vars/k8s_cluster/k8s-cluster.yml"
+    regexp: "^container_manager: "
+    line: "container_manager: {{ container_runtime }}"

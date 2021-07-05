@@ -1,8 +1,0 @@
----
-- name: Replace cluster_name variable
-  ansible.builtin.lineinfile:
-    path: "{{ jenkins_workspace }}roles/kubespray-2.16.0/inventory/mycluster/group_vars/k8s_cluster/k8s-cluster.yml"
-    regexp: "^cluster_name: "
-    line: "cluster_name: {{ k8s_cluster_name }}"
-
-    #  dest: "{{ jenkins_workspace }}roles/kubespray-2.16.0/inventory/mycluster/group_vars/k8s_cluster/k8s-cluster.yml"
