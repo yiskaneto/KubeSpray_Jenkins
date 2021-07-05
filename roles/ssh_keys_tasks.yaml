@@ -16,3 +16,13 @@
         ssh_key_file: .ssh/id_rsa
         # ssh_key_passphrase: "{{ ssh_key_passphrase }}"
         force: no
+---
+- hosts: all
+  remote_user: root
+  gather_facts: false
+  tasks:
+    - name: shh-copy-id to target nodes
+      authorized_key:
+        user: root
+        state: present
+        key: "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
