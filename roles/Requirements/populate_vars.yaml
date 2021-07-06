@@ -8,7 +8,7 @@
     no_proxy: "{{ no_proxy }}"
 
   tasks:
-    - name: Copy inventory/sample to inventory/mycluter
+    - name: Running simple command to set env
       shell: "date"
 
 - hosts: localhost
