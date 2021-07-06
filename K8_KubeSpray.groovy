@@ -209,7 +209,7 @@ pipeline {
                 //     extras: '-v -u root --become --become-user=root --flush-cache'
                 // )
                 sh '''
-                cd ${WORKSPACE}/roles/kubespray-2.16.0/ && time ansible-playbook -u root -i ${WORKSPACE}/inventory.ini --become --become-user=root cluster.yml -vv
+                cd ${WORKSPACE}/roles/kubespray-2.16.0/ && time ansible-playbook -i ${WORKSPACE}/inventory.ini -u root --become --become-user=root --flush-cache cluster.yml -vv
                 '''
             }
         }
