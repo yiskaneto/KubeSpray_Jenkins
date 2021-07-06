@@ -13,9 +13,9 @@
   remote_user: root
   gather_facts: false
   environment:
-    http_proxy: "http://web-proxy.us.softwaregrp.net:8080"
-    https_proxy: "http://web-proxy.us.softwaregrp.net:8080"
-    no_proxy: "127.0.0.1,localhost,15.214.200.244,.arcsight.com,.arst.hpeswlab.net,.arst.usa.hp.com"
+    http_proxy: "{{ http_proxy }}"
+    https_proxy: "{{ https_proxy }}"
+    no_proxy: "{{ no_proxy }}"
 
   tasks:
     - name:
