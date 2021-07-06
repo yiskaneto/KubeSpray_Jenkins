@@ -200,12 +200,7 @@ pipeline {
                     playbook: "${WORKSPACE}/roles/kubespray-2.16.0/cluster.yml",
                     inventory: "${WORKSPACE}/inventory.ini",
                     colorized: true,
-                    become: true,
-                    becomeUser: "root",
-                    extras: '-v -u root --become --become-user=root --flush-cache --ssh-extra-args="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"',
-                    extraVars: [
-                        jenkins_workspace: "${env.WORKSPACE}/"
-                    ]
+                    extras: '-v -u root --become --become-user=root --flush-cache'
                 )
             }
         }
