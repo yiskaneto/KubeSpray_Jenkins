@@ -17,7 +17,17 @@
   connection: local
   tasks:
     - name: Copy inventory/sample to inventory/mycluter
-      shell: "cd {{ jenkins_workspace }}roles/kubespray-2.16.0/ ; cp -rfp inventory/sample inventory/mycluster"
+      shell: "cd {{ jenkins_workspace }}roles/kubespray-2.16.0/ && cp -rfp inventory/sample inventory/mycluster"
+
+    - name: Copy all.yml to mycluster
+      copy:
+        src: all.yml
+        dest: "{{ jenkins_workspace }}roles/kubespray-2.16.0/inventory/sample inventory/mycluster/group_vars/all/all.yml"
+
+    - name: Copy k8s_cluster.yml to mycluster
+      copy:
+        src: all.yml
+        dest: "{{ jenkins_workspace }}roles/kubespray-2.16.0/inventory/sample inventory/mycluster/group_vars/k8s_cluster/k8s-cluster.yml"
 
     - name: Running tasks/populate.yaml instead of 'main'
       import_role:

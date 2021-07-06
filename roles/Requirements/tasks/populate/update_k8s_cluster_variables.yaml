@@ -29,6 +29,12 @@
     regexp: "^cluster_name: "
     line: "cluster_name: {{ k8s_cluster_name }}"
 
+- name: Updating cluster_name inventory/mycluster/group_vars/k8s_cluster/k8s-cluster.yml
+  ansible.builtin.lineinfile:
+    path: "{{ jenkins_workspace }}roles/kubespray-2.16.0/inventory/mycluster/group_vars/k8s_cluster/k8s-cluster.yml"
+    regexp: "^cluster_name: "
+    line: "cluster_name: {{ cluster_name }}"
+
 - name: Updating container_manager inventory/mycluster/group_vars/k8s_cluster/k8s-cluster.yml
   ansible.builtin.lineinfile:
     path: "{{ jenkins_workspace }}roles/kubespray-2.16.0/inventory/mycluster/group_vars/k8s_cluster/k8s-cluster.yml"

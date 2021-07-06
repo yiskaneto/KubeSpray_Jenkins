@@ -18,11 +18,6 @@ pipeline {
   
     parameters {
         string(
-            name: 'main-master-node-install',
-            defaultValue: '',
-            description: 'Main kube control planenode that will be used to install KubeSpray'
-        )
-        string(
             name: 'http_proxy',
             defaultValue: '',
             description: '<h5>e.g http://my_proxy.com:8080</h5>'
@@ -183,7 +178,7 @@ pipeline {
                         http_proxy: "${params.http_proxy}",
                         https_proxy: "${params.https_proxy}",
                         no_proxy: "${params.no_proxy}",
-                        k8s_cluster_name: "${params.cluster_name}",
+                        cluster_name: "${params.cluster_name}",
                         apiserver_loadbalancer_domain_name: "${params.apiserver_loadbalancer_domain_name}",
                         apiserver_loadbalancer_address: "${params.apiserver_loadbalancer_address}",
                         apiserver_loadbalancer_port: "${params.apiserver_loadbalancer_port}",
