@@ -26,7 +26,7 @@
 
     - name: Copy k8s_cluster.yml to mycluster
       copy:
-        src: k8s_cluster.yml
+        src: k8s-cluster.yml
         dest: "{{ jenkins_workspace }}roles/kubespray-2.16.0/inventory/mycluster/group_vars/k8s_cluster/k8s-cluster.yml"
 
     - name: Running tasks/populate.yaml instead of 'main'
