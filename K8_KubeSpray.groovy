@@ -169,6 +169,8 @@ pipeline {
                     playbook: "${env.WORKSPACE}/roles/Requirements/populate_vars.yaml",
                     inventory: "${env.WORKSPACE}/inventory.ini",
                     colorized: true,
+                    become: true,
+                    becomeUser: "root",
                     extras: '-vv --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"',
                     extraVars: [
                         jenkins_workspace: "${env.WORKSPACE}/",
