@@ -9,13 +9,16 @@
 
   tasks:
     - name: Copy inventory/sample to inventory/mycluter
-      shell: "cp -rfp {{ jenkins_workspace }}roles/kubespray-2.16.0/inventory/sample {{ jenkins_workspace }}roles/kubespray-2.16.0/inventory//mycluster"
+      shell: "date"
 
 - hosts: localhost
   remote_user: root
   gather_facts: false
   connection: local
   tasks:
+    - name: Copy inventory/sample to inventory/mycluter
+      shell: "cp -rfp {{ jenkins_workspace }}roles/kubespray-2.16.0/inventory/sample {{ jenkins_workspace }}roles/kubespray-2.16.0/inventory//mycluster"
+
     - name: Running tasks/populate.yaml instead of 'main'
       import_role:
         name: ../
