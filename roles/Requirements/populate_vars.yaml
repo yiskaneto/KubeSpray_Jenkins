@@ -1,14 +1,4 @@
 ---
-- hosts: localhost
-  remote_user: root
-  gather_facts: false
-  connection: local
-  tasks:
-    - name: Running tasks/populate.yaml instead of 'main'
-      import_role:
-        name: ../
-        tasks_from: populate.yaml
-
 - hosts: all
   remote_user: root
   gather_facts: false
@@ -18,18 +8,15 @@
     no_proxy: "{{ no_proxy }}"
 
   tasks:
-    - name:
-      shell: "echo ${http_proxy}"
-      register: echo_http_proxy
+    - name: Copy inventory/sample to inventory/myclsuter
+      shell: "cp -rfp {{ jenkins_workspace }}roles/kubespray-2.16.0/inventory/sample {{ jenkins_workspace }}roles/kubespray-2.16.0/inventory//mycluster"
 
-    - name: printing echo_http_proxy
-      debug:
-        msg: "{{ echo_http_proxy.stdout_lines }}"
-
-    - name:
-      shell: "echo ${no_proxy}"
-      register: echo_no_proxy
-
-    - name: printing echo_no_proxy
-      debug:
-        msg: "{{ echo_no_proxy.stdout_lines }}"
+- hosts: localhost
+  remote_user: root
+  gather_facts: false
+  connection: local
+  tasks:
+    - name: Running tasks/populate.yaml instead of 'main'
+      import_role:
+        name: ../
+        tasks_from: populate.yaml
