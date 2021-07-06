@@ -17,7 +17,7 @@
   connection: local
   tasks:
     - name: Copy inventory/sample to inventory/mycluter
-      shell: "cp -rfp {{ jenkins_workspace }}roles/kubespray-2.16.0/inventory/sample {{ jenkins_workspace }}roles/kubespray-2.16.0/inventory/mycluster"
+      shell: "cd {{ jenkins_workspace }}roles/kubespray-2.16.0/ ; cp -rfp inventory/sample inventory/mycluster"
 
     - name: Running tasks/populate.yaml instead of 'main'
       import_role:
