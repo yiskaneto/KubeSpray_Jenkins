@@ -156,6 +156,7 @@ pipeline {
                     extras: '-vv --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"',
                     extraVars: [
                         jenkins_workspace: "${env.WORKSPACE}/",
+                        http_proxy: "${params.http_proxy}",
                         ansible_password: [value: '${Host_Password}', hidden: true]
                     ]
                 )    
