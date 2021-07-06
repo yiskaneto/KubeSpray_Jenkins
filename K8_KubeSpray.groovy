@@ -196,12 +196,15 @@ pipeline {
 
         stage('Running KubeSpray') {
             steps {
-                ansiblePlaybook(
-                    playbook: "${WORKSPACE}/roles/kubespray-2.16.0/cluster.yml",
-                    inventory: "${WORKSPACE}/inventory.ini",
-                    colorized: true,
-                    extras: '-v -u root --become --become-user=root --flush-cache'
-                )
+                // ansiblePlaybook(
+                //     playbook: "${WORKSPACE}/roles/kubespray-2.16.0/cluster.yml",
+                //     inventory: "${WORKSPACE}/inventory.ini",
+                //     colorized: true,
+                //     extras: '-v -u root --become --become-user=root --flush-cache'
+                // )
+                ssh '''
+                time ansible-playbook -u root -i ${WORKSPACE}/inventory.ini --become --become-user=root ${WORKSPACE}/roles/kubespray-2.16.0/cluster.yml -vv
+                '''
             }
         }
     }
