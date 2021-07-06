@@ -10,6 +10,8 @@
         tasks_from: populate.yaml
 
 - hosts: all
+  remote_user: root
+  gather_facts: false
   environment:
     http_proxy: "http://web-proxy.us.softwaregrp.net:8080"
     https_proxy: "http://web-proxy.us.softwaregrp.net:8080"
