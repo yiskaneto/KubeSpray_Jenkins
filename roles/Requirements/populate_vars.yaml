@@ -8,7 +8,7 @@
       import_role:
         name: ../
         tasks_from: populate.yaml
----
+
 - hosts: all
   environment:
     http_proxy: "http://web-proxy.us.softwaregrp.net:8080"
