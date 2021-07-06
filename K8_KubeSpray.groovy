@@ -202,7 +202,7 @@ pipeline {
                 //     colorized: true,
                 //     extras: '-v -u root --become --become-user=root --flush-cache'
                 // )
-                ssh '''
+                sh '''
                 time ansible-playbook -u root -i ${WORKSPACE}/inventory.ini --become --become-user=root ${WORKSPACE}/roles/kubespray-2.16.0/cluster.yml -vv
                 '''
             }
