@@ -8,7 +8,7 @@
     no_proxy: "{{ no_proxy }}"
 
   tasks:
-    - name: Copy inventory/sample to inventory/myclsuter
+    - name: Copy inventory/sample to inventory/mycluter
       shell: "cp -rfp {{ jenkins_workspace }}roles/kubespray-2.16.0/inventory/sample {{ jenkins_workspace }}roles/kubespray-2.16.0/inventory//mycluster"
 
 - hosts: localhost
