@@ -8,3 +8,26 @@
       import_role:
         name: ../
         tasks_from: populate.yaml
+---
+- hosts: all
+  environment:
+    http_proxy: "http://web-proxy.us.softwaregrp.net:8080"
+    https_proxy: "http://web-proxy.us.softwaregrp.net:8080"
+    no_proxy: "127.0.0.1,localhost,15.214.200.244,.arcsight.com,.arst.hpeswlab.net,.arst.usa.hp.com"
+
+  tasks:
+    - name:
+      shell: "echo ${http_proxy}"
+      register: echo_http_proxy
+
+    - name: printing echo_http_proxy
+      debug:
+        msg: "{{ echo_http_proxy.stdout_lines }}"
+
+    - name:
+      shell: "echo ${no_proxy}"
+      register: echo_no_proxy
+
+    - name: printing echo_http_proxy
+      debug:
+        msg: "{{ echo_http_proxy.stdout_lines }}"
