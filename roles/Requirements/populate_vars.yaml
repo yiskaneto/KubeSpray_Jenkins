@@ -28,6 +28,6 @@
       shell: "echo ${no_proxy}"
       register: echo_no_proxy
 
-    - name: printing echo_http_proxy
+    - name: printing echo_no_proxy
       debug:
-        msg: "{{ echo_http_proxy.stdout_lines }}"
+        msg: "{{ echo_no_proxy.stdout_lines }}"
