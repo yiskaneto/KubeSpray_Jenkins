@@ -26,7 +26,7 @@ kube_proxy_mode: ipvs
 ## List of kubeadm init phases that should be skipped during control plane setup
 ## By default 'addon/coredns' is skipped
 ## 'addon/kube-proxy' gets skipped for some network plugins
-kubeadm_init_phases_skip_default: [ "addon/coredns" ]
+kubeadm_init_phases_skip_default: ["addon/coredns"]
 kubeadm_init_phases_skip: >-
   {%- if kube_network_plugin == 'kube-router' and (kube_router_run_service_proxy is defined and kube_router_run_service_proxy) -%}
   {{ kubeadm_init_phases_skip_default }} + [ "addon/kube-proxy" ]
@@ -79,9 +79,9 @@ cluster_name: cluster.local
 ndots: 2
 # Default resolv.conf options
 docker_dns_options:
-- ndots:{{ ndots }}
-- timeout:2
-- attempts:2
+  - ndots:{{ ndots }}
+  - timeout:2
+  - attempts:2
 # Can be coredns, coredns_dual, manual, or none
 dns_mode: coredns
 
@@ -102,8 +102,8 @@ skydns_server: "{{ kube_service_addresses|ipaddr('net')|ipaddr(3)|ipaddr('addres
 skydns_server_secondary: "{{ kube_service_addresses|ipaddr('net')|ipaddr(4)|ipaddr('address') }}"
 dns_domain: "{{ cluster_name }}"
 docker_dns_search_domains:
-- 'default.svc.{{ dns_domain }}'
-- 'svc.{{ dns_domain }}'
+  - "default.svc.{{ dns_domain }}"
+  - "svc.{{ dns_domain }}"
 
 kube_dns_servers:
   coredns: ["{{skydns_server}}"]
@@ -317,7 +317,6 @@ containerd_version: >-
   1.4.4
   {%- endif -%}
 containerd_use_systemd_cgroup: true
-
 # Settings for containerized control plane (etcd/kubelet/secrets)
 # deployment type for legacy etcd mode
 etcd_deployment_type: docker
@@ -405,7 +404,7 @@ external_openstack_network_public_networks: []
 ## List of authorization modes that must be configured for
 ## the k8s cluster. Only 'AlwaysAllow', 'AlwaysDeny', 'Node' and
 ## 'RBAC' modes are tested. Order is important.
-authorization_modes: ['Node', 'RBAC']
+authorization_modes: ["Node", "RBAC"]
 rbac_enabled: "{{ 'RBAC' in authorization_modes }}"
 
 # When enabled, API bearer tokens (including service account tokens) can be used to authenticate to the kubelet's HTTPS endpoint
@@ -571,13 +570,13 @@ proxy_env:
   NO_PROXY: "{{ no_proxy | default ('') }}"
 
 proxy_disable_env:
-  ALL_PROXY: ''
-  FTP_PROXY: ''
-  HTTPS_PROXY: ''
-  HTTP_PROXY: ''
-  NO_PROXY: ''
-  all_proxy: ''
-  ftp_proxy: ''
-  http_proxy: ''
-  https_proxy: ''
-  no_proxy: ''
+  ALL_PROXY: '"{{ http_proxy | default ('') }}"'
+  FTP_PROXY: '"{{ http_proxy | default ('') }}"'
+  HTTPS_PROXY: '"{{ http_proxy | default ('') }}"'
+  HTTP_PROXY: '"{{ http_proxy | default ('') }}"'
+  NO_PROXY: '"{{ http_proxy | default ('') }}"'
+  all_proxy: '"{{ http_proxy | default ('') }}"'
+  ftp_proxy: '"{{ http_proxy | default ('') }}"'
+  http_proxy: '"{{ http_proxy | default ('') }}"'
+  https_proxy: '"{{ http_proxy | default ('') }}"'
+  no_proxy: '"{{ no_proxy | default ('') }}"'
