@@ -17,9 +17,23 @@
   connection: local
   tasks:
     - name: Copy inventory/sample to inventory/mycluter
-      shell: "cp -rfp {{ jenkins_workspace }}roles/kubespray-2.16.0/inventory/sample {{ jenkins_workspace }}roles/kubespray-2.16.0/inventory//mycluster"
+      shell: "cp -rfp {{ jenkins_workspace }}roles/kubespray-2.16.0/inventory/sample {{ jenkins_workspace }}roles/kubespray-2.16.0/inventory/mycluster"
 
     - name: Running tasks/populate.yaml instead of 'main'
       import_role:
         name: ../
         tasks_from: populate.yaml
+# - hosts: main-master-node-install
+#   remote_user: root
+#   gather_facts: false
+#   environment:
+#     http_proxy: "{{ http_proxy }}"
+#     https_proxy: "{{ https_proxy }}"
+#     no_proxy: "{{ no_proxy }}"
+
+#   tasks:
+#     - name: Clone KubeSpray to /opt/ on main master node
+#       shell: "cd /opt/ && git clone -b release-2.16 https://github.com/kubernetes-sigs/kubespray.git"
+
+#     - name: Copy inventory/sample to inventory/mycluter
+#       shell: "cp -rfp /opt/kubespray/inventory/sample/ /opt/kubespray/inventory/mycluster"

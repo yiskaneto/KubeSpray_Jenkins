@@ -18,6 +18,11 @@ pipeline {
   
     parameters {
         string(
+            name: 'main-master-node-install',
+            defaultValue: '',
+            description: 'Main kube control planenode that will be used to install KubeSpray'
+        )
+        string(
             name: 'http_proxy',
             defaultValue: '',
             description: '<h5>e.g http://my_proxy.com:8080</h5>'
@@ -123,6 +128,7 @@ pipeline {
                 echo ${kube_nodes} | sed \'s/,/\\n/g\' | while read line ; do sed -i \'/\\[all\\]/a \\\'"${line}"\'\' ${WORKSPACE}/inventory.ini ; done
                 echo ${calico_rr_nodes} | sed \'s/,/\\n/g\' | while read line ; do sed -i \'/\\[all\\]/a \\\'"${line}"\'\' ${WORKSPACE}/inventory.ini ; done
 
+                echo ${main-master-node-install} | sed \'s/,/\\n/g\' | while read line ; do sed -i \'/\\[main-master-node-install\\]/a \\\'"${line}"\'\' ${WORKSPACE}/inventory.ini ; done
                 echo ${kube_control_plane_nodes} | sed \'s/,/\\n/g\' | while read line ; do sed -i \'/\\[kube_control_plane\\]/a \\\'"${line}"\'\' ${WORKSPACE}/inventory.ini ; done
                 echo ${etcd_nodes} | sed \'s/,/\\n/g\' | while read line ; do sed -i \'/\\[etcd\\]/a \\\'"${line}"\'\' ${WORKSPACE}/inventory.ini ; done
                 echo ${kube_nodes} | sed \'s/,/\\n/g\' | while read line ; do sed -i \'/\\[kube_node\\]/a \\\'"${line}"\'\' ${WORKSPACE}/inventory.ini ; done
@@ -203,7 +209,7 @@ pipeline {
                 //     extras: '-v -u root --become --become-user=root --flush-cache'
                 // )
                 sh '''
-                time ansible-playbook -u root -i ${WORKSPACE}/inventory.ini --become --become-user=root ${WORKSPACE}/roles/kubespray-2.16.0/cluster.yml -vv
+                cd ${WORKSPACE}/roles/kubespray-2.16.0/ && time ansible-playbook -u root -i ${WORKSPACE}/inventory.ini --become --become-user=root cluster.yml -vv
                 '''
             }
         }
