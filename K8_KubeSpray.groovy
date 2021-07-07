@@ -246,7 +246,7 @@ pipeline {
                 sh '''
                 cd "${env.WORKSPACE}/roles/tmp/kubespray/" ; echo -e "\n"
                 pwd ; echo -e "\n"
-                source venv/bin/activate ; echo -e "\n\n"
+                deactivate ; echo -e "\n"
                 '''
                 // ansiblePlaybook(
                 //     playbook: "${env.WORKSPACE}/roles/tmp/kubespray/cluster.yml",
