@@ -215,12 +215,16 @@ pipeline {
                 // deactivate ; echo -e "\n"s
                 
                 // Trying to use ansiblePlaybook method instead of the method above
-                ansiblePlaybook(
-                    playbook: "${env.WORKSPACE}/roles/tmp/kubespray/cluster.yml",
-                    inventory: "${WORKSPACE}/inventory.ini",
-                    colorized: true,
-                    extras: '-u root --become --become-user=root --flush-cache --extra-vars "http_proxy=${http_proxy} https_proxy=${https_proxy} no_proxy=${no_proxy}" -vv'
+                retry(8) {
+                    ansiblePlaybook(
+                        playbook: "${env.WORKSPACE}/roles/tmp/kubespray/cluster.yml",
+                        inventory: "${WORKSPACE}/inventory.ini",
+                        colorized: true,
+                        extras: '-u root --become --become-user=root --flush-cache --extra-vars "http_proxy=${http_proxy} https_proxy=${https_proxy} no_proxy=${no_proxy}" -vv'
+                    )    
                 )
+                    
+                }
             }
         }
     }
