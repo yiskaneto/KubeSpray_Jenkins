@@ -238,27 +238,29 @@ pipeline {
         
         stage('Running KubeSpray') {
             steps {
-                // sh '''
-                // cd ${WORKSPACE}/roles/tmp/kubespray/ ; echo -e "\n"
-                // pwd ; echo -e "\n"
-                // source venv/bin/activate ; echo -e "\n\n"
-                // '''
+                sh '''
+                cd ${WORKSPACE}/roles/tmp/kubespray/ ; echo -e "\n"
+                pwd ; echo -e "\n"
+                source venv/bin/activate ; echo -e "\n\n"
+                until time ansible-playbook -i ${WORKSPACE}/inventory.ini  --become --become-user=root cluster.yml ; sleep 5 ; done
+                source venv/bin/activate ; echo -e "\n\n"
+                '''
                 // sh '''
                 // cd ${WORKSPACE}/roles/tmp/kubespray/ ; echo -e "\n"
                 // pwd ; echo -e "\n"
                 // deactivate ; echo -e "\n"
                 // '''
-                ansiblePlaybook(
-                    playbook: "${env.WORKSPACE}/roles/tmp/kubespray/cluster.yml",
-                    inventory: "${WORKSPACE}/inventory.ini",
-                    colorized: true,
-                    extras: '-v -u root --become --become-user=root --flush-cache'
-                )
-                sh '''
-                cd "${env.WORKSPACE}/roles/tmp/kubespray/" ; echo -e "\n"
-                pwd ; echo -e "\n"
-                source venv/bin/activate ; echo -e "\n\n"
-                '''
+                // ansiblePlaybook(
+                //     playbook: "${env.WORKSPACE}/roles/tmp/kubespray/cluster.yml",
+                //     inventory: "${WORKSPACE}/inventory.ini",
+                //     colorized: true,
+                //     extras: '-v -u root --become --become-user=root --flush-cache'
+                // )
+                // sh '''
+                // cd "${env.WORKSPACE}/roles/tmp/kubespray/" ; echo -e "\n"
+                // pwd ; echo -e "\n"
+                // source venv/bin/activate ; echo -e "\n\n"
+                // '''
             }
         }
     }
