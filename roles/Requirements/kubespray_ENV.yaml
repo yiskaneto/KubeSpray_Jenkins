@@ -25,7 +25,7 @@
       with_items:
         - cd "{{ jenkins_workspace }}roles/kubespray/"
         - /usr/local/bin/pipenv shell
-        - pip3 -r requirements.txt
+        - python3 -m pip install -r requirements.txt
         - exit
       register: pipenv_result
 
