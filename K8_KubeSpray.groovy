@@ -208,7 +208,7 @@ pipeline {
                 chmod +x pip.sh
                 ./pip.sh
                 cp -rfp inventory/sample inventory/mycluster
-                sleep 120
+                sleep 10
                 '''
             }
         }
