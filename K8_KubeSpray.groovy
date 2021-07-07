@@ -198,18 +198,17 @@ pipeline {
         stage('Setting KubeSpray Env') {
             steps {
                 sh '''
-                echo "Creating temp directory"
                 mkdir ${WORKSPACE}/roles/tmp/
                 cd ${WORKSPACE}/roles/tmp/
                 pwd
-                sleep 10
                 git clone https://github.com/kubernetes-sigs/kubespray.git
                 cd kubespray
                 git checkout release-2.16
                 until /usr/local/bin/pipenv install --three ; do sleep 5 ; done
                 until /usr/local/bin/pipenvshell ; do sleep 5 ; done
                 until /usr/local/bin/pipenv install -r requirements.txt ; sleep 5 ;  done
-                cp -rfp inventory/sample inventory/mycluster                
+                cp -rfp inventory/sample inventory/mycluster
+                sleep 120          
                 '''
             }
         }
