@@ -239,12 +239,12 @@ pipeline {
         stage('Running KubeSpray') {
             steps {
                 sh '''
-                cd "${env.WORKSPACE}/roles/tmp/kubespray/" ; echo -e "\n"
+                cd ${WORKSPACE}/roles/tmp/kubespray/ ; echo -e "\n"
                 pwd ; echo -e "\n"
                 source venv/bin/activate ; echo -e "\n\n"
                 '''
                 sh '''
-                cd "${env.WORKSPACE}/roles/tmp/kubespray/" ; echo -e "\n"
+                cd ${WORKSPACE}/roles/tmp/kubespray/ ; echo -e "\n"
                 pwd ; echo -e "\n"
                 deactivate ; echo -e "\n"
                 '''
