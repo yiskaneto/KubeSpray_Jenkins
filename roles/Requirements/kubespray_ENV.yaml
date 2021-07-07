@@ -6,7 +6,7 @@
   tasks:
     - name: Clone KubeSpray project
       shell: |
-        cd %( echo "{{ jenkins_workspace }}roles/")
+        cd "{{ jenkins_workspace }}roles/"
         pwd
         sleep 10
         git clone https://github.com/kubernetes-sigs/kubespray.git
