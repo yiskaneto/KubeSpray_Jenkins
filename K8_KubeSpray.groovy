@@ -195,21 +195,37 @@ pipeline {
         //     }
         // }
 
+        // stage('Setting KubeSpray Env') {
+        //     steps {
+        //         sh '''
+        //         mkdir ${WORKSPACE}/roles/tmp/
+        //         cd ${WORKSPACE}/roles/tmp/
+        //         pwd
+        //         git clone https://github.com/kubernetes-sigs/kubespray.git
+        //         cd kubespray
+        //         git checkout release-2.16
+        //         python3 -m venv venv
+        //         source venv/bin/activate
+        //         until pip3 -r requirements.txt ; sleep 5 ;  done
+        //         cp -rfp inventory/sample inventory/mycluster
+        //         sleep 120          
+        //         '''
+        //     }
+        // }
+
         stage('Setting KubeSpray Env') {
             steps {
-                sh '''
-                mkdir ${WORKSPACE}/roles/tmp/
-                cd ${WORKSPACE}/roles/tmp/
-                pwd
-                git clone https://github.com/kubernetes-sigs/kubespray.git
-                cd kubespray
-                git checkout release-2.16
-                python3 -m venv venv
-                source venv/bin/activate
-                until pip3 -r requirements.txt ; sleep 5 ;  done
-                cp -rfp inventory/sample inventory/mycluster
-                sleep 120          
-                '''
+                ansiblePlaybook(
+                    playbook: "${env.WORKSPACE}/roles/Requirements/kubespray_ENV.yaml",
+                    inventory: "${env.WORKSPACE}/inventory.ini",
+                    colorized: true,
+                    extras: '-vv --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"',
+                    extraVars: [
+                        jenkins_workspace: "${env.WORKSPACE}/",
+                        http_proxy: "${params.http_proxy}",
+                        ansible_password: [value: '${Host_Password}', hidden: true]
+                    ]
+                )    
             }
         }
         
