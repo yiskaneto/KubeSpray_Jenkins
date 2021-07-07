@@ -220,9 +220,7 @@ pipeline {
                         playbook: "${env.WORKSPACE}/roles/tmp/kubespray/cluster.yml",
                         inventory: "${WORKSPACE}/inventory.ini",
                         colorized: true,
-                        become: true,
-                        becomeUser: "root",
-                        extras: '--flush-cache -vv',
+                        extras: '-u root --become --become-user=root --flush-cache -vv',
                         extraVars: [
                             http_proxy: "${params.http_proxy}",
                             https_proxy: "${params.https_proxy}",
