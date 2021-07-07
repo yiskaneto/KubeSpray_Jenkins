@@ -21,11 +21,12 @@
         msg: "{{ cloning.stdout_lines }}"
 
     - name: Start pipenv shell and install requirements
-      command: |
-        cd "{{ jenkins_workspace }}roles/kubespray/" 
-        pipenv shell
-        until pip3 -r requirements.txt ; sleep 5 ;  done
-        exit
+      command: "{{ item }}"
+      with_items:
+        - cd "{{ jenkins_workspace }}roles/kubespray/"
+        - pipenv shell
+        - until pip3 -r requirements.txt ; sleep 5 ;  done
+        - exit
       register: pipenv_result
 
     - name: Printing pipenv_result output
