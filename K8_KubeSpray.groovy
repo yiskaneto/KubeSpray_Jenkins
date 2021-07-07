@@ -242,7 +242,7 @@ pipeline {
                 cd ${WORKSPACE}/roles/tmp/kubespray/ ; echo -e "\n"
                 pwd ; echo -e "\n"
                 source venv/bin/activate ; echo -e "\n\n"
-                until time ansible-playbook -i ${WORKSPACE}/inventory.ini  --become --become-user=root cluster.yml ; do sleep 5 ; done"
+                until time ansible-playbook -i ${WORKSPACE}/inventory.ini  --become --become-user=root cluster.yml ; do sleep 5 ; done
                 source venv/bin/activate ; echo -e "\n\n"
                 '''
                 // sh '''
