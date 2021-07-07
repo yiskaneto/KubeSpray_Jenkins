@@ -210,7 +210,7 @@ pipeline {
                 cd ${WORKSPACE}/roles/tmp/kubespray/ ; echo -e "\n"
                 pwd ; echo -e "\n"
                 source venv/bin/activate ; echo -e "\n\n"
-                until time ansible-playbook -i ${WORKSPACE}/inventory.ini cluster.yml -u root --become --become-user=root -e http_proxy: ${http_proxy} -e https_proxy: ${https_proxy} ; do sleep 5 ; done
+                until time ansible-playbook -i ${WORKSPACE}/inventory.ini cluster.yml -u root --become --become-user=root --extra-vars "http_proxy=${http_proxy} https_proxy=${https_proxy} no_proxy=${no_proxy}"  ; do sleep 5 ; done
                 deactivate ; echo -e "\n"s
                 '''
                 // sh '''
