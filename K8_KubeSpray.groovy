@@ -204,7 +204,7 @@ pipeline {
                 git clone https://github.com/kubernetes-sigs/kubespray.git
                 cd kubespray
                 git checkout release-2.16
-                pip3 -r requirements.txt ; sleep 5 ;  done
+                until pip3 -r requirements.txt ; sleep 5 ;  done
                 cp -rfp inventory/sample inventory/mycluster
                 sleep 120
                 '''
