@@ -204,7 +204,6 @@ pipeline {
                 git clone https://github.com/kubernetes-sigs/kubespray.git
                 cd kubespray
                 git checkout release-2.16
-                until /usr/local/bin/pipenv install --three ; do sleep 5 ; done
                 cd ${WORKSPACE}/roles/tmp/kubespray
                 pwd
                 until /usr/local/bin/pipenv shell ; do sleep 5 ; done
