@@ -204,8 +204,7 @@ pipeline {
                 git clone https://github.com/kubernetes-sigs/kubespray.git
                 cd kubespray
                 git checkout release-2.16
-                cp ${WORKSPACE}/roles/pip.sh ${WORKSPACE}/roles/tmp/
-                cd ${WORKSPACE}/roles/tmp/
+                cp ${WORKSPACE}/roles/pip.sh ${WORKSPACE}/roles/tmp/kubespray
                 chmod +x pip.sh
                 ./pip.sh
                 cp -rfp inventory/sample inventory/mycluster
