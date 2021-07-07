@@ -204,9 +204,9 @@ pipeline {
                 git clone https://github.com/kubernetes-sigs/kubespray.git
                 cd kubespray
                 git checkout release-2.16
-                cp ${WORKSPACE}/roles/scripts/kubeSpray_venv.sh .
-                chmod +x kubeSpray_venv.sh
-                ./kubeSpray_venv.sh
+                cp ${WORKSPACE}/roles/scripts/kubeSpray_venv_install_requirements.sh .
+                chmod +x kubeSpray_venv_install_requirements.sh
+                ./kubeSpray_venv_install_requirements.sh
                 cp -rfp inventory/sample inventory/mycluster
                 '''
                 ansiblePlaybook(
@@ -233,23 +233,20 @@ pipeline {
                         ansible_password: [value: '${Host_Password}', hidden: true]
                     ]
                 )
-                sh "sleep 120"
             }
         }
         
-        // stage('Running KubeSpray') {
-        //     steps {
-        //         // ansiblePlaybook(
-        //         //     playbook: "${WORKSPACE}/roles/kubespray-2.16.0/cluster.yml",
-        //         //     inventory: "${WORKSPACE}/inventory.ini",
-        //         //     colorized: true,
-        //         //     extras: '-v -u root --become --become-user=root --flush-cache'
-        //         // )
-        //         sh '''
-        //         cd ${WORKSPACE}/roles/kubespray-2.16.0/ && time ansible-playbook -i ${WORKSPACE}/inventory.ini -u root --become --become-user=root --flush-cache cluster.yml -vv
-        //         '''
-        //     }
-        // }
+        stage('Running KubeSpray') {
+            steps {
+                sh '''
+                cd ${WORKSPACE}/roles/tmp/kubespray
+                echo "Starting source venv/bin/activate"
+                source venv/bin/activate ; echo -e "\n\n"
+                time ansible-playbook -i ${WORKSPACE}/inventory.ini -u root --become --become-user=root --flush-cache cluster.yml -vv
+
+                '''
+            }
+        }
     }
   
     post {
