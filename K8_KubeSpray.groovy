@@ -1,6 +1,6 @@
 def setDescription() {
     def item = Jenkins.instance.getItemByFullName(env.JOB_NAME)
-    item.setDescription("<h5><span style=\"color:#138D75\">KubeSpray Automation Test, the file kubeSpray_home/inventory/mycluster/group_vars/all/all.ymlcontains all the parameters for k8s</span></h5>")
+    item.setDescription("<h5><span style=\"color:#138D75\">KubeSpray Automation job. <br>Before running this pipeline make sure to: <br><ul> <li>Distribute the anisble host public key to the target hosts</li></ul></span></h5>")
     item.save()
 }
 setDescription()
