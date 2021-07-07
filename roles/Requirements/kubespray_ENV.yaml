@@ -22,6 +22,6 @@
 
     - name: Start pipenv shell
       shell: |
-        cd "{{ jenkins_workspace }}roles/kubespray/"
+        cd "{{ jenkins_workspace }}roles/kubespray/" 
         pipenv shell
   # until pip3 -r requirements.txt ; sleep 5 ;  done && cp -rfp inventory/sample inventory/mycluster && sleep  120"
