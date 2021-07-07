@@ -14,6 +14,11 @@
         pwd
         sleep 10
         git checkout release-2.16
+      register: clonu
+
+    - name: Printing cloning output
+      debug:
+        msg: "{{ clonu.stdout_lines }}"
 
     # - name: Start pipenv shell
     #   shell: "cd {{ jenkins_workspace }}roles/kubespray/ && pipenv shell && until pip3 -r requirements.txt ; sleep 5 ;  done && cp -rfp inventory/sample inventory/mycluster && sleep  120"
