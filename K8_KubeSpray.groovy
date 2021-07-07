@@ -215,7 +215,7 @@ pipeline {
                 // deactivate ; echo -e "\n"s
                 
                 // Trying to use ansiblePlaybook method instead of the method above
-                retry(8) {
+                retry(10) {
                     ansiblePlaybook(
                         playbook: "${env.WORKSPACE}/roles/tmp/kubespray/cluster.yml",
                         inventory: "${WORKSPACE}/inventory.ini",
