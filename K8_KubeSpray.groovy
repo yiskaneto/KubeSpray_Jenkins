@@ -222,7 +222,7 @@ pipeline {
                         colorized: true,
                         become: yes,
                         becomeUser: "root",
-                        extras: '--flush-cache -vv'
+                        extras: '--flush-cache -vv',
                         extraVars: [
                             http_proxy: "${params.http_proxy}",
                             https_proxy: "${params.https_proxy}",
