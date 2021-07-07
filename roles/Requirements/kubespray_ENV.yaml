@@ -24,8 +24,8 @@
       command: "{{ item }}"
       with_items:
         - cd "{{ jenkins_workspace }}roles/kubespray/"
-        - pipenv shell
-        - until pip3 -r requirements.txt ; sleep 5 ;  done
+        - /usr/local/bin/pipenv shell
+        - pip3 -r requirements.txt
         - exit
       register: pipenv_result
 
