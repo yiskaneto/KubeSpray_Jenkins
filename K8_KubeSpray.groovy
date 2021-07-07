@@ -220,7 +220,7 @@ pipeline {
                         playbook: "${env.WORKSPACE}/roles/tmp/kubespray/cluster.yml",
                         inventory: "${WORKSPACE}/inventory.ini",
                         colorized: true,
-                        become: yes,
+                        become: true,
                         becomeUser: "root",
                         extras: '--flush-cache -vv',
                         extraVars: [
