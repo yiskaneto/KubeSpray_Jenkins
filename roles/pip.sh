@@ -7,10 +7,13 @@ echo "Starting source venv/bin/activate"
 source venv/bin/activate ; echo -e "\n\n"
 
 echo -e "cd pwd"
-pwd ; echo -e "\n\n"
+pwd ; echo -e "\n"
 
-echo "Running /usr/local/bin/pip3 install -r requirements.txt"
+echo "Running /usr/local/bin/pip3 install -r requirements.txt\n"
 /usr/local/bin/pip3 install -r requirements.txt ; echo -e "\n\n"
 
-echo "Deactive venv"
-deactivate ; echo -e "\n\n"
+echo -e "cd pwd"
+pwd ; echo -e "\n"
+
+echo "Deactivating venv"
+deactivate ; echo -e "\n"
