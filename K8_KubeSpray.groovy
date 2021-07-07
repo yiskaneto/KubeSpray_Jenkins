@@ -204,9 +204,8 @@ pipeline {
                 git clone https://github.com/kubernetes-sigs/kubespray.git
                 cd kubespray
                 git checkout release-2.16
-                cd ${WORKSPACE}/roles/tmp/kubespray
-                pwd
-                until /usr/local/bin/pipenv shell ; do sleep 5 ; done
+                python3 -m venv venv
+                source venv/bin/activate
                 until pip3 -r requirements.txt ; sleep 5 ;  done
                 cp -rfp inventory/sample inventory/mycluster
                 sleep 120          
