@@ -221,9 +221,7 @@ pipeline {
                         inventory: "${WORKSPACE}/inventory.ini",
                         colorized: true,
                         extras: '-u root --become --become-user=root --flush-cache --extra-vars "http_proxy=${http_proxy} https_proxy=${https_proxy} no_proxy=${no_proxy}" -vv'
-                    )    
-                )
-                    
+                    )                
                 }
             }
         }
