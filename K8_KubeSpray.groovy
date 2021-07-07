@@ -233,6 +233,7 @@ pipeline {
                         ansible_password: [value: '${Host_Password}', hidden: true]
                     ]
                 )
+                sh "sleep 120"
             }
         }
         
