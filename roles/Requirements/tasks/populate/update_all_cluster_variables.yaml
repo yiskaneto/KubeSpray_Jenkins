@@ -2,47 +2,49 @@
 - name: Updating apiserver_loadbalancer_domain_name on inventory/mycluster/group_vars/all/all.yml
   ansible.builtin.lineinfile:
     path: "{{ jenkins_workspace }}roles/kubespray-2.16.0/inventory/mycluster/group_vars/all/all.yml"
-    regexp: "^apiserver_loadbalancer_domain_name: "
+    regexp: "^## apiserver_loadbalancer_domain_name: "
     line: "apiserver_loadbalancer_domain_name: {{ apiserver_loadbalancer_domain_name }}"
 
 - name: Updating loadbalancer_apiserver address on inventory/mycluster/group_vars/all/all.yml
   ansible.builtin.lineinfile:
     path: "{{ jenkins_workspace }}roles/kubespray-2.16.0/inventory/mycluster/group_vars/all/all.yml"
-    regexp: "^  address: 1.2.3.4"
+    regexp: "^#   address: "
     line: "  address: {{ apiserver_loadbalancer_address }}"
 
 - name: Updating loadbalancer_apiserver port on inventory/mycluster/group_vars/all/all.yml
   ansible.builtin.lineinfile:
     path: "{{ jenkins_workspace }}roles/kubespray-2.16.0/inventory/mycluster/group_vars/all/all.yml"
-    regexp: "^  port: 1234"
+    regexp: "^#   port: "
     line: "  port: {{ apiserver_loadbalancer_port }}"
 
 - name: Updating loadbalancer_apiserver_localhost on inventory/mycluster/group_vars/all/all.yml
   ansible.builtin.lineinfile:
     path: "{{ jenkins_workspace }}roles/kubespray-2.16.0/inventory/mycluster/group_vars/all/all.yml"
-    regexp: "^loadbalancer_apiserver_localhost: "
+    regexp: "^# loadbalancer_apiserver_localhost: "
     line: "loadbalancer_apiserver_localhost: {{ use_internal_loadbalancer }}"
+  when: use_internal_loadbalancer | bool == true
 
 - name: Updating loadbalancer_apiserver_type on inventory/mycluster/group_vars/all/all.yml
   ansible.builtin.lineinfile:
     path: "{{ jenkins_workspace }}roles/kubespray-2.16.0/inventory/mycluster/group_vars/all/all.yml"
-    regexp: "^loadbalancer_apiserver_type: "
+    regexp: "^# loadbalancer_apiserver_type: "
     line: "loadbalancer_apiserver_type: {{ loadbalancer_apiserver_type }}"
+  when: use_internal_loadbalancer | bool == true
 
 - name: Updating http_proxy on inventory/mycluster/group_vars/all/all.yml
   ansible.builtin.lineinfile:
     path: "{{ jenkins_workspace }}roles/kubespray-2.16.0/inventory/mycluster/group_vars/all/all.yml"
-    regexp: "^http_proxy: "
+    regexp: "^# http_proxy: "
     line: 'http_proxy: "{{ http_proxy }}"'
 
 - name: Updating https_proxy on inventory/mycluster/group_vars/all/all.yml
   ansible.builtin.lineinfile:
     path: "{{ jenkins_workspace }}roles/kubespray-2.16.0/inventory/mycluster/group_vars/all/all.yml"
-    regexp: "^https_proxy: "
+    regexp: "^# https_proxy: "
     line: 'https_proxy: "{{ https_proxy }}"'
 
 - name: Updating no_proxy on inventory/mycluster/group_vars/all/all.yml
   ansible.builtin.lineinfile:
     path: "{{ jenkins_workspace }}roles/kubespray-2.16.0/inventory/mycluster/group_vars/all/all.yml"
-    regexp: "^no_proxy: "
+    regexp: "^# no_proxy: "
     line: 'no_proxy: "{{ no_proxy }}"'
