@@ -134,35 +134,35 @@ pipeline {
 			}
 		}
 
-        stage('SSH Key Pair Tasks') {
-            steps {
-                ansiblePlaybook(
-                    playbook: "${env.WORKSPACE}/roles/ssh_keys_tasks.yaml",
-                    inventory: "${env.WORKSPACE}/inventory.ini",
-                    colorized: true,
-                    extras: '-v --ssh-extra-args="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o IdentityFile=~/.ssh/id_rsa"',
-                    extraVars: [
-                        ansible_password: [value: '${Host_Password}', hidden: true]
-                    ]
-                )
-            }
-        }
+        // stage('SSH Key Pair Tasks') {
+        //     steps {
+        //         ansiblePlaybook(
+        //             playbook: "${env.WORKSPACE}/roles/ssh_keys_tasks.yaml",
+        //             inventory: "${env.WORKSPACE}/inventory.ini",
+        //             colorized: true,
+        //             extras: '-v --ssh-extra-args="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o IdentityFile=~/.ssh/id_rsa"',
+        //             extraVars: [
+        //                 ansible_password: [value: '${Host_Password}', hidden: true]
+        //             ]
+        //         )
+        //     }
+        // }
 
-        stage('Running Requirements') {
-            steps {
-                ansiblePlaybook(
-                    playbook: "${env.WORKSPACE}/roles/Requirements/main.yaml",
-                    inventory: "${env.WORKSPACE}/inventory.ini",
-                    colorized: true,
-                    extras: '-vv --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"',
-                    extraVars: [
-                        jenkins_workspace: "${env.WORKSPACE}/",
-                        http_proxy: "${params.http_proxy}",
-                        ansible_password: [value: '${Host_Password}', hidden: true]
-                    ]
-                )    
-            }
-        }
+        // stage('Running Requirements') {
+        //     steps {
+        //         ansiblePlaybook(
+        //             playbook: "${env.WORKSPACE}/roles/Requirements/main.yaml",
+        //             inventory: "${env.WORKSPACE}/inventory.ini",
+        //             colorized: true,
+        //             extras: '-vv --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"',
+        //             extraVars: [
+        //                 jenkins_workspace: "${env.WORKSPACE}/",
+        //                 http_proxy: "${params.http_proxy}",
+        //                 ansible_password: [value: '${Host_Password}', hidden: true]
+        //             ]
+        //         )    
+        //     }
+        // }
 
         // stage('Updating Templates') {
         //     steps {
@@ -195,6 +195,25 @@ pipeline {
         //     }
         // }
 
+        stage('Setting KubeSpray Env') {
+            steps {
+                sh '''
+                echo "Creating temp directory"
+                mkdir ${WORKSPACE}/roles/tmp/
+                cd ${WORKSPACE}/roles/tmp/
+                pwd
+                sleep 10
+                git clone https://github.com/kubernetes-sigs/kubespray.git
+                cd kubespray
+                git checkout release-2.16
+                until pipenv install --three ; do sleep 5 ; done
+                until pipenv shell ; do sleep 5 ; done
+                until pip install -r requirements.txt ; sleep 5 ;  done
+                cp -rfp inventory/sample inventory/mycluster                
+                '''
+            }
+        }
+        
         // stage('Running KubeSpray') {
         //     steps {
         //         // ansiblePlaybook(
