@@ -206,24 +206,24 @@ pipeline {
         
         stage('Running KubeSpray') {
             steps {
-                sh '''
-                cd ${WORKSPACE}/roles/tmp/kubespray/ ; echo -e "\n"
-                pwd ; echo -e "\n"
-                source venv/bin/activate ; echo -e "\n\n"
-                until time ansible-playbook -i ${WORKSPACE}/inventory.ini cluster.yml -u root --become --become-user=root --extra-vars "http_proxy=${http_proxy} https_proxy=${https_proxy} no_proxy=${no_proxy}" ; do sleep 5 ; done
-                deactivate ; echo -e "\n"s
-                '''
+                // sh '''
+                // cd ${WORKSPACE}/roles/tmp/kubespray/ ; echo -e "\n"
+                // pwd ; echo -e "\n"
+                // source venv/bin/activate ; echo -e "\n\n"
+                // until time ansible-playbook -i ${WORKSPACE}/inventory.ini cluster.yml -u root --become --become-user=root --extra-vars "http_proxy=${http_proxy} https_proxy=${https_proxy} no_proxy=${no_proxy}" ; do sleep 5 ; done
+                // deactivate ; echo -e "\n"s
+                // '''
                 // sh '''
                 // cd ${WORKSPACE}/roles/tmp/kubespray/ ; echo -e "\n"
                 // pwd ; echo -e "\n"
                 // deactivate ; echo -e "\n"
                 // '''
-                // ansiblePlaybook(
-                //     playbook: "${env.WORKSPACE}/roles/tmp/kubespray/cluster.yml",
-                //     inventory: "${WORKSPACE}/inventory.ini",
-                //     colorized: true,
-                //     extras: '-v -u root --become --become-user=root --flush-cache'
-                // )
+                ansiblePlaybook(
+                    playbook: "${env.WORKSPACE}/roles/tmp/kubespray/cluster.yml",
+                    inventory: "${WORKSPACE}/inventory.ini",
+                    colorized: true,
+                    extras: '-u root --become --become-user=root --flush-cache --extra-vars "http_proxy=${http_proxy} https_proxy=${https_proxy} no_proxy=${no_proxy}" -vv'
+                )
                 // sh '''
                 // cd "${env.WORKSPACE}/roles/tmp/kubespray/" ; echo -e "\n"
                 // pwd ; echo -e "\n"
