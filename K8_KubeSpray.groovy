@@ -164,37 +164,6 @@ pipeline {
         //     }
         // }
 
-        // stage('Updating Templates') {
-        //     steps {
-        //         ansiblePlaybook(
-        //             playbook: "${env.WORKSPACE}/roles/Requirements/populate_vars.yaml",
-        //             inventory: "${env.WORKSPACE}/inventory.ini",
-        //             colorized: true,
-        //             become: true,
-        //             becomeUser: "root",
-        //             extras: '-vv --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"',
-        //             extraVars: [
-        //                 jenkins_workspace: "${env.WORKSPACE}/",
-        //                 http_proxy: "${params.http_proxy}",
-        //                 https_proxy: "${params.https_proxy}",
-        //                 no_proxy: "${params.no_proxy}",
-        //                 cluster_name: "${params.cluster_name}",
-        //                 apiserver_loadbalancer_domain_name: "${params.apiserver_loadbalancer_domain_name}",
-        //                 apiserver_loadbalancer_address: "${params.apiserver_loadbalancer_address}",
-        //                 apiserver_loadbalancer_port: "${params.apiserver_loadbalancer_port}",
-        //                 use_internal_loadbalancer: "${params.use_internal_loadbalancer}",
-        //                 loadbalancer_apiserver_type: "${params.loadbalancer_apiserver_type}",
-        //                 kube_network_plugin: "${params.kube_network_plugin}",
-        //                 container_runtime: "${params.container_runtime}",
-        //                 local_release_dir: "${params.kubespray_temp_dir}",
-        //                 kube_service_addresses: "${params.kube_service_addresses}",
-        //                 kube_pods_subnet: "${params.kube_pods_subnet}",
-        //                 ansible_password: [value: '${Host_Password}', hidden: true]
-        //             ]
-        //         )    
-        //     }
-        // }
-
         stage('Setting KubeSpray Env') {
             steps {
                 sh '''
