@@ -205,7 +205,9 @@ pipeline {
                 cd kubespray
                 git checkout release-2.16
                 until /usr/local/bin/pipenv install --three ; do sleep 5 ; done
-                until pipenv shell ; do sleep 5 ; done
+                cd ${WORKSPACE}/roles/tmp/kubespray
+                pwd
+                until /usr/local/bin/pipenv shell ; do sleep 5 ; done
                 until pip3 -r requirements.txt ; sleep 5 ;  done
                 cp -rfp inventory/sample inventory/mycluster
                 sleep 120          
