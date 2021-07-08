@@ -119,7 +119,7 @@ pipeline {
     }
             	
     stages {
-        stage('Creating Inventory file') {
+        stage('Creating Inventory File') {
 			steps {
 				sh '''
                 echo ${kube_control_plane_nodes} | sed \'s/,/\\n/g\' | while read line ; do sed -i \'/\\[all\\]/a \\\'"${line}"\'\' ${WORKSPACE}/inventory.ini ; done
