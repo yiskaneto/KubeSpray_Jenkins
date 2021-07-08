@@ -1,0 +1,5 @@
+---
+- name: Removing /opt/containerd /opt/cni
+  shell: |
+    rm -rf /opt/containerd /opt/cni
+  ignore_errors: yes

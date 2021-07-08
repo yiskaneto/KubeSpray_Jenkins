@@ -7,4 +7,5 @@
 #- import_tasks: Pre-Requisites/upgrade_packages.yaml
 #- import_tasks: Pre-Requisites/install_packages.yaml
 - import_tasks: Pre-Requisites/uninstall_calico.yaml
+- import_tasks: Pre-Requisites/clean_opt.yaml
 - import_tasks: Pre-Requisites/reboot_target_node_ansible_way.yaml
