@@ -210,16 +210,8 @@ pipeline {
         }
         
         stage('Running KubeSpray') {
-            steps {
-                // The following works
-                // sh '''
-                // cd ${WORKSPACE}/roles/tmp/kubespray/ ; echo -e "\n"
-                // pwd ; echo -e "\n"
-                // source venv/bin/activate ; echo -e "\n\n"
-                // until time ansible-playbook -i ${WORKSPACE}/inventory.ini cluster.yml -u root --become --become-user=root --extra-vars "http_proxy=${http_proxy} https_proxy=${https_proxy} no_proxy=${no_proxy}" ; do sleep 5 ; done
-                // deactivate ; echo -e "\n"s
-                
-                // Trying to use ansiblePlaybook method instead of the method above
+            steps {                
+                // This is the recommended way of running ansible playbooks/roles from Jennkins
                 retry(10) {
                     ansiblePlaybook(
                         playbook: "${env.WORKSPACE}/roles/tmp/kubespray/cluster.yml",
@@ -235,6 +227,14 @@ pipeline {
                         ]
                     )              
                 }
+
+                // This also works but doesn't show the colors on the output which at the end could help us find easier error or warnings.
+                // sh '''
+                // cd ${WORKSPACE}/roles/tmp/kubespray/ ; echo -e "\n"
+                // pwd ; echo -e "\n"
+                // source venv/bin/activate ; echo -e "\n\n"
+                // until time ansible-playbook -i ${WORKSPACE}/inventory.ini cluster.yml -u root --become --become-user=root --extra-vars "http_proxy=${http_proxy} https_proxy=${https_proxy} no_proxy=${no_proxy}" ; do sleep 5 ; done
+                // deactivate ; echo -e "\n"s
             }
         }
     }
