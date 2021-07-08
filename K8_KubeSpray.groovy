@@ -1,6 +1,6 @@
 def setDescription() {
     def item = Jenkins.instance.getItemByFullName(env.JOB_NAME)
-    item.setDescription("<h5><span style=\"color:#138D75\">KubeSpray Automation job. <br>Before running this pipeline make sure to: <br><ul> <li>Distribute the anisble host public key to the target hosts</li></ul></span></h5>")
+    item.setDescription("<h5><span style=\"color:#138D75\">KubeSpray Automation job.Before running this pipeline make sure to read the README.MD from </li></ul></span></h5>")
     item.save()
 }
 setDescription()
@@ -17,6 +17,11 @@ pipeline {
 		}
   
     parameters {
+        string(
+            name: 'user',
+            defaultValue: 'root',
+            description: '<h5>Username that will run the installation, the user must have enough privileges for writing SSL keys in /etc/, installing packages and interacting with various systemd daemons</h5>'
+        )
         string(
             name: 'http_proxy',
             defaultValue: '',
@@ -220,13 +225,15 @@ pipeline {
                         playbook: "${env.WORKSPACE}/roles/tmp/kubespray/cluster.yml",
                         inventory: "${WORKSPACE}/inventory.ini",
                         colorized: true,
-                        extras: '-u root --become --become-user=root --flush-cache -v',
+                        become: true,
+                        becomeUser: root,
+                        extras: '-u ${user} --flush-cache -v',
                         extraVars: [
                             http_proxy: "${params.http_proxy}",
                             https_proxy: "${params.https_proxy}",
                             no_proxy: "${params.no_proxy}"
                         ]
-                    )                
+                    )              
                 }
             }
         }
