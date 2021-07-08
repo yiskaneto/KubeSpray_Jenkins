@@ -5,7 +5,7 @@ For now this project only works on CentOS/RHEL 7/8
 Jenkins pipeline to automate the installation of Kubernetes on CentOS by using the Kubespray project, the pipeline has 5 Stages
 
 1. Create the inventory file:
-   - takes the passed hostname on the host parameters and fills a pre-built inventory file
+   - Takes the passed hostname on the host parameters and fills a pre-built inventory file
 2. Create the SSH key pairs, only of they don't exist.
 3. Running requirements:
    - SElinux_disable
