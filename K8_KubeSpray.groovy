@@ -111,11 +111,6 @@ pipeline {
             defaultValue: '/tmp/kubespray_temp_dir',
             description: "Where the binaries will be downloaded. Note: ensure that you've enough disk space (about 1G)"
         )
-        password(
-        name: 'Host_Password',
-        defaultValue: 'empty',
-        description: '<h5>Host root\'s password. The default password is <span style=\"color:#E74C3C\">empty</span>, you can change it by clicking on \"Change Password\".</h5>'
-        )
     }
             	
     stages {
