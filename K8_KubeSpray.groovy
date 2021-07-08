@@ -208,7 +208,7 @@ pipeline {
                         inventory: "${WORKSPACE}/inventory.ini",
                         colorized: true,
                         become: true,
-                        becomeUser: root,
+                        becomeUser: "root",
                         extras: '-u ${user} --flush-cache --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" -v',
                         extraVars: [
                             http_proxy: "${params.http_proxy}",
