@@ -1,7 +1,6 @@
 # KubeSpray Jenkins Automation Pipeline
 
-For now this project only works on CentOS/RHEL 7/8
-
+For now this project only works on CentOS/RHEL 7/8.
 Jenkins pipeline to automate the installation of Kubernetes on CentOS by using the Kubespray project, the pipeline has 5 Stages
 
 1. Create the inventory file:
@@ -20,3 +19,5 @@ Jenkins pipeline to automate the installation of Kubernetes on CentOS by using t
    - Populates the inventory/mycluster/group_vars/k8s_cluster/k8s-cluster.yml with the pass values from the Jenkins user input section
 5. Running KubeSpray:
    - This section runs the installation of K8s using KubeSpray, it could take from 7 to 30 mins, this will depend on the connection speed and the number of control plane and worker nodes.
+
+Make sure to distribute the Ansible host public keys to the K8s nodes.

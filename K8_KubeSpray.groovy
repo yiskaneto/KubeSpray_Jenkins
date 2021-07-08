@@ -144,25 +144,25 @@ pipeline {
                     playbook: "${env.WORKSPACE}/roles/playbooks/ssh_keys_tasks.yaml",
                     inventory: "${env.WORKSPACE}/inventory.ini",
                     colorized: true,
-                    extras: '-v --ssh-extra-args="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o IdentityFile=~/.ssh/id_rsa"'
+                    extras: '-v --ssh-extra-args="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"'
                 )
             }
         }
 
-        stage('Running Requirements') {
-            steps {
-                ansiblePlaybook(
-                    playbook: "${env.WORKSPACE}/roles/Requirements/main.yaml",
-                    inventory: "${env.WORKSPACE}/inventory.ini",
-                    colorized: true,
-                    extras: '-vv --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"',
-                    extraVars: [
-                        jenkins_workspace: "${env.WORKSPACE}/",
-                        http_proxy: "${params.http_proxy}"
-                    ]
-                )    
-            }
-        }
+        // stage('Running Requirements') {
+        //     steps {
+        //         ansiblePlaybook(
+        //             playbook: "${env.WORKSPACE}/roles/Requirements/main.yaml",
+        //             inventory: "${env.WORKSPACE}/inventory.ini",
+        //             colorized: true,
+        //             extras: '-vv --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"',
+        //             extraVars: [
+        //                 jenkins_workspace: "${env.WORKSPACE}/",
+        //                 http_proxy: "${params.http_proxy}"
+        //             ]
+        //         )    
+        //     }
+        // }
 
         stage('Setting KubeSpray Env') {
             steps {
