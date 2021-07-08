@@ -144,10 +144,7 @@ pipeline {
                     playbook: "${env.WORKSPACE}/roles/playbooks/ssh_keys_tasks.yaml",
                     inventory: "${env.WORKSPACE}/inventory.ini",
                     colorized: true,
-                    extras: '-v --ssh-extra-args="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o IdentityFile=~/.ssh/id_rsa"',
-                    extraVars: [
-                        ansible_password: [value: '${Host_Password}', hidden: true]
-                    ]
+                    extras: '-v --ssh-extra-args="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o IdentityFile=~/.ssh/id_rsa"'
                 )
             }
         }
@@ -161,8 +158,7 @@ pipeline {
                     extras: '-vv --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"',
                     extraVars: [
                         jenkins_workspace: "${env.WORKSPACE}/",
-                        http_proxy: "${params.http_proxy}",
-                        ansible_password: [value: '${Host_Password}', hidden: true]
+                        http_proxy: "${params.http_proxy}"
                     ]
                 )    
             }
@@ -202,8 +198,7 @@ pipeline {
                         container_runtime: "${params.container_runtime}",
                         local_release_dir: "${params.kubespray_temp_dir}",
                         kube_service_addresses: "${params.kube_service_addresses}",
-                        kube_pods_subnet: "${params.kube_pods_subnet}",
-                        ansible_password: [value: '${Host_Password}', hidden: true]
+                        kube_pods_subnet: "${params.kube_pods_subnet}"
                     ]
                 )
             }
@@ -225,7 +220,7 @@ pipeline {
                             https_proxy: "${params.https_proxy}",
                             no_proxy: "${params.no_proxy}"
                         ]
-                    )              
+                    )
                 }
 
                 // This also works but doesn't show the colors on the output which at the end could help us find easier error or warnings.
