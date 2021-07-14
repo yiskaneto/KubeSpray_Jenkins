@@ -139,7 +139,7 @@ pipeline {
                     playbook: "${env.WORKSPACE}/roles/playbooks/ssh_keys_tasks.yaml",
                     inventory: "${env.WORKSPACE}/inventory.ini",
                     colorized: true,
-                    extras: '-v --ssh-extra-args="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"'
+                    extras: '-v --ssh-extra-args="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" -f 16'
                 )
             }
         }
@@ -150,7 +150,7 @@ pipeline {
                     playbook: "${env.WORKSPACE}/roles/Requirements/main.yaml",
                     inventory: "${env.WORKSPACE}/inventory.ini",
                     colorized: true,
-                    extras: '-vv --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"',
+                    extras: '-vv --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" -f 16',
                     extraVars: [
                         jenkins_workspace: "${env.WORKSPACE}/",
                         http_proxy: "${params.http_proxy}"
@@ -177,7 +177,7 @@ pipeline {
                     playbook: "${env.WORKSPACE}/roles/Requirements/populate_vars.yaml",
                     inventory: "${env.WORKSPACE}/inventory.ini",
                     colorized: true,
-                    extras: '-vv --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"',
+                    extras: '-vv --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" -f 16',
                     extraVars: [
                         jenkins_workspace: "${env.WORKSPACE}/",
                         http_proxy: "${params.http_proxy}",
@@ -209,7 +209,7 @@ pipeline {
                         colorized: true,
                         become: true,
                         becomeUser: "root",
-                        extras: '-u ${user} --flush-cache --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" -v',
+                        extras: '-u ${user} --flush-cache --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" -v -f 16',
                         extraVars: [
                             http_proxy: "${params.http_proxy}",
                             https_proxy: "${params.https_proxy}",
