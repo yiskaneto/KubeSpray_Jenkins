@@ -16,7 +16,10 @@
     - name: Cloning project on master node
       shell: |
         rm -rf /opt/kubespray
-        cd /opt/ ; git clone https://github.com/kubernetes-sigs/kubespray.git
+        cd /opt/
+        git clone https://github.com/kubernetes-sigs/kubespray.git
+        cd kubespray
+        git checkout release-2.16
         mkdir /opt/kubespray/inventory/mycluster/
       register: gitod
 
