@@ -94,7 +94,7 @@ pipeline {
         choice(
             name: 'loadbalancer_apiserver_type',
             choices: ['nginx','haproxy'],
-            description: 'What load balancer provider to use, this will only be consider if the paramter above was set to true'
+            description: 'What load balancer provider to use, this will only be consider if the parameter above was set to true'
 		)
         string(
             name: 'kube_service_addresses',
