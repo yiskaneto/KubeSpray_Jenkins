@@ -86,14 +86,24 @@ pipeline {
             defaultValue: '8383',
             description: 'VIP port for external Load Balancer. Leave empty if not needed'
         )
-        booleanParam(
+        choice(
+            name: 'helm_enabled',
+            choices: ['true','false'],
+            description: 'Whether or not to install HELM'
+        )
+        choice(
             name: 'ingress_nginx_enabled',
-            defaultValue: true,
+            choices: ['true','false'],
             description: 'Whether or not to install nginx ingress'
         )
-        booleanParam(
+        choice(
+            name: 'metrics_server_enabled',
+            choices: ['true','false'],
+            description: 'Whether or not to enable metrics'
+        )
+        choice(
             name: 'use_internal_loadbalancer',
-            defaultValue: false,
+            choices: ['false','true'],
             description: 'Whether or not to use internal loadbalancers for apiservers'
         )
         choice(
@@ -138,17 +148,17 @@ pipeline {
 			}
 		}
 
-        stage('SSH Key Pair Tasks') {
-            steps {
-                ansiblePlaybook(
-                    playbook: "${env.WORKSPACE}/roles/playbooks/ssh_keys_tasks.yaml",
-                    inventory: "${env.WORKSPACE}/inventory.ini",
-                    forks: 16,
-                    colorized: true,
-                    extras: '-v --ssh-extra-args="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"'
-                )
-            }
-        }
+        // stage('SSH Key Pair Tasks') {
+        //     steps {
+        //         ansiblePlaybook(
+        //             playbook: "${env.WORKSPACE}/roles/playbooks/ssh_keys_tasks.yaml",
+        //             inventory: "${env.WORKSPACE}/inventory.ini",
+        //             forks: 16,
+        //             colorized: true,
+        //             extras: '-v --ssh-extra-args="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"'
+        //         )
+        //     }
+        // }
 
         // stage('Running Requirements') {
         //     steps {
@@ -197,7 +207,9 @@ pipeline {
                         apiserver_loadbalancer_domain_name: "${params.apiserver_loadbalancer_domain_name}",
                         apiserver_loadbalancer_address: "${params.apiserver_loadbalancer_address}",
                         apiserver_loadbalancer_port: "${params.apiserver_loadbalancer_port}",
+                        metrics_server_enabled: "${params.metrics_server_enabled}",
                         ingress_nginx_enabled: "${params.ingress_nginx_enabled}",
+                        helm_enabled: "${params.helm_enabled}",
                         use_internal_loadbalancer: "${params.use_internal_loadbalancer}",
                         loadbalancer_apiserver_type: "${params.loadbalancer_apiserver_type}",
                         kube_network_plugin: "${params.kube_network_plugin}",
