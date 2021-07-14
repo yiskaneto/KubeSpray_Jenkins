@@ -8,3 +8,12 @@
       import_role:
         name: ../
         tasks_from: populate.yaml
+
+- hosts: kube_control_plane[0]
+  remote_user: root
+  gather_facts: false
+  tasks:
+    - name: Making a copy of the current project on one of the control plane nodes
+      copy:
+        src: "{{ jenkins_workspace }}/roles/tmp/kubespray/"
+        dest: /opt/
