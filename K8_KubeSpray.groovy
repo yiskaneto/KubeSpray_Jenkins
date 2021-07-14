@@ -180,7 +180,7 @@ pipeline {
                 ./kubeSpray_venv_install_requirements.sh
                 cp -rfp inventory/sample inventory/mycluster
                 rm -rf inventory/mycluster/inventory.ini
-                cp {WORKSPACE}/inventory.ini inventory/mycluster/inventory.ini
+                cp ${WORKSPACE}/inventory.ini inventory/mycluster/inventory.ini
                 '''
                 ansiblePlaybook(
                     playbook: "${env.WORKSPACE}/roles/Requirements/populate_vars.yaml",
