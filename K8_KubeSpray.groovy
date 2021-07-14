@@ -138,8 +138,9 @@ pipeline {
                 ansiblePlaybook(
                     playbook: "${env.WORKSPACE}/roles/playbooks/ssh_keys_tasks.yaml",
                     inventory: "${env.WORKSPACE}/inventory.ini",
+                    forks: 16,
                     colorized: true,
-                    extras: '-v --ssh-extra-args="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" -f 16'
+                    extras: '-v --ssh-extra-args="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"'
                 )
             }
         }
@@ -149,8 +150,9 @@ pipeline {
                 ansiblePlaybook(
                     playbook: "${env.WORKSPACE}/roles/Requirements/main.yaml",
                     inventory: "${env.WORKSPACE}/inventory.ini",
+                    forks: 16,
                     colorized: true,
-                    extras: '-vv --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" -f 16',
+                    extras: '-vv --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"',
                     extraVars: [
                         jenkins_workspace: "${env.WORKSPACE}/",
                         http_proxy: "${params.http_proxy}"
@@ -176,8 +178,9 @@ pipeline {
                 ansiblePlaybook(
                     playbook: "${env.WORKSPACE}/roles/Requirements/populate_vars.yaml",
                     inventory: "${env.WORKSPACE}/inventory.ini",
+                    forks: 16,
                     colorized: true,
-                    extras: '-vv --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" -f 16',
+                    extras: '-vv --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"',
                     extraVars: [
                         jenkins_workspace: "${env.WORKSPACE}/",
                         http_proxy: "${params.http_proxy}",
@@ -206,10 +209,11 @@ pipeline {
                     ansiblePlaybook(
                         playbook: "${env.WORKSPACE}/roles/tmp/kubespray/cluster.yml",
                         inventory: "${WORKSPACE}/inventory.ini",
+                        forks: 16,
                         colorized: true,
                         become: true,
                         becomeUser: "root",
-                        extras: '-u ${user} --flush-cache --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" -v -f 16',
+                        extras: '-u ${user} --flush-cache --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" -v',
                         extraVars: [
                             http_proxy: "${params.http_proxy}",
                             https_proxy: "${params.https_proxy}",
