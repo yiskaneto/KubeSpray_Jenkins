@@ -195,6 +195,7 @@ pipeline {
                         apiserver_loadbalancer_domain_name: "${params.apiserver_loadbalancer_domain_name}",
                         apiserver_loadbalancer_address: "${params.apiserver_loadbalancer_address}",
                         apiserver_loadbalancer_port: "${params.apiserver_loadbalancer_port}",
+                        ingress_nginx_enabled: "${params.ingress_nginx_enabled}",
                         use_internal_loadbalancer: "${params.use_internal_loadbalancer}",
                         loadbalancer_apiserver_type: "${params.loadbalancer_apiserver_type}",
                         kube_network_plugin: "${params.kube_network_plugin}",
