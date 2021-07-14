@@ -74,21 +74,26 @@ pipeline {
         string(
             name: 'apiserver_loadbalancer_domain_name',
             defaultValue: '',
-            description: 'Leave empty if not needed'
+            description: 'VIP domain name for external Load Balancer. Leave empty if not needed'
         )
         string(
             name: 'apiserver_loadbalancer_address',
             defaultValue: '',
-            description: 'Leave empty if not needed'
+            description: 'VIP ip address for external Load Balancer. Leave empty if not needed'
         )
         string(
             name: 'apiserver_loadbalancer_port',
             defaultValue: '8383',
-            description: 'Leave empty if not needed'
-        )        
+            description: 'VIP port for external Load Balancer. Leave empty if not needed'
+        )
+        booleanParam(
+            name: 'ingress_nginx_enabled',
+            defaultValue: true,
+            description: 'Whether or not to install nginx ingress'
+        )
         booleanParam(
             name: 'use_internal_loadbalancer',
-            defaultValue: true,
+            defaultValue: false,
             description: 'Whether or not to use internal loadbalancers for apiservers'
         )
         choice(
