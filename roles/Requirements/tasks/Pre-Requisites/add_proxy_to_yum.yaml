@@ -1,6 +1,0 @@
----
-- name: Adding proxy to yum
-  shell: |
-    \cp /etc/yum.conf /etc/yum.conf.original
-    sed -i "/^proxy/d" /etc/yum.conf
-    echo "proxy={{ http_proxy }}" >> /etc/yum.conf

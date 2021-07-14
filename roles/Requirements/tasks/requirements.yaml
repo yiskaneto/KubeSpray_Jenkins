@@ -1,5 +1,5 @@
 ---
-#- import_tasks: Pre-Requisites/add_proxy_to_yum.yaml
+- import_tasks: Pre-Requisites/cleanning_hosts_file.yaml
 - import_tasks: Pre-Requisites/SElinux_disable.yaml
 - import_tasks: Pre-Requisites/disable_firewalld.yaml
 - import_tasks: Pre-Requisites/docker_uninstall.yaml
