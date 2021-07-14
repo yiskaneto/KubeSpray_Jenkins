@@ -1,5 +1,5 @@
 ---
 - name: Removing /opt/containerd /opt/cni
   shell: |
-    rm -rf /opt/containerd /opt/cni
+    rm -rf /opt/containerd /opt/cni /opt/kubespray
   ignore_errors: yes
