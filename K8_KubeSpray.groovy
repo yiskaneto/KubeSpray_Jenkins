@@ -171,6 +171,11 @@ pipeline {
             choices: ['nginx','haproxy'],
             description: 'What load balancer provider to use, this will only be consider if the parameter above was set to true'
 		)
+        booleanParam(
+            name: 'use_localhost_as_kubeapi_loadbalancer',
+            defaultValue: false,
+            description: 'Whether or not to use localhost as kubeapi loadbalancer'
+        )
         string(
             name: 'kube_service_addresses',
             defaultValue: '10.233.0.0/18',
@@ -281,6 +286,7 @@ pipeline {
                         cert_manager_enabled: "${params.cert_manager_enabled}",
                         use_internal_loadbalancer: "${params.use_internal_loadbalancer}",
                         loadbalancer_apiserver_type: "${params.loadbalancer_apiserver_type}",
+                        use_localhost_as_kubeapi_loadbalancer: "${params.use_localhost_as_kubeapi_loadbalancer}",
                         kube_network_plugin: "${params.kube_network_plugin}",
                         container_runtime: "${params.container_runtime}",
                         local_release_dir: "${params.kubespray_temp_dir}",
