@@ -345,6 +345,7 @@ pipeline {
                     source venv/bin/activate ; echo -e "\n\n"
                     time ansible-playbook -i ${WORKSPACE}/inventory.ini cluster.yml --tags apps -u root --become --become-user=root --extra-vars "http_proxy=${http_proxy} https_proxy=${https_proxy} no_proxy=${no_proxy}" --flush-cache -v
                     deactivate ; echo -e "\n"s
+                    '''
                 }
             }
         }
