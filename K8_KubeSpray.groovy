@@ -71,6 +71,11 @@ pipeline {
             choices: ['docker','crio','containerd'],
             description: 'docker for docker, crio for cri-o and containerd for containerd.'
 		)
+        booleanParam(
+            name: 'use_external_load_balancer',
+            defaultValue: false,
+            description: 'Whether or not to use an external load balancer fpr the kube api'
+        )
         string(
             name: 'apiserver_loadbalancer_domain_name',
             defaultValue: '',
@@ -204,6 +209,7 @@ pipeline {
                         https_proxy: "${params.https_proxy}",
                         no_proxy: "${params.no_proxy}",
                         cluster_name: "${params.cluster_name}",
+                        use_external_load_balancer: "${params.use_external_load_balancer}",
                         apiserver_loadbalancer_domain_name: "${params.apiserver_loadbalancer_domain_name}",
                         apiserver_loadbalancer_address: "${params.apiserver_loadbalancer_address}",
                         apiserver_loadbalancer_port: "${params.apiserver_loadbalancer_port}",
