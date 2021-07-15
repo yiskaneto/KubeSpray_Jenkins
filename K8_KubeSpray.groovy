@@ -86,24 +86,24 @@ pipeline {
             defaultValue: '8383',
             description: 'VIP port for external Load Balancer. Leave empty if not needed'
         )
-        choice(
+        booleanParam(
             name: 'helm_enabled',
-            choices: ['true','false'],
+            defaultValue: true,
             description: 'Whether or not to install HELM'
         )
-        choice(
+        booleanParam(
             name: 'ingress_nginx_enabled',
-            choices: ['true','false'],
+            defaultValue: true,
             description: 'Whether or not to install nginx ingress'
         )
-        choice(
+        booleanParam(
             name: 'metrics_server_enabled',
-            choices: ['true','false'],
+            defaultValue: true,
             description: 'Whether or not to enable metrics'
         )
-        choice(
+        booleanParam(
             name: 'use_internal_loadbalancer',
-            choices: ['false','true'],
+            defaultValue: true,
             description: 'Whether or not to use internal loadbalancers for apiservers'
         )
         choice(
