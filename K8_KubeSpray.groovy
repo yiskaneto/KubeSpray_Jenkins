@@ -192,8 +192,7 @@ pipeline {
         stage('Creating Inventory File') {
 			steps {
                 sh '''
-                echo "" > ${WORKSPACE}/inventory.yaml
-                echo ${inventory} > ${WORKSPACE}/inventory.yaml
+                echo ${inventory} >> ${WORKSPACE}/inventory.yaml
                 cat ${WORKSPACE}/inventory.yaml
                 '''
 			// 	sh '''
