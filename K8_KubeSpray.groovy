@@ -192,9 +192,9 @@ pipeline {
         stage('Creating Inventory File') {
 			steps {
                 sh '''
-                echo "" > ${WORKSPACE}/inventory.ini
-                echo ${inventory} > ${WORKSPACE}/inventory.ini
-                cat ${WORKSPACE}/inventory.ini
+                echo "" > ${WORKSPACE}/inventory.yaml
+                echo ${inventory} > ${WORKSPACE}/inventory.yaml
+                cat ${WORKSPACE}/inventory.yaml
                 '''
 			// 	sh '''
             //     echo ${kube_control_plane_nodes} | sed \'s/,/\\n/g\' | while read line ; do sed -i \'/\\[all\\]/a \\\'"${line}"\'\' ${WORKSPACE}/inventory.ini ; done
@@ -255,7 +255,7 @@ pipeline {
                 ./kubeSpray_venv_install_requirements.sh
                 cp -rfp inventory/sample inventory/mycluster
                 rm -rf inventory/mycluster/inventory.ini
-                cp ${WORKSPACE}/inventory.ini inventory/mycluster/inventory.yaml
+                cp ${WORKSPACE}/inventory.yaml inventory/mycluster/inventory.yaml
                 '''
                 ansiblePlaybook(
                     playbook: "${env.WORKSPACE}/roles/Requirements/populate_vars.yaml",
