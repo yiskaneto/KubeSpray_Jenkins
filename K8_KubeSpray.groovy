@@ -58,6 +58,11 @@ pipeline {
   
     parameters {
         booleanParam(
+            name: 'uninstall_kubespray',
+            defaultValue: true,
+            description: 'only choose this option if kubespray has been previously installed with the same, use the ip/hostname in the inventory parameter'
+        )
+        booleanParam(
             name: 'run_requirements',
             defaultValue: false,
             description: 'Whether or not to run the requirements stage'
@@ -302,6 +307,21 @@ pipeline {
                         kube_pods_subnet: "${params.kube_pods_subnet}"
                     ]
                 )
+            }
+        }
+
+        stage('Uninstalling KubeSpray') {
+            when {
+                expression { params.uninstall_kubespray == true }
+            }
+            steps {                
+                retry(10) {
+                    // This also works but doesn't show the colors on the output which at the end could help us find easier error or warnings.
+                    sh '''
+                    cd ${WORKSPACE}/roles/tmp/kubespray/ ; echo -e "\n"
+                    yes | time ansible-playbook -i ${WORKSPACE}/inventory.ini reset.yml -u root --become --become-user=root --extra-vars "http_proxy=${http_proxy} https_proxy=${https_proxy} no_proxy=${no_proxy}" --flush-cache -v
+                    '''
+                }
             }
         }
         
