@@ -148,33 +148,33 @@ pipeline {
 			}
 		}
 
-        // stage('SSH Key Pair Tasks') {
-        //     steps {
-        //         ansiblePlaybook(
-        //             playbook: "${env.WORKSPACE}/roles/playbooks/ssh_keys_tasks.yaml",
-        //             inventory: "${env.WORKSPACE}/inventory.ini",
-        //             forks: 16,
-        //             colorized: true,
-        //             extras: '-v --ssh-extra-args="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"'
-        //         )
-        //     }
-        // }
+        stage('SSH Key Pair Tasks') {
+            steps {
+                ansiblePlaybook(
+                    playbook: "${env.WORKSPACE}/roles/playbooks/ssh_keys_tasks.yaml",
+                    inventory: "${env.WORKSPACE}/inventory.ini",
+                    forks: 16,
+                    colorized: true,
+                    extras: '-v --ssh-extra-args="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"'
+                )
+            }
+        }
 
-        // stage('Running Requirements') {
-        //     steps {
-        //         ansiblePlaybook(
-        //             playbook: "${env.WORKSPACE}/roles/Requirements/main.yaml",
-        //             inventory: "${env.WORKSPACE}/inventory.ini",
-        //             forks: 16,
-        //             colorized: true,
-        //             extras: '-vv --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"',
-        //             extraVars: [
-        //                 jenkins_workspace: "${env.WORKSPACE}/",
-        //                 http_proxy: "${params.http_proxy}"
-        //             ]
-        //         )    
-        //     }
-        // }
+        stage('Running Requirements') {
+            steps {
+                ansiblePlaybook(
+                    playbook: "${env.WORKSPACE}/roles/Requirements/main.yaml",
+                    inventory: "${env.WORKSPACE}/inventory.ini",
+                    forks: 16,
+                    colorized: true,
+                    extras: '-vv --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"',
+                    extraVars: [
+                        jenkins_workspace: "${env.WORKSPACE}/",
+                        http_proxy: "${params.http_proxy}"
+                    ]
+                )    
+            }
+        }
 
         stage('Setting KubeSpray Env') {
             steps {
@@ -222,35 +222,35 @@ pipeline {
             }
         }
         
-        // stage('Running KubeSpray') {
-        //     steps {                
-        //         // This is the recommended way of running ansible playbooks/roles from Jennkins
-        //         retry(10) {
-        //             ansiblePlaybook(
-        //                 playbook: "${env.WORKSPACE}/roles/tmp/kubespray/cluster.yml",
-        //                 inventory: "${WORKSPACE}/inventory.ini",
-        //                 forks: 16,
-        //                 colorized: true,
-        //                 become: true,
-        //                 becomeUser: "root",
-        //                 extras: '-u ${user} --flush-cache --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" -v',
-        //                 extraVars: [
-        //                     http_proxy: "${params.http_proxy}",
-        //                     https_proxy: "${params.https_proxy}",
-        //                     no_proxy: "${params.no_proxy}"
-        //                 ]
-        //             )
-        //         }
+        stage('Running KubeSpray') {
+            steps {                
+                // This is the recommended way of running ansible playbooks/roles from Jennkins
+                retry(10) {
+                    ansiblePlaybook(
+                        playbook: "${env.WORKSPACE}/roles/tmp/kubespray/cluster.yml",
+                        inventory: "${WORKSPACE}/inventory.ini",
+                        forks: 16,
+                        colorized: true,
+                        become: true,
+                        becomeUser: "root",
+                        extras: '-u ${user} --flush-cache --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" -v',
+                        extraVars: [
+                            http_proxy: "${params.http_proxy}",
+                            https_proxy: "${params.https_proxy}",
+                            no_proxy: "${params.no_proxy}"
+                        ]
+                    )
+                }
 
-        //         // This also works but doesn't show the colors on the output which at the end could help us find easier error or warnings.
-        //         // sh '''
-        //         // cd ${WORKSPACE}/roles/tmp/kubespray/ ; echo -e "\n"
-        //         // pwd ; echo -e "\n"
-        //         // source venv/bin/activate ; echo -e "\n\n"
-        //         // until time ansible-playbook -i ${WORKSPACE}/inventory.ini cluster.yml -u root --become --become-user=root --extra-vars "http_proxy=${http_proxy} https_proxy=${https_proxy} no_proxy=${no_proxy}" ; do sleep 5 ; done
-        //         // deactivate ; echo -e "\n"s
-        //     }
-        // }
+                // This also works but doesn't show the colors on the output which at the end could help us find easier error or warnings.
+                // sh '''
+                // cd ${WORKSPACE}/roles/tmp/kubespray/ ; echo -e "\n"
+                // pwd ; echo -e "\n"
+                // source venv/bin/activate ; echo -e "\n\n"
+                // until time ansible-playbook -i ${WORKSPACE}/inventory.ini cluster.yml -u root --become --become-user=root --extra-vars "http_proxy=${http_proxy} https_proxy=${https_proxy} no_proxy=${no_proxy}" ; do sleep 5 ; done
+                // deactivate ; echo -e "\n"s
+            }
+        }
     }
   
     post {
