@@ -262,7 +262,7 @@ pipeline {
                     inventory: "${env.WORKSPACE}/roles/tmp/kubespray/inventory/mycluster/inventory.ini",
                     forks: 16,
                     colorized: true,
-                    extras: '-vv --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"',
+                    extras: '--ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" --flush-cache -v',
                     extraVars: [
                         jenkins_workspace: "${env.WORKSPACE}/",
                         http_proxy: "${params.http_proxy}",
