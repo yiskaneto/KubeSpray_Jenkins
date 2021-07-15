@@ -194,6 +194,7 @@ pipeline {
                 sh '''
                 echo "" > ${WORKSPACE}/inventory.ini
                 echo ${inventory} > ${WORKSPACE}/inventory.ini
+                cat ${WORKSPACE}/inventory.ini
                 '''
 			// 	sh '''
             //     echo ${kube_control_plane_nodes} | sed \'s/,/\\n/g\' | while read line ; do sed -i \'/\\[all\\]/a \\\'"${line}"\'\' ${WORKSPACE}/inventory.ini ; done
