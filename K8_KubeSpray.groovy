@@ -87,26 +87,26 @@ pipeline {
             defaultValue: 'cluster.local',
             description: 'Leave empty if not needed'
         )
-        string(
-            name: 'kube_control_plane_nodes',
-            defaultValue: '192.168.0.10,192.168.0.11,192.168.0.12',
-            description: 'List of kube control planes IPs, separated by comas"'
-        )
-        string(
-            name: 'etcd_nodes',
-            defaultValue: '192.168.0.10,192.168.0.11,192.168.0.12',
-            description: 'List of kube control planes IPs, separated by comas"'
-        )
-        string(
-            name: 'kube_nodes',
-            defaultValue: '192.168.0.10,192.168.0.11,192.168.0.12',
-            description: 'List of kube control planes IPs, separated by comas"'
-        )
-        string(
-            name: 'calico_rr_nodes',
-            defaultValue: '192.168.0.10,192.168.0.11,192.168.0.12',
-            description: 'List of kube control planes IPs, separated by comas"'
-        )
+        // string(
+        //     name: 'kube_control_plane_nodes',
+        //     defaultValue: '192.168.0.10,192.168.0.11,192.168.0.12',
+        //     description: 'List of kube control planes IPs, separated by comas"'
+        // )
+        // string(
+        //     name: 'etcd_nodes',
+        //     defaultValue: '192.168.0.10,192.168.0.11,192.168.0.12',
+        //     description: 'List of kube control planes IPs, separated by comas"'
+        // )
+        // string(
+        //     name: 'kube_nodes',
+        //     defaultValue: '192.168.0.10,192.168.0.11,192.168.0.12',
+        //     description: 'List of kube control planes IPs, separated by comas"'
+        // )
+        // string(
+        //     name: 'calico_rr_nodes',
+        //     defaultValue: '192.168.0.10,192.168.0.11,192.168.0.12',
+        //     description: 'List of kube control planes IPs, separated by comas"'
+        // )
         choice(
             name: 'kube_network_plugin',
             choices: ['calico','flannel','cilium','weave','cloud'],
