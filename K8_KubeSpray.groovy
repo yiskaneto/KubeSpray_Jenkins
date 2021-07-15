@@ -193,9 +193,10 @@ pipeline {
 			steps {
                 sh '''
                 echo "" > ${WORKSPACE}/inventory.yaml
-                echo ${inventory} > ${WORKSPACE}/inventory.yaml
-                cat ${WORKSPACE}/inventory.yaml
                 '''
+                writeFile file: "${WORKSPACE}/inventory.yaml", text: "${inventory}"
+                sh 'ls -lht ${WORKSPACE}/inventory.yaml'
+                sh 'cat ${WORKSPACE}/inventory.yaml'
 			// 	sh '''
             //     echo ${kube_control_plane_nodes} | sed \'s/,/\\n/g\' | while read line ; do sed -i \'/\\[all\\]/a \\\'"${line}"\'\' ${WORKSPACE}/inventory.ini ; done
             //     echo ${etcd_nodes} | sed \'s/,/\\n/g\' | while read line ; do sed -i \'/\\[all\\]/a \\\'"${line}"\'\' ${WORKSPACE}/inventory.ini ; done
