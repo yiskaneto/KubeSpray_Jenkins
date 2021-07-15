@@ -207,7 +207,7 @@ pipeline {
 
             //     cat ${WORKSPACE}/inventory.ini		
 			// 	'''
-			// }
+			}
 		}
 
         // stage('SSH Key Pair Tasks') {
