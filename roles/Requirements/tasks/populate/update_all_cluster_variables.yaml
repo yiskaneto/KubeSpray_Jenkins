@@ -34,7 +34,7 @@
     path: "{{ jenkins_workspace }}roles/tmp/kubespray/inventory/mycluster/group_vars/all/all.yml"
     regexp: "^# loadbalancer_apiserver_type: "
     line: "loadbalancer_apiserver_type: {{ loadbalancer_apiserver_type }}"
-  when: use_internal_loadbalancer == true
+  when: use_internal_loadbalancer | bool == true
 
 - name: Updating http_proxy on inventory/mycluster/group_vars/all/all.yml
   ansible.builtin.lineinfile:
