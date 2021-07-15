@@ -190,50 +190,53 @@ pipeline {
     stages {
         stage('Creating Inventory File') {
 			steps {
-				sh '''
-                echo ${kube_control_plane_nodes} | sed \'s/,/\\n/g\' | while read line ; do sed -i \'/\\[all\\]/a \\\'"${line}"\'\' ${WORKSPACE}/inventory.ini ; done
-                echo ${etcd_nodes} | sed \'s/,/\\n/g\' | while read line ; do sed -i \'/\\[all\\]/a \\\'"${line}"\'\' ${WORKSPACE}/inventory.ini ; done
-                echo ${kube_nodes} | sed \'s/,/\\n/g\' | while read line ; do sed -i \'/\\[all\\]/a \\\'"${line}"\'\' ${WORKSPACE}/inventory.ini ; done
-                echo ${calico_rr_nodes} | sed \'s/,/\\n/g\' | while read line ; do sed -i \'/\\[all\\]/a \\\'"${line}"\'\' ${WORKSPACE}/inventory.ini ; done
+                sh '''
+                sleep 60
+                '''
+			// 	sh '''
+            //     echo ${kube_control_plane_nodes} | sed \'s/,/\\n/g\' | while read line ; do sed -i \'/\\[all\\]/a \\\'"${line}"\'\' ${WORKSPACE}/inventory.ini ; done
+            //     echo ${etcd_nodes} | sed \'s/,/\\n/g\' | while read line ; do sed -i \'/\\[all\\]/a \\\'"${line}"\'\' ${WORKSPACE}/inventory.ini ; done
+            //     echo ${kube_nodes} | sed \'s/,/\\n/g\' | while read line ; do sed -i \'/\\[all\\]/a \\\'"${line}"\'\' ${WORKSPACE}/inventory.ini ; done
+            //     echo ${calico_rr_nodes} | sed \'s/,/\\n/g\' | while read line ; do sed -i \'/\\[all\\]/a \\\'"${line}"\'\' ${WORKSPACE}/inventory.ini ; done
 
-                echo ${main-master-node-install} | sed \'s/,/\\n/g\' | while read line ; do sed -i \'/\\[main-master-node-install\\]/a \\\'"${line}"\'\' ${WORKSPACE}/inventory.ini ; done
-                echo ${kube_control_plane_nodes} | sed \'s/,/\\n/g\' | while read line ; do sed -i \'/\\[kube_control_plane\\]/a \\\'"${line}"\'\' ${WORKSPACE}/inventory.ini ; done
-                echo ${etcd_nodes} | sed \'s/,/\\n/g\' | while read line ; do sed -i \'/\\[etcd\\]/a \\\'"${line}"\'\' ${WORKSPACE}/inventory.ini ; done
-                echo ${kube_nodes} | sed \'s/,/\\n/g\' | while read line ; do sed -i \'/\\[kube_node\\]/a \\\'"${line}"\'\' ${WORKSPACE}/inventory.ini ; done
-                echo ${calico_rr_nodes} | sed \'s/,/\\n/g\' | while read line ; do sed -i \'/\\[calico_rr\\]/a \\\'"${line}"\'\' ${WORKSPACE}/inventory.ini ; done
+            //     echo ${main-master-node-install} | sed \'s/,/\\n/g\' | while read line ; do sed -i \'/\\[main-master-node-install\\]/a \\\'"${line}"\'\' ${WORKSPACE}/inventory.ini ; done
+            //     echo ${kube_control_plane_nodes} | sed \'s/,/\\n/g\' | while read line ; do sed -i \'/\\[kube_control_plane\\]/a \\\'"${line}"\'\' ${WORKSPACE}/inventory.ini ; done
+            //     echo ${etcd_nodes} | sed \'s/,/\\n/g\' | while read line ; do sed -i \'/\\[etcd\\]/a \\\'"${line}"\'\' ${WORKSPACE}/inventory.ini ; done
+            //     echo ${kube_nodes} | sed \'s/,/\\n/g\' | while read line ; do sed -i \'/\\[kube_node\\]/a \\\'"${line}"\'\' ${WORKSPACE}/inventory.ini ; done
+            //     echo ${calico_rr_nodes} | sed \'s/,/\\n/g\' | while read line ; do sed -i \'/\\[calico_rr\\]/a \\\'"${line}"\'\' ${WORKSPACE}/inventory.ini ; done
 
-                cat ${WORKSPACE}/inventory.ini		
-				'''
-			}
+            //     cat ${WORKSPACE}/inventory.ini		
+			// 	'''
+			// }
 		}
 
-        stage('SSH Key Pair Tasks') {
-            steps {
-                ansiblePlaybook(
-                    playbook: "${env.WORKSPACE}/roles/playbooks/ssh_keys_tasks.yaml",
-                    inventory: "${env.WORKSPACE}/inventory.ini",
-                    forks: 16,
-                    colorized: true,
-                    extras: '-v --ssh-extra-args="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"'
-                )
-            }
-        }
+        // stage('SSH Key Pair Tasks') {
+        //     steps {
+        //         ansiblePlaybook(
+        //             playbook: "${env.WORKSPACE}/roles/playbooks/ssh_keys_tasks.yaml",
+        //             inventory: "${env.WORKSPACE}/inventory.ini",
+        //             forks: 16,
+        //             colorized: true,
+        //             extras: '-v --ssh-extra-args="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"'
+        //         )
+        //     }
+        // }
 
-        stage('Running Requirements') {
-            steps {
-                ansiblePlaybook(
-                    playbook: "${env.WORKSPACE}/roles/Requirements/main.yaml",
-                    inventory: "${env.WORKSPACE}/inventory.ini",
-                    forks: 16,
-                    colorized: true,
-                    extras: '-vv --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"',
-                    extraVars: [
-                        jenkins_workspace: "${env.WORKSPACE}/",
-                        http_proxy: "${params.http_proxy}"
-                    ]
-                )    
-            }
-        }
+        // stage('Running Requirements') {
+        //     steps {
+        //         ansiblePlaybook(
+        //             playbook: "${env.WORKSPACE}/roles/Requirements/main.yaml",
+        //             inventory: "${env.WORKSPACE}/inventory.ini",
+        //             forks: 16,
+        //             colorized: true,
+        //             extras: '-vv --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"',
+        //             extraVars: [
+        //                 jenkins_workspace: "${env.WORKSPACE}/",
+        //                 http_proxy: "${params.http_proxy}"
+        //             ]
+        //         )    
+        //     }
+        // }
 
         stage('Setting KubeSpray Env') {
             steps {
