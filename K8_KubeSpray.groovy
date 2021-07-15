@@ -109,7 +109,7 @@ pipeline {
         booleanParam(
             name: 'use_internal_loadbalancer',
             defaultValue: false,
-            description: 'Whether or not to use internal loadbalancers for apiservers'
+            description: 'Whether or not to use internal loadbalancers for kube api servers'
         )
         choice(
             name: 'loadbalancer_apiserver_type',
