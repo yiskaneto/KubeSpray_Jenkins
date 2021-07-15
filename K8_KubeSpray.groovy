@@ -108,7 +108,7 @@ pipeline {
         )
         booleanParam(
             name: 'use_internal_loadbalancer',
-            defaultValue: true,
+            defaultValue: false,
             description: 'Whether or not to use internal loadbalancers for apiservers'
         )
         choice(
