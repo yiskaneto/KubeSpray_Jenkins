@@ -57,8 +57,8 @@ pipeline {
   
     parameters {
         text(
-            name: '${inventory_sample}',
-            defaultValue: 'One\nTwo\nThree\n',
+            name: 'inventory',
+            defaultValue: '${inventory_sample}',
             description: ''
         )
         string(
