@@ -255,11 +255,11 @@ pipeline {
                 ./kubeSpray_venv_install_requirements.sh
                 cp -rfp inventory/sample inventory/mycluster
                 rm -rf inventory/mycluster/inventory.ini
-                cp ${WORKSPACE}/inventory.ini inventory/mycluster/inventory.ini
+                cp ${WORKSPACE}/inventory.ini inventory/mycluster/inventory.yaml
                 '''
                 ansiblePlaybook(
                     playbook: "${env.WORKSPACE}/roles/Requirements/populate_vars.yaml",
-                    inventory: "${env.WORKSPACE}/roles/tmp/kubespray/inventory/mycluster/inventory.ini",
+                    inventory: "${env.WORKSPACE}/roles/tmp/kubespray/inventory/mycluster/inventory.yaml",
                     forks: 16,
                     colorized: true,
                     extras: '--ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" --flush-cache -v',
@@ -296,7 +296,7 @@ pipeline {
                 retry(10) {
                     ansiblePlaybook(
                         playbook: "${env.WORKSPACE}/roles/tmp/kubespray/cluster.yml",
-                        inventory: "${env.WORKSPACE}/roles/tmp/kubespray/inventory/mycluster/inventory.ini",
+                        inventory: "${env.WORKSPACE}/roles/tmp/kubespray/inventory/mycluster/inventory.yaml",
                         forks: 16,
                         colorized: true,
                         become: true,
