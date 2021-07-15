@@ -192,11 +192,11 @@ pipeline {
         stage('Creating Inventory File') {
 			steps {
                 sh '''
-                echo "" > ${WORKSPACE}/inventory.yaml
+                echo "" > ${WORKSPACE}/inventory.ini
                 '''
-                writeFile file: "${WORKSPACE}/inventory.yaml", text: "${inventory}"
-                sh 'ls -lht ${WORKSPACE}/inventory.yaml'
-                sh 'cat ${WORKSPACE}/inventory.yaml'
+                writeFile file: "${WORKSPACE}/inventory.ini", text: "${inventory}"
+                sh 'ls -lht ${WORKSPACE}/inventory.ini'
+                sh 'cat ${WORKSPACE}/inventory.ini'
 			// 	sh '''
             //     echo ${kube_control_plane_nodes} | sed \'s/,/\\n/g\' | while read line ; do sed -i \'/\\[all\\]/a \\\'"${line}"\'\' ${WORKSPACE}/inventory.ini ; done
             //     echo ${etcd_nodes} | sed \'s/,/\\n/g\' | while read line ; do sed -i \'/\\[all\\]/a \\\'"${line}"\'\' ${WORKSPACE}/inventory.ini ; done
@@ -256,11 +256,11 @@ pipeline {
                 ./kubeSpray_venv_install_requirements.sh
                 cp -rfp inventory/sample inventory/mycluster
                 rm -rf inventory/mycluster/inventory.ini
-                cp ${WORKSPACE}/inventory.yaml inventory/mycluster/inventory.yaml
+                cp ${WORKSPACE}/inventory.ini inventory/mycluster/inventory.ini
                 '''
                 ansiblePlaybook(
                     playbook: "${env.WORKSPACE}/roles/Requirements/populate_vars.yaml",
-                    inventory: "${env.WORKSPACE}/roles/tmp/kubespray/inventory/mycluster/inventory.yaml",
+                    inventory: "${env.WORKSPACE}/roles/tmp/kubespray/inventory/mycluster/inventory.ini",
                     forks: 16,
                     colorized: true,
                     extras: '--ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" --flush-cache -v',
@@ -297,7 +297,7 @@ pipeline {
                 retry(10) {
                     ansiblePlaybook(
                         playbook: "${env.WORKSPACE}/roles/tmp/kubespray/cluster.yml",
-                        inventory: "${env.WORKSPACE}/roles/tmp/kubespray/inventory/mycluster/inventory.yaml",
+                        inventory: "${env.WORKSPACE}/roles/tmp/kubespray/inventory/mycluster/inventory.ini",
                         forks: 16,
                         colorized: true,
                         become: true,
