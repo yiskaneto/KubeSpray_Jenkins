@@ -15,15 +15,11 @@
   tasks:
     - name: Cloning project on master node
       shell: |
-        rm -rf /opt/kubespray
-        cd /opt/
-        git clone https://github.com/kubernetes-sigs/kubespray.git
-        cd kubespray
-        git checkout release-2.16
-        mkdir /opt/kubespray/inventory/mycluster/
+        rm -rf /opt/mycluster
       register: gitod
+      ignore_errors: yes
 
     - name: Making a copy of the kubespray project on one of the control plane nodes
       copy:
         src: "{{ jenkins_workspace }}/roles/tmp/kubespray/inventory/mycluster"
-        dest: /opt/kubespray/inventory/
+        dest: /opt/

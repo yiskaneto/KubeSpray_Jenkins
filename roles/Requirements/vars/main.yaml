@@ -18,4 +18,8 @@ container_runtime: "{{ container_runtime }}"
 kube_network_plugin: "{{ kube_network_plugin }}"
 
 # File from KubeSpray kubeSpray/inventory/mycluster/group_vars/k8s_cluster/addons.yml
+dashboard_enabled: "{{ dashboard_enabled }}"
 ingress_nginx_enabled: "{{ ingress_nginx_enabled }}"
+metrics_server_enabled: "{{ metrics_server_enabled }}"
+helm_enabled: "{{ helm_enabled }}"
+cert_manager_enabled: "{{ cert_manager_enabled }}"
