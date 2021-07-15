@@ -2,7 +2,7 @@
 - name: Updating ingress_nginx_enabled on inventory/mycluster/group_vars/k8s_cluster/addons.yml
   ansible.builtin.lineinfile:
     path: "{{ jenkins_workspace }}roles/tmp/kubespray/inventory/mycluster/group_vars/k8s_cluster/addons.yml"
-    regexp: "^ingress_nginx_enabled: "
+    regexp: "^dashboard_enabled: "
     line: "dashboard_enabled: true"
   when: dashboard_enabled | bool == true
 
