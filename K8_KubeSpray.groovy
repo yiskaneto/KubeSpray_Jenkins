@@ -369,8 +369,9 @@ pipeline {
 
                     sh '''
                     cd ${WORKSPACE}/roles/tmp/kubespray/ ; echo -e "\n"
+                    git checkout release-2.16
                     pwd ; echo -e "\n"
-                    time ansible-playbook -i ${WORKSPACE}/inventory.ini cluster.yml --tags apps -f 16 -u root --become --become-user=root --extra-vars "http_proxy=${http_proxy} https_proxy=${https_proxy} no_proxy=${no_proxy}" --flush-cache -v
+                    time ansible-playbook -i ${WORKSPACE}/inventory.ini --tags apps -u root --become --become-user=root -f 16 --extra-vars "http_proxy=${http_proxy} https_proxy=${https_proxy} no_proxy=${no_proxy}" --flush-cache -v cluster.yml
                     '''
                 }
 
