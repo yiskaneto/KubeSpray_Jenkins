@@ -60,7 +60,7 @@ pipeline {
         booleanParam(
             name: 'uninstall_kubespray',
             defaultValue: true,
-            description: 'only choose this option if kubespray has been previously installed with the same, use the ip/hostname in the inventory parameter'
+            description: 'Uninstall previous installations K8s, this will force reboot weather is installed or not'
         )
         booleanParam(
             name: 'run_requirements',
