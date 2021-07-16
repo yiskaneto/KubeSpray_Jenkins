@@ -316,11 +316,34 @@ pipeline {
             }
             steps {                
                 retry(10) {
-                    // This also works but doesn't show the colors on the output which at the end could help us find easier error or warnings.
-                    sh '''
-                    cd ${WORKSPACE}/roles/tmp/kubespray/ ; echo -e "\n"
-                    yes | time ansible-playbook -i ${WORKSPACE}/inventory.ini reset.yml -u root --become --become-user=root --extra-vars "http_proxy=${http_proxy} https_proxy=${https_proxy} no_proxy=${no_proxy}" --flush-cache -v
-                    '''
+                    ansiblePlaybook(
+                        playbook: "${env.WORKSPACE}/roles/tmp/kubespray/reset.yml",
+                        inventory: "${env.WORKSPACE}/inventory.ini",
+                        forks: 16,
+                        colorized: true,
+                        become: true,
+                        becomeUser: "root",
+                        extras: '-u ${user} reset_confirmation=yes --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" --flush-cache -v',
+                        extraVars: [
+                            http_proxy: "${params.http_proxy}",
+                            https_proxy: "${params.https_proxy}",
+                            no_proxy: "${params.no_proxy}"
+                        ]
+                    )
+                    ansiblePlaybook(
+                        playbook: "${env.WORKSPACE}/roles/Requirements/reboot.yaml",
+                        inventory: "${env.WORKSPACE}/inventory.ini",
+                        forks: 16,
+                        colorized: true,
+                        become: true,
+                        becomeUser: "root",
+                        extras: '-u ${user} r--ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" --flush-cache -v',
+                        extraVars: [
+                            http_proxy: "${params.http_proxy}",
+                            https_proxy: "${params.https_proxy}",
+                            no_proxy: "${params.no_proxy}"
+                        ]
+                    )
                 }
             }
         }
@@ -343,7 +366,15 @@ pipeline {
                             no_proxy: "${params.no_proxy}"
                         ]
                     )
+
+                    sh '''
+                    cd ${WORKSPACE}/roles/tmp/kubespray/ ; echo -e "\n"
+                    pwd ; echo -e "\n"
+                    time ansible-playbook -i ${WORKSPACE}/inventory.ini cluster.yml --tags apps -u root --become --become-user=root --extra-vars "http_proxy=${http_proxy} https_proxy=${https_proxy} no_proxy=${no_proxy}" --flush-cache -v
+                    '''
                 }
+
+                
 
                 // This also works but doesn't show the colors on the output which at the end could help us find easier error or warnings.
                 // sh '''
@@ -352,21 +383,6 @@ pipeline {
                 // source venv/bin/activate ; echo -e "\n\n"
                 // until time ansible-playbook -i ${WORKSPACE}/inventory.ini cluster.yml -u root --become --become-user=root --extra-vars "http_proxy=${http_proxy} https_proxy=${https_proxy} no_proxy=${no_proxy}" ; do sleep 5 ; done
                 // deactivate ; echo -e "\n"s
-            }
-        }
-
-        stage('Installing Addons') {
-            steps {                
-                retry(10) {
-                    // This also works but doesn't show the colors on the output which at the end could help us find easier error or warnings.
-                    sh '''
-                    cd ${WORKSPACE}/roles/tmp/kubespray/ ; echo -e "\n"
-                    pwd ; echo -e "\n"
-                    source venv/bin/activate ; echo -e "\n\n"
-                    time ansible-playbook -i ${WORKSPACE}/inventory.ini cluster.yml --tags apps -u root --become --become-user=root --extra-vars "http_proxy=${http_proxy} https_proxy=${https_proxy} no_proxy=${no_proxy}" --flush-cache -v
-                    deactivate ; echo -e "\n"s
-                    '''
-                }
             }
         }
     }
