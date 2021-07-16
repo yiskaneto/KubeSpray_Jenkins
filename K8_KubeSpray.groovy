@@ -336,7 +336,7 @@ pipeline {
                 '''
                 ansiblePlaybook(
                     playbook: "${env.WORKSPACE}/roles/Requirements/populate_vars.yaml",
-                    inventory: "${env.WORKSPACE}/inventory.ini",
+                    inventory: "${env.WORKSPACE}/roles/tmp/kubespray/inventory/mycluster/inventory.ini",
                     forks: 16,
                     colorized: true,
                     extras: '--ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" --flush-cache -v',
