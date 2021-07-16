@@ -253,34 +253,52 @@ pipeline {
             when {
                 expression { params.uninstall_kubespray == true }
             }
-            steps {                
-                retry(2) {
-                    ansiblePlaybook(
-                        playbook: "${env.WORKSPACE}/roles/tmp/kubespray/reset.yml",
-                        inventory: "${env.WORKSPACE}/inventory.ini",
-                        forks: 16,
-                        colorized: true,
-                        become: true,
-                        becomeUser: "root",
-                        extras: '-u ${user} --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" --flush-cache -v',
-                        extraVars: [
-                            http_proxy: "${params.http_proxy}",
-                            https_proxy: "${params.https_proxy}",
-                            no_proxy: "${params.no_proxy}",
-                            reset_confirmation: "yes"
-                        ]
-                    )
-                    ansiblePlaybook(
-                        playbook: "${env.WORKSPACE}/roles/Requirements/main.yaml",
-                        inventory: "${env.WORKSPACE}/inventory.ini",
-                        forks: 16,
-                        colorized: true,
-                        extras: '--ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" -v',
-                        extraVars: [
-                            jenkins_workspace: "${env.WORKSPACE}/",
-                            http_proxy: "${params.http_proxy}"
-                        ]
-                    )  
+            steps {
+                script {
+                    try {
+                        ansiblePlaybook(
+                            playbook: "${env.WORKSPACE}/roles/tmp/kubespray/reset.yml",
+                            inventory: "${env.WORKSPACE}/inventory.ini",
+                            forks: 16,
+                            colorized: true,
+                            become: true,
+                            becomeUser: "root",
+                            extras: '-u ${user} --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" --flush-cache -v',
+                            extraVars: [
+                                http_proxy: "${params.http_proxy}",
+                                https_proxy: "${params.https_proxy}",
+                                no_proxy: "${params.no_proxy}",
+                                reset_confirmation: "yes"
+                            ]
+                        )
+
+                        ansiblePlaybook(
+                            playbook: "${env.WORKSPACE}/roles/Requirements/main.yaml",
+                            inventory: "${env.WORKSPACE}/inventory.ini",
+                            forks: 16,
+                            colorized: true,
+                            extras: '--ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" -v',
+                            extraVars: [
+                                jenkins_workspace: "${env.WORKSPACE}/",
+                                http_proxy: "${params.http_proxy}"
+                            ]
+                        )
+                        
+                    } catch (Exception e) {
+                        echo 'Exception occurred: ' + e.toString()
+                        sh 'Handle the exception!'
+                        ansiblePlaybook(
+                            playbook: "${env.WORKSPACE}/roles/Requirements/main.yaml",
+                            inventory: "${env.WORKSPACE}/inventory.ini",
+                            forks: 16,
+                            colorized: true,
+                            extras: '--ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" -v',
+                            extraVars: [
+                                jenkins_workspace: "${env.WORKSPACE}/",
+                                http_proxy: "${params.http_proxy}"
+                            ]
+                        )
+                    }
                 }
             }
         }
