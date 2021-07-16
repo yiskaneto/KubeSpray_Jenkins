@@ -315,7 +315,7 @@ pipeline {
                 expression { params.uninstall_kubespray == true }
             }
             steps {                
-                retry(10) {
+                retry(4) {
                     ansiblePlaybook(
                         playbook: "${env.WORKSPACE}/roles/tmp/kubespray/reset.yml",
                         inventory: "${env.WORKSPACE}/inventory.ini",
@@ -338,7 +338,7 @@ pipeline {
                         colorized: true,
                         become: true,
                         becomeUser: "root",
-                        extras: '-u ${user} r--ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" --flush-cache -v',
+                        extras: '-u ${user} --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" --flush-cache -v',
                         extraVars: [
                             http_proxy: "${params.http_proxy}",
                             https_proxy: "${params.https_proxy}",
