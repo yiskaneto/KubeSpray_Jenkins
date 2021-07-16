@@ -315,7 +315,7 @@ pipeline {
                 expression { params.uninstall_kubespray == true }
             }
             steps {                
-                retry(4) {
+                retry(3) {
                     ansiblePlaybook(
                         playbook: "${env.WORKSPACE}/roles/tmp/kubespray/reset.yml",
                         inventory: "${env.WORKSPACE}/inventory.ini",
@@ -352,7 +352,7 @@ pipeline {
         stage('Running KubeSpray') {
             steps {                
                 // This is the recommended way of running ansible playbooks/roles from Jennkins
-                retry(10) {
+                retry(4) {
                     ansiblePlaybook(
                         playbook: "${env.WORKSPACE}/roles/tmp/kubespray/cluster.yml",
                         inventory: "${env.WORKSPACE}/inventory.ini",
@@ -360,22 +360,14 @@ pipeline {
                         colorized: true,
                         become: true,
                         becomeUser: "root",
-                        extras: '-u ${user} --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" --flush-cache -v',
+                        extras: '--tags all -u ${user} --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" --flush-cache -v',
                         extraVars: [
                             http_proxy: "${params.http_proxy}",
                             https_proxy: "${params.https_proxy}",
                             no_proxy: "${params.no_proxy}"
                         ]
                     )
-
-                    sh '''
-                    cd ${WORKSPACE}/roles/tmp/kubespray/
-                    ansible-playbook -i inventory/mycluster/inventory.ini cluster.yml --tags apps --skip-tags=download,bootstrap-os -u root --become --become-user=root -f 16 --extra-vars "http_proxy=${http_proxy} https_proxy=${https_proxy} no_proxy=${no_proxy}" --flush-cache -v
-                    '''
                 }
-
-                
-
                 // This also works but doesn't show the colors on the output which at the end could help us find easier error or warnings.
                 // sh '''
                 // cd ${WORKSPACE}/roles/tmp/kubespray/ ; echo -e "\n"
@@ -385,6 +377,17 @@ pipeline {
                 // deactivate ; echo -e "\n"s
             }
         }
+
+        // stage('Running KubeSpray') {
+        //     steps {                
+        //         // This is the recommended way of running ansible playbooks/roles from Jennkins
+        //         retry(2) {
+        //             sh '''
+        //             cd ${WORKSPACE}/roles/tmp/kubespray/
+        //             ansible-playbook -i inventory/mycluster/inventory.ini cluster.yml --tags apps --skip-tags=download,bootstrap-os -u root --become --become-user=root -f 16 --extra-vars "http_proxy=${http_proxy} https_proxy=${https_proxy} no_proxy=${no_proxy}" --flush-cache
+        //             '''
+        //     }
+        // }
     }
   
     post {
