@@ -1,6 +1,6 @@
 ---
 - name: Removing /opt/containerd /opt/cni
   shell: |
-    rm -rf /opt/containerd /opt/cni /opt/kubespray /opt/.*
+    rm -rf /opt/containerd /opt/cni /opt/kubespray /opt/.* /opt/mycluster
     rm -rf /tmp/* /tmp/.*
   ignore_errors: yes
