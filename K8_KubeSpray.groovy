@@ -241,22 +241,39 @@ pipeline {
             }
         }
 
-        stage('Running Requirements') {
+        stage('Uninstalling K8s') {
             when {
-                expression { params.run_requirements == true }
-            }	
-            steps {
-                ansiblePlaybook(
-                    playbook: "${env.WORKSPACE}/roles/Requirements/main.yaml",
-                    inventory: "${env.WORKSPACE}/inventory.ini",
-                    forks: 16,
-                    colorized: true,
-                    extras: '-vv --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"',
-                    extraVars: [
-                        jenkins_workspace: "${env.WORKSPACE}/",
-                        http_proxy: "${params.http_proxy}"
-                    ]
-                )    
+                expression { params.uninstall_kubespray == true }
+            }
+            steps {                
+                retry(2) {
+                    ansiblePlaybook(
+                        playbook: "${env.WORKSPACE}/roles/tmp/kubespray/reset.yml",
+                        inventory: "${env.WORKSPACE}/inventory.ini",
+                        forks: 16,
+                        colorized: true,
+                        become: true,
+                        becomeUser: "root",
+                        extras: '-u ${user} --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" --flush-cache -v',
+                        extraVars: [
+                            http_proxy: "${params.http_proxy}",
+                            https_proxy: "${params.https_proxy}",
+                            no_proxy: "${params.no_proxy}",
+                            reset_confirmation: "yes"
+                        ]
+                    )
+                    ansiblePlaybook(
+                        playbook: "${env.WORKSPACE}/roles/Requirements/main.yaml",
+                        inventory: "${env.WORKSPACE}/inventory.ini",
+                        forks: 16,
+                        colorized: true,
+                        extras: '--ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" -v',
+                        extraVars: [
+                            jenkins_workspace: "${env.WORKSPACE}/",
+                            http_proxy: "${params.http_proxy}"
+                        ]
+                    )  
+                }
             }
         }
 
@@ -307,45 +324,6 @@ pipeline {
                         kube_pods_subnet: "${params.kube_pods_subnet}"
                     ]
                 )
-            }
-        }
-
-        stage('Uninstalling KubeSpray') {
-            when {
-                expression { params.uninstall_kubespray == true }
-            }
-            steps {                
-                retry(3) {
-                    ansiblePlaybook(
-                        playbook: "${env.WORKSPACE}/roles/tmp/kubespray/reset.yml",
-                        inventory: "${env.WORKSPACE}/inventory.ini",
-                        forks: 16,
-                        colorized: true,
-                        become: true,
-                        becomeUser: "root",
-                        extras: '-u ${user} --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" --flush-cache -v',
-                        extraVars: [
-                            http_proxy: "${params.http_proxy}",
-                            https_proxy: "${params.https_proxy}",
-                            no_proxy: "${params.no_proxy}",
-                            reset_confirmation: "yes"
-                        ]
-                    )
-                    ansiblePlaybook(
-                        playbook: "${env.WORKSPACE}/roles/Requirements/reboot.yaml",
-                        inventory: "${env.WORKSPACE}/inventory.ini",
-                        forks: 16,
-                        colorized: true,
-                        become: true,
-                        becomeUser: "root",
-                        extras: '-u ${user} --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" --flush-cache -v',
-                        extraVars: [
-                            http_proxy: "${params.http_proxy}",
-                            https_proxy: "${params.https_proxy}",
-                            no_proxy: "${params.no_proxy}"
-                        ]
-                    )
-                }
             }
         }
         
