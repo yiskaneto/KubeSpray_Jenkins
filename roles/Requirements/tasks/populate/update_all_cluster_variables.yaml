@@ -58,8 +58,8 @@
     regexp: "^# https_proxy: "
     line: 'https_proxy: "{{ https_proxy }}"'
 
-- name: Updating additional_no_proxy with no_proxy on inventory/mycluster/group_vars/all/all.yml
+- name: Updating no_proxy with no_proxy on inventory/mycluster/group_vars/all/all.yml
   ansible.builtin.lineinfile:
     path: "{{ jenkins_workspace }}roles/tmp/kubespray/inventory/mycluster/group_vars/all/all.yml"
-    regexp: "^# additional_no_proxy: "
-    line: 'additional_no_proxy: "{{ no_proxy }}"'
+    regexp: "^# no_proxy: "
+    line: 'no_proxy: "{{ no_proxy }}"'
