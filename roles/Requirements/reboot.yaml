@@ -9,6 +9,10 @@
         rm -rf /tmp/* /tmp/.*
       ignore_errors: yes
 
+    - name: Cleaning previous entries on /etc/hosts from ansible
+      shell: |
+        sed -i '/^# Ansible/,$d' /etc/hosts
+
     - name: Rebooting all nodes using ansible module
       reboot:
         reboot_timeout: 1800
