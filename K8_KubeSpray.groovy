@@ -286,12 +286,11 @@ pipeline {
 
                     } catch (Exception e) {
                         echo 'Exception occurred: ' + e.toString()
-                        sh 'Exception handled!'
-                    }
-                }
-
-                sh "The job should now continue"
-                ansiblePlaybook(
+                        sh '''
+                        echo "Exception Handled"
+                        cd ${WORKSPACE}/
+                        '''
+                        ansiblePlaybook(
                             playbook: "${env.WORKSPACE}/roles/Requirements/main.yaml",
                             inventory: "${env.WORKSPACE}/inventory.ini",
                             forks: 16,
@@ -301,7 +300,9 @@ pipeline {
                                 jenkins_workspace: "${env.WORKSPACE}/",
                                 http_proxy: "${params.http_proxy}"
                             ]
-                )
+                        )
+                    }
+                }
 
             }
         }
