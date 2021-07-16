@@ -284,12 +284,8 @@ pipeline {
                             ]
                         )
 
-                    } catch (Exception e) {
-                        echo 'Exception occurred: ' + e.toString()
-                        sh 'Handle the exception!'
-                    }
-
-                    ansiblePlaybook(
+                    } finally {
+                        ansiblePlaybook(
                             playbook: "${env.WORKSPACE}/roles/Requirements/main.yaml",
                             inventory: "${env.WORKSPACE}/inventory.ini",
                             forks: 16,
@@ -300,6 +296,8 @@ pipeline {
                                 http_proxy: "${params.http_proxy}"
                             ]
                         )
+                    }
+
                 }
             }
         }
