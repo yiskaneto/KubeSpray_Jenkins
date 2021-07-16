@@ -384,7 +384,7 @@ pipeline {
                 retry(2) {
                     sh '''
                     cd ${WORKSPACE}/roles/tmp/kubespray/
-                    ansible-playbook -i inventory/mycluster/inventory.ini cluster.yml --tags apps --skip-tags=download,bootstrap-os -u root --become --become-user=root -f 16 --extra-vars "http_proxy=${http_proxy} https_proxy=${https_proxy} no_proxy=${no_proxy}" --flush-cache
+                    ansible-playbook -i inventory/mycluster/inventory.ini cluster.yml --tags apps -u root --become --become-user=root -f 16 --extra-vars "http_proxy=${http_proxy} https_proxy=${https_proxy} no_proxy=${no_proxy}" --flush-cache
                     '''
                     // sh '''
                     // cd ${WORKSPACE}/roles/tmp/kubespray/
