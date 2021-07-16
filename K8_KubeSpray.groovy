@@ -236,6 +236,19 @@ pipeline {
             }
         }
 
+        stage('Clonning KubeSpray project') {
+            steps {
+                sh '''
+                mkdir ${WORKSPACE}/roles/tmp/
+                cd ${WORKSPACE}/roles/tmp/
+                pwd
+                git clone https://github.com/kubernetes-sigs/kubespray.git
+                cd kubespray
+                git checkout release-2.16
+                '''
+            }
+        }
+
         stage('Uninstalling K8s') {
             when {
                 expression { params.uninstall_kubespray == true }
@@ -275,11 +288,7 @@ pipeline {
         stage('Setting KubeSpray Env') {
             steps {
                 sh '''
-                mkdir ${WORKSPACE}/roles/tmp/
-                cd ${WORKSPACE}/roles/tmp/
-                pwd
-                git clone https://github.com/kubernetes-sigs/kubespray.git
-                cd kubespray
+                cd kubespray ${WORKSPACE}/roles/tmp/
                 git checkout release-2.16
                 cp ${WORKSPACE}/roles/scripts/kubeSpray_venv_install_requirements.sh .
                 chmod +x kubeSpray_venv_install_requirements.sh
