@@ -378,16 +378,16 @@ pipeline {
             }
         }
 
-        // stage('Running KubeSpray') {
-        //     steps {                
-        //         // This is the recommended way of running ansible playbooks/roles from Jennkins
-        //         retry(2) {
-        //             sh '''
-        //             cd ${WORKSPACE}/roles/tmp/kubespray/
-        //             ansible-playbook -i inventory/mycluster/inventory.ini cluster.yml --tags apps --skip-tags=download,bootstrap-os -u root --become --become-user=root -f 16 --extra-vars "http_proxy=${http_proxy} https_proxy=${https_proxy} no_proxy=${no_proxy}" --flush-cache
-        //             '''
-        //     }
-        // }
+        stage('Installing Addons') {
+            steps {                
+                // This is the recommended way of running ansible playbooks/roles from Jennkins
+                retry(2) {
+                    sh '''
+                    cd ${WORKSPACE}/roles/tmp/kubespray/
+                    ansible-playbook -i inventory/mycluster/inventory.ini cluster.yml --tags apps --skip-tags=download,bootstrap-os -u root --become --become-user=root -f 16 --extra-vars "http_proxy=${http_proxy} https_proxy=${https_proxy} no_proxy=${no_proxy}" --flush-cache
+                    '''
+            }
+        }
     }
   
     post {
