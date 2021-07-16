@@ -284,6 +284,9 @@ pipeline {
                             ]
                         )
 
+                    } catch (Exception e) {
+                        echo 'Exception occurred: ' + e.toString()
+                        sh 'Handle the exception!'
                     } finally {
                         ansiblePlaybook(
                             playbook: "${env.WORKSPACE}/roles/Requirements/main.yaml",
@@ -297,8 +300,9 @@ pipeline {
                             ]
                         )
                     }
-
                 }
+
+                sh "The job should continue now"
             }
         }
 
