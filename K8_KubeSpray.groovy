@@ -236,43 +236,25 @@ pipeline {
             }
         }
 
-        stage('Clonning KubeSpray project') {
-            steps {
-                sh '''
-                mkdir ${WORKSPACE}/roles/tmp/
-                cd ${WORKSPACE}/roles/tmp/
-                pwd
-                git clone https://github.com/kubernetes-sigs/kubespray.git
-                cd kubespray
-                git checkout release-2.16
-                '''
-            }
-        }
+        // stage('Clonning KubeSpray project') {
+        //     steps {
+        //         sh '''
+        //         mkdir ${WORKSPACE}/roles/tmp/
+        //         cd ${WORKSPACE}/roles/tmp/
+        //         pwd
+        //         git clone https://github.com/kubernetes-sigs/kubespray.git
+        //         cd kubespray
+        //         git checkout release-2.16
+        //         '''
+        //     }
+        // }
 
         stage('Uninstalling K8s') {
             when {
                 expression { params.uninstall_kubespray == true }
             }
             steps {
-                script {
-                    try {
-                        ansiblePlaybook(
-                            playbook: "${env.WORKSPACE}/roles/tmp/kubespray/reset.yml",
-                            inventory: "${env.WORKSPACE}/inventory.ini",
-                            forks: 16,
-                            colorized: true,
-                            become: true,
-                            becomeUser: "root",
-                            extras: '-u ${user} --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" --flush-cache -v',
-                            extraVars: [
-                                http_proxy: "${params.http_proxy}",
-                                https_proxy: "${params.https_proxy}",
-                                no_proxy: "${params.no_proxy}",
-                                reset_confirmation: "yes"
-                            ]
-                        )
-
-                        ansiblePlaybook(
+                ansiblePlaybook(
                             playbook: "${env.WORKSPACE}/roles/Requirements/main.yaml",
                             inventory: "${env.WORKSPACE}/inventory.ini",
                             forks: 16,
@@ -283,26 +265,55 @@ pipeline {
                                 http_proxy: "${params.http_proxy}"
                             ]
                         )
+                // script {
+                //     try {
+                //         ansiblePlaybook(
+                //             playbook: "${env.WORKSPACE}/roles/tmp/kubespray/reset.yml",
+                //             inventory: "${env.WORKSPACE}/inventory.ini",
+                //             forks: 16,
+                //             colorized: true,
+                //             become: true,
+                //             becomeUser: "root",
+                //             extras: '-u ${user} --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" --flush-cache -v',
+                //             extraVars: [
+                //                 http_proxy: "${params.http_proxy}",
+                //                 https_proxy: "${params.https_proxy}",
+                //                 no_proxy: "${params.no_proxy}",
+                //                 reset_confirmation: "yes"
+                //             ]
+                //         )
 
-                    } catch (Exception e) {
-                        echo 'Exception occurred: ' + e.toString()
-                        sh '''
-                        echo "Exception Handled"
-                        cd ${WORKSPACE}/
-                        '''
-                        ansiblePlaybook(
-                            playbook: "${env.WORKSPACE}/roles/Requirements/main.yaml",
-                            inventory: "${env.WORKSPACE}/inventory.ini",
-                            forks: 16,
-                            colorized: true,
-                            extras: '--ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" -v',
-                            extraVars: [
-                                jenkins_workspace: "${env.WORKSPACE}/",
-                                http_proxy: "${params.http_proxy}"
-                            ]
-                        )
-                    }
-                }
+                //         ansiblePlaybook(
+                //             playbook: "${env.WORKSPACE}/roles/Requirements/main.yaml",
+                //             inventory: "${env.WORKSPACE}/inventory.ini",
+                //             forks: 16,
+                //             colorized: true,
+                //             extras: '--ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" -v',
+                //             extraVars: [
+                //                 jenkins_workspace: "${env.WORKSPACE}/",
+                //                 http_proxy: "${params.http_proxy}"
+                //             ]
+                //         )
+
+                //     } catch (Exception e) {
+                //         echo 'Exception occurred: ' + e.toString()
+                //         sh '''
+                //         echo "Exception Handled"
+                //         cd ${WORKSPACE}/
+                //         '''
+                //         ansiblePlaybook(
+                //             playbook: "${env.WORKSPACE}/roles/Requirements/main.yaml",
+                //             inventory: "${env.WORKSPACE}/inventory.ini",
+                //             forks: 16,
+                //             colorized: true,
+                //             extras: '--ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" -v',
+                //             extraVars: [
+                //                 jenkins_workspace: "${env.WORKSPACE}/",
+                //                 http_proxy: "${params.http_proxy}"
+                //             ]
+                //         )
+                //     }
+                // }
 
             }
         }
@@ -310,7 +321,11 @@ pipeline {
         stage('Setting KubeSpray Env') {
             steps {
                 sh '''
-                cd ${WORKSPACE}/roles/tmp/kubespray
+                mkdir ${WORKSPACE}/roles/tmp/
+                cd ${WORKSPACE}/roles/tmp/
+                pwd
+                git clone https://github.com/kubernetes-sigs/kubespray.git
+                cd kubespray
                 git checkout release-2.16
                 cp ${WORKSPACE}/roles/scripts/kubeSpray_venv_install_requirements.sh .
                 chmod +x kubeSpray_venv_install_requirements.sh
