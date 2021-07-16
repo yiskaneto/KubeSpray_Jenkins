@@ -168,7 +168,7 @@ pipeline {
         )
         booleanParam(
             name: 'cert_manager_enabled',
-            defaultValue: false,
+            defaultValue: true,
             description: 'Whether or not to install cert manager'
         )
         booleanParam(
