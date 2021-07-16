@@ -323,8 +323,9 @@ pipeline {
                         colorized: true,
                         become: true,
                         becomeUser: "root",
-                        extras: '-u ${user} reset_confirmation=yes --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" --flush-cache -v',
+                        extras: '-u ${user} --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" --flush-cache -v',
                         extraVars: [
+                            reset_confirmation: yes,
                             http_proxy: "${params.http_proxy}",
                             https_proxy: "${params.https_proxy}",
                             no_proxy: "${params.no_proxy}"
