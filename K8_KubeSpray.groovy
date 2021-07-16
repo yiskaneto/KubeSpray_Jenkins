@@ -374,7 +374,7 @@ pipeline {
                 retry(4) {
                     ansiblePlaybook(
                         playbook: "${env.WORKSPACE}/roles/tmp/kubespray/cluster.yml",
-                        inventory: "${env.WORKSPACE}/inventory.ini",
+                        inventory: "${env.WORKSPACE}/roles/tmp/kubespray/inventory/mycluster/inventory.ini",
                         forks: 16,
                         colorized: true,
                         become: true,
