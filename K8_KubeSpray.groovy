@@ -62,11 +62,6 @@ pipeline {
             defaultValue: true,
             description: 'Uninstall previous installations K8s, this will force reboot weather is installed or not'
         )
-        booleanParam(
-            name: 'run_requirements',
-            defaultValue: false,
-            description: 'Whether or not to run the requirements stage'
-        )
         // text(
         //     name: 'inventory',
         //     defaultValue: "${inventorySample}",
