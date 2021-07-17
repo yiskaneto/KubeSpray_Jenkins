@@ -294,6 +294,7 @@ pipeline {
                             extras: '--ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" -v',
                             extraVars: [
                                 jenkins_workspace: "${env.WORKSPACE}/",
+                                apiserver_loadbalancer_address: "${params.apiserver_loadbalancer_address}",
                                 http_proxy: "${params.http_proxy}"
                             ]
                         )
