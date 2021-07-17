@@ -2,7 +2,7 @@
 - name: Running "kubeadm reset", if k8s exists
   shell: |
     yes | kubeadm reset
-  ignore_errors: yes  
+  ignore_errors: yes
 
 - name: Uninstalling previous versions of K8S(if present)
   shell: |
@@ -18,8 +18,8 @@
   shell: |
     rm -rf ~/.kube
   ignore_errors: yes
-  
+
 - name: Removing /var/lib/etcd /var/lib/kubelet /etc/kubernetes/ /var/lib/dockershim /var/run/kubernetes /var/lib/cni (If they exist)
   shell: |
-    rm -rf /var/lib/etcd/ /var/lib/kubelet/ /etc/kubernetes/ /var/lib/dockershim/ /var/run/kubernetes/ /var/lib/cni/ /etc/cni/
+    rm -rf /var/lib/etcd/ /var/lib/kubelet/ /etc/kubernetes/* /etc/kubernetes/ /var/lib/dockershim/ /var/run/kubernetes/ /var/lib/cni/ /etc/cni/
   ignore_errors: yes

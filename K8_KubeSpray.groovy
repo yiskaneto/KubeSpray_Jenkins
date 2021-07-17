@@ -379,7 +379,7 @@ pipeline {
                 retry(2) {
                     ansiblePlaybook(
                         playbook: "${env.WORKSPACE}/roles/tmp/kubespray/cluster.yml",
-                        inventory: "${env.WORKSPACE}/roles/tmp/kubespray/inventory/mycluster/inventory.ini",
+                        inventory: "${env.WORKSPACE}/inventory.ini",
                         forks: 16,
                         colorized: true,
                         extras: '-u ${user} --become --become-user=root --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" --flush-cache -v',
