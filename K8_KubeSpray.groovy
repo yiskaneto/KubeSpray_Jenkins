@@ -348,25 +348,7 @@ pipeline {
                         jenkins_workspace: "${env.WORKSPACE}/",
                         http_proxy: "${params.http_proxy}",
                         https_proxy: "${params.https_proxy}",
-                        no_proxy: "${params.no_proxy}",
-                        cluster_name: "${params.cluster_name}",
-                        use_external_load_balancer: "${params.use_external_load_balancer}",
-                        apiserver_loadbalancer_domain_name: "${params.apiserver_loadbalancer_domain_name}",
-                        apiserver_loadbalancer_address: "${params.apiserver_loadbalancer_address}",
-                        apiserver_loadbalancer_port: "${params.apiserver_loadbalancer_port}",
-                        dashboard_enabled: "${params.dashboard_enabled}",
-                        ingress_nginx_enabled: "${params.ingress_nginx_enabled}",
-                        metrics_server_enabled: "${params.metrics_server_enabled}",
-                        helm_enabled: "${params.helm_enabled}",
-                        cert_manager_enabled: "${params.cert_manager_enabled}",
-                        use_internal_loadbalancer: "${params.use_internal_loadbalancer}",
-                        loadbalancer_apiserver_type: "${params.loadbalancer_apiserver_type}",
-                        use_localhost_as_kubeapi_loadbalancer: "${params.use_localhost_as_kubeapi_loadbalancer}",
-                        kube_network_plugin: "${params.kube_network_plugin}",
-                        container_runtime: "${params.container_runtime}",
-                        local_release_dir: "${params.kubespray_temp_dir}",
-                        kube_service_addresses: "${params.kube_service_addresses}",
-                        kube_pods_subnet: "${params.kube_pods_subnet}"
+                        no_proxy: "${params.no_proxy}"
                     ]
                 )
             }
