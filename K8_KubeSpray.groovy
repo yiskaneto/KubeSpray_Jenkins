@@ -401,18 +401,27 @@ pipeline {
         }
 
         stage('Installing Addons') {
-            steps {                
+            steps {   
+                ansiblePlaybook(
+                        playbook: "${env.WORKSPACE}/roles/tmp/kubespray/cluster.yml",
+                        inventory: "${env.WORKSPACE}/inventory.ini",
+                        forks: 16,
+                        colorized: true,
+                        extras: '-u ${user} --become --become-user=root --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" -v',
+                        extraVars: [
+                            tags: "apps",
+                            http_proxy: "${params.http_proxy}",
+                            https_proxy: "${params.https_proxy}",
+                            no_proxy: "${params.no_proxy}"
+                        ]
+                    )         
                 // This is the recommended way of running ansible playbooks/roles from Jennkins
-                retry(2) {
-                    sh '''
-                    cd ${WORKSPACE}/roles/tmp/kubespray/
-                    ansible-playbook -i ${WORKSPACE}/inventory.ini cluster.yml --tags apps -u root --become --become-user=root -f 16 --extra-vars "http_proxy=${http_proxy} https_proxy=${https_proxy} no_proxy=${no_proxy}" -v
-                    '''
-                    // sh '''
-                    // cd ${WORKSPACE}/roles/tmp/kubespray/
-                    // ansible-playbook -i inventory/mycluster/inventory.ini cluster.yml --tags apps --skip-tags=download,bootstrap-os -u root --become --become-user=root -f 16 --extra-vars "http_proxy=${http_proxy} https_proxy=${https_proxy} no_proxy=${no_proxy}" --flush-cache
-                    // '''
-                }    
+                // retry(2) {
+                //     sh '''
+                //     cd ${WORKSPACE}/roles/tmp/kubespray/
+                //     ansible-playbook -i ${WORKSPACE}/inventory.ini cluster.yml --tags apps -u root --become --become-user=root -f 16 --extra-vars "http_proxy=${http_proxy} https_proxy=${https_proxy} no_proxy=${no_proxy}" -v
+                //     '''
+                // }
             }
         }
     }
