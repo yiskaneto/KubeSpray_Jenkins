@@ -382,9 +382,7 @@ pipeline {
                         inventory: "${env.WORKSPACE}/roles/tmp/kubespray/inventory/mycluster/inventory.ini",
                         forks: 16,
                         colorized: true,
-                        become: true,
-                        becomeUser: "root",
-                        extras: '-u ${user} --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" --flush-cache -v',
+                        extras: '-u ${user} --become --become-user=root --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" --flush-cache -v',
                         extraVars: [
                             http_proxy: "${params.http_proxy}",
                             https_proxy: "${params.https_proxy}",
