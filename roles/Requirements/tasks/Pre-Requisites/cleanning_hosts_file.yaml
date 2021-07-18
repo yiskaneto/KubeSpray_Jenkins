@@ -3,4 +3,4 @@
   shell: |
     sed -i '/^# Ansible/,$d' /etc/hosts
     sed -i "/{{ apiserver_loadbalancer_address }}/d" /etc/hosts
-  ignore_erros: yes
+  ignore_errors: yes
