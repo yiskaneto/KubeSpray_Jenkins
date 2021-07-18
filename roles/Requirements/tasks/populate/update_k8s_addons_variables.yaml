@@ -25,7 +25,7 @@
   ansible.builtin.lineinfile:
     path: "{{ jenkins_workspace }}kubespray/inventory/mycluster/group_vars/k8s_cluster/addons.yml"
     regexp: "^# ingress_nginx_host_network: "
-    line: "ingress_nginx_host_network: {{ ingress_nginx_host_network }}"
+    line: "ingress_nginx_host_network: {{ ingress_nginx_enabled }}"
   when: ingress_nginx_enabled | bool == true
 
 # - name: Updating ingress_nginx_host_network on inventory/mycluster/group_vars/k8s_cluster/k8s-cluster.yml
