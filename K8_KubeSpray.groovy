@@ -268,7 +268,7 @@ pipeline {
                     ]
                 )
             }
-        // }
+        }
 
         stage('Setting KubeSpray Env') {
             steps {
