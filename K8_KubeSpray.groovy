@@ -326,7 +326,7 @@ pipeline {
                     cd ${WORKSPACE}/
                     '''
                     ansiblePlaybook(
-                        playbook: "${env.WORKSPACE}kubespray/cluster.yml",
+                        playbook: "${env.WORKSPACE}/kubespray/cluster.yml",
                         inventory: "${env.WORKSPACE}/inventory.ini",
                         forks: 16,
                         colorized: true,
@@ -352,7 +352,7 @@ pipeline {
         stage('Installing Addons') {
             steps {
                 sh '''
-                cd ${WORKSPACE}/roles/tmp/kubespray/
+                cd ${WORKSPACE}/kubespray/
                 ansible-playbook -i ${WORKSPACE}/inventory.ini cluster.yml --tags apps -u root --become --become-user=root -f 16 --extra-vars "http_proxy=${http_proxy} https_proxy=${https_proxy} no_proxy=${no_proxy}" -v
                 ''' 
             }
