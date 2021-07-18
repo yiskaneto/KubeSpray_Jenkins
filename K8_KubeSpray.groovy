@@ -279,7 +279,7 @@ pipeline {
                 chmod +x kubeSpray_venv_install_requirements.sh
                 ./kubeSpray_venv_install_requirements.sh
                 rm -rf inventory/mycluster/
-                cp -rfp ${WORKSPACE}/kubespray/inventory/sample/ ${WORKSPACE}/kubespray/inventory/sample/inventory/mycluster/
+                cp -rfp ${WORKSPACE}/kubespray/inventory/sample/ ${WORKSPACE}/kubespray/inventory/mycluster/
                 rm -rf ${WORKSPACE}/kubespray/inventory/mycluster/inventory.ini
                 cp ${WORKSPACE}/inventory.ini ${WORKSPACE}/kubespray/inventory/mycluster/inventory.ini
                 '''
