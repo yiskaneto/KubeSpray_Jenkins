@@ -273,16 +273,13 @@ pipeline {
         stage('Setting KubeSpray Env') {
             steps {
                 sh '''
-                mkdir -p ${WORKSPACE}/roles/tmp/
-                cd ${WORKSPACE}/roles/tmp/
-                pwd
                 git clone https://github.com/kubernetes-sigs/kubespray.git
                 cd kubespray
                 git checkout release-2.16
                 cp ${WORKSPACE}/roles/scripts/kubeSpray_venv_install_requirements.sh .
                 chmod +x kubeSpray_venv_install_requirements.sh
                 ./kubeSpray_venv_install_requirements.sh
-                cp -rfp inventory/sample inventory/mycluster
+                cp -rfp inventory/sample/ inventory/mycluster
                 rm -rf inventory/mycluster/inventory.ini
                 cp ${WORKSPACE}/inventory.ini inventory/mycluster/inventory.ini
                 '''
