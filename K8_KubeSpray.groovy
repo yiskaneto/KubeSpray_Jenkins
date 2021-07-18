@@ -323,7 +323,7 @@ pipeline {
                 // This is the recommended way of running ansible playbooks/roles from Jennkins
                 retry(2) {
                     sh '''
-                    cd ${WORKSPACE}/
+                    cd ${WORKSPACE}/kubespray/
                     '''
                     ansiblePlaybook(
                         playbook: "${env.WORKSPACE}/kubespray/cluster.yml",
