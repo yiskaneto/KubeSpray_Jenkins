@@ -273,6 +273,7 @@ pipeline {
         stage('Setting KubeSpray Env') {
             steps {
                 sh '''
+                cd ${WORKSPACE}/
                 git clone https://github.com/kubernetes-sigs/kubespray.git
                 cd kubespray
                 git checkout release-2.16
@@ -322,10 +323,10 @@ pipeline {
         //         // This is the recommended way of running ansible playbooks/roles from Jennkins
         //         retry(2) {
         //             sh '''
-        //             cd ${WORKSPACE}/roles/tmp/kubespray/
+        //             cd ${WORKSPACE}/
         //             '''
         //             ansiblePlaybook(
-        //                 playbook: "${env.WORKSPACE}/roles/tmp/kubespray/cluster.yml",
+        //                 playbook: "${env.WORKSPACE}kubespray/cluster.yml",
         //                 inventory: "${env.WORKSPACE}/inventory.ini",
         //                 forks: 16,
         //                 colorized: true,
@@ -358,7 +359,7 @@ pipeline {
         //         }
         //         // This also works but doesn't show the colors on the output which at the end could help us find easier error or warnings.
         //         // sh '''
-        //         // cd ${WORKSPACE}/roles/tmp/kubespray/ ; echo -e "\n"
+        //         // cd ${WORKSPACE}/kubespray/ ; echo -e "\n"
         //         // pwd ; echo -e "\n"
         //         // source venv/bin/activate ; echo -e "\n\n"
         //         // until time ansible-playbook -i ${WORKSPACE}/inventory.ini cluster.yml -u root --become --become-user=root --extra-vars "http_proxy=${http_proxy} https_proxy=${https_proxy} no_proxy=${no_proxy}" ; do sleep 5 ; done
