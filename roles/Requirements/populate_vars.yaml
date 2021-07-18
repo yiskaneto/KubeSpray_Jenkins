@@ -15,9 +15,7 @@
   tasks:
     - name: Cloning project on master node
       shell: |
-        rm -rf /opt/mycluster
-      register: gitod
-      ignore_errors: yes
+        rm -rf /opt/mycluster/
 
     - name: Making a copy of the kubespray project on one of the control plane nodes
       copy:

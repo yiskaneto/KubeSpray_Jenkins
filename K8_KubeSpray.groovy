@@ -274,15 +274,14 @@ pipeline {
             steps {
                 sh '''
                 cd ${WORKSPACE}/
-                git clone https://github.com/kubernetes-sigs/kubespray.git
-                cd kubespray
-                git checkout release-2.16
+                git clone https://github.com/kubernetes-sigs/kubespray.git ; cd ${WORKSPACE}/kubespray ; git checkout release-2.16
                 cp ${WORKSPACE}/roles/scripts/kubeSpray_venv_install_requirements.sh .
                 chmod +x kubeSpray_venv_install_requirements.sh
                 ./kubeSpray_venv_install_requirements.sh
-                cp -rfp inventory/sample/ inventory/mycluster
-                rm -rf inventory/mycluster/inventory.ini
-                cp ${WORKSPACE}/inventory.ini inventory/mycluster/inventory.ini
+                rm -rf inventory/mycluster/
+                cp -rfp ${WORKSPACE}/kubespray/inventory/sample/ ${WORKSPACE}/kubespray/inventory/sample/inventory/mycluster/
+                rm -rf ${WORKSPACE}/kubespray/inventory/mycluster/inventory.ini
+                cp ${WORKSPACE}/inventory.ini ${WORKSPACE}/kubespray/inventory/mycluster/inventory.ini
                 '''
                 ansiblePlaybook(
                     playbook: "${env.WORKSPACE}/roles/Requirements/populate_vars.yaml",
@@ -322,17 +321,16 @@ pipeline {
             steps {         
                 // This is the recommended way of running ansible playbooks/roles from Jennkins
                 retry(2) {
-                    sh '''
-                    cd ${WORKSPACE}/kubespray/
-                    '''
+                    sh "cd ${WORKSPACE}/kubespray/ ; pwd"
                     ansiblePlaybook(
                         playbook: "${env.WORKSPACE}/kubespray/cluster.yml",
-                        inventory: "${env.WORKSPACE}/inventory.ini",
+                        inventory: "${env.WORKSPACE}/kubespray/inventory/mycluster/inventory.ini",
+                        become: true,
+                        becomeUser: "root",
                         forks: 16,
                         colorized: true,
                         extras: '-u ${user} --become --become-user=root --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" -v',
                         extraVars: [
-                            jenkins_workspace: "${env.WORKSPACE}/",
                             http_proxy: "${params.http_proxy}",
                             https_proxy: "${params.https_proxy}",
                             no_proxy: "${params.no_proxy}"
