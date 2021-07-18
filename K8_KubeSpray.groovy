@@ -317,44 +317,44 @@ pipeline {
             }
         }
         
-        stage('Running KubeSpray') {
-            steps {         
-                // This is the recommended way of running ansible playbooks/roles from Jennkins
-                retry(2) {
-                    sh "cd ${WORKSPACE}/kubespray/ ; pwd"
-                    ansiblePlaybook(
-                        playbook: "${env.WORKSPACE}/kubespray/cluster.yml",
-                        inventory: "${env.WORKSPACE}/kubespray/inventory/mycluster/inventory.ini",
-                        become: true,
-                        becomeUser: "root",
-                        forks: 16,
-                        colorized: true,
-                        extras: '-u ${user} --become --become-user=root --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" -v',
-                        extraVars: [
-                            http_proxy: "${params.http_proxy}",
-                            https_proxy: "${params.https_proxy}",
-                            no_proxy: "${params.no_proxy}"
-                        ]
-                    )
-                }
-                // This also works but doesn't show the colors on the output which at the end could help us find easier error or warnings.
-                // sh '''
-                // cd ${WORKSPACE}/kubespray/ ; echo -e "\n"
-                // pwd ; echo -e "\n"
-                // source venv/bin/activate ; echo -e "\n\n"
-                // until time ansible-playbook -i ${WORKSPACE}/inventory.ini cluster.yml -u root --become --become-user=root --extra-vars "http_proxy=${http_proxy} https_proxy=${https_proxy} no_proxy=${no_proxy}" ; do sleep 5 ; done
-                // deactivate ; echo -e "\n"s
-            }
-        }
+        // stage('Running KubeSpray') {
+        //     steps {         
+        //         // This is the recommended way of running ansible playbooks/roles from Jennkins
+        //         retry(2) {
+        //             sh "cd ${WORKSPACE}/kubespray/ ; pwd"
+        //             ansiblePlaybook(
+        //                 playbook: "${env.WORKSPACE}/kubespray/cluster.yml",
+        //                 inventory: "${env.WORKSPACE}/kubespray/inventory/mycluster/inventory.ini",
+        //                 become: true,
+        //                 becomeUser: "root",
+        //                 forks: 16,
+        //                 colorized: true,
+        //                 extras: '-u ${user} --become --become-user=root --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" -v',
+        //                 extraVars: [
+        //                     http_proxy: "${params.http_proxy}",
+        //                     https_proxy: "${params.https_proxy}",
+        //                     no_proxy: "${params.no_proxy}"
+        //                 ]
+        //             )
+        //         }
+        //         // This also works but doesn't show the colors on the output which at the end could help us find easier error or warnings.
+        //         // sh '''
+        //         // cd ${WORKSPACE}/kubespray/ ; echo -e "\n"
+        //         // pwd ; echo -e "\n"
+        //         // source venv/bin/activate ; echo -e "\n\n"
+        //         // until time ansible-playbook -i ${WORKSPACE}/inventory.ini cluster.yml -u root --become --become-user=root --extra-vars "http_proxy=${http_proxy} https_proxy=${https_proxy} no_proxy=${no_proxy}" ; do sleep 5 ; done
+        //         // deactivate ; echo -e "\n"s
+        //     }
+        // }
 
-        stage('Installing Addons') {
-            steps {
-                sh '''
-                cd ${WORKSPACE}/kubespray/
-                ansible-playbook -i ${WORKSPACE}/inventory.ini cluster.yml --tags apps -u root --become --become-user=root -f 16 --extra-vars "http_proxy=${http_proxy} https_proxy=${https_proxy} no_proxy=${no_proxy}" -v
-                ''' 
-            }
-        }
+        // stage('Installing Addons') {
+        //     steps {
+        //         sh '''
+        //         cd ${WORKSPACE}/kubespray/
+        //         ansible-playbook -i ${WORKSPACE}/inventory.ini cluster.yml --tags apps -u root --become --become-user=root -f 16 --extra-vars "http_proxy=${http_proxy} https_proxy=${https_proxy} no_proxy=${no_proxy}" -v
+        //         ''' 
+        //     }
+        // }
 
         // stage('Uninstalling K8s') {
         //     when {
