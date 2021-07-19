@@ -10,35 +10,36 @@ def inventorySample = '''# ## Configure 'ip' variable to bind kubernetes service
 # ## different ip than the default iface
 # ## We should set etcd_member_name for etcd cluster. The node that is not a etcd member do not need to set the value, or can set the empty string value.
 [all]
-# node1 ansible_host=95.54.0.12  # ip=10.3.0.1 etcd_member_name=etcd1
-# node2 ansible_host=95.54.0.13  # ip=10.3.0.2 etcd_member_name=etcd2
-# node3 ansible_host=95.54.0.14  # ip=10.3.0.3 etcd_member_name=etcd3
-# node4 ansible_host=95.54.0.15  # ip=10.3.0.4 etcd_member_name=etcd4
-# node5 ansible_host=95.54.0.16  # ip=10.3.0.5 etcd_member_name=etcd5
-# node6 ansible_host=95.54.0.17  # ip=10.3.0.6 etcd_member_name=etcd6
+node1 ansible_host=95.54.0.12  # ip=10.3.0.1 etcd_member_name=etcd1
+node2 ansible_host=95.54.0.13  # ip=10.3.0.2 etcd_member_name=etcd2
+node3 ansible_host=95.54.0.14  # ip=10.3.0.3 etcd_member_name=etcd3
+node4 ansible_host=95.54.0.15  # ip=10.3.0.4 etcd_member_name=etcd4
+node5 ansible_host=95.54.0.16  # ip=10.3.0.5 etcd_member_name=etcd5
+node6 ansible_host=95.54.0.17  # ip=10.3.0.6 etcd_member_name=etcd6
 
 # ## configure a bastion host if your nodes are not directly reachable
 # [bastion]
 # bastion ansible_host=x.x.x.x ansible_user=some_user
 
 [kube_control_plane]
-# node1
-# node2
-# node3
+node1
+node2
+node3
 
 [etcd]
-# node1
-# node2
-# node3
+node1
+node2
+node3
 
 [kube_node]
-# node2
-# node3
-# node4
-# node5
-# node6
+node2
+node3
+node4
+node5
+node6
 
 [calico_rr]
+# Calico advanced options: https://github.com/kubernetes-sigs/kubespray/blob/master/docs/calico.md
 
 [k8s_cluster:children]
 kube_control_plane
@@ -60,7 +61,7 @@ pipeline {
         booleanParam(
             name: 'uninstall_kubespray',
             defaultValue: true,
-            description: 'Uninstall previous installations K8s, this will force reboot weather is installed or not'
+            description: 'SUninstall previous installations K8s and set OS requiriments, this will force a reboot whether K8s is installed or not'
         )
         text(
             name: 'inventory',
@@ -236,45 +237,80 @@ pipeline {
             }
         }
 
-        // stage('Clonning KubeSpray project') {
-        //     steps {
-        //         sh '''
-        //         mkdir ${WORKSPACE}/roles/tmp/
-        //         cd ${WORKSPACE}/roles/tmp/
-        //         pwd
-        //         git clone https://github.com/kubernetes-sigs/kubespray.git
-        //         cd kubespray
-        //         git checkout release-2.16
-        //         '''
-        //     }
-        // }
+        stage('Clonning KubeSpray project') {
+            steps {
+                sh '''
+                cd ${WORKSPACE}/
+                git clone https://github.com/kubernetes-sigs/kubespray.git
+                cd kubespray
+                git checkout release-2.16
+                '''
+            }
+        }
 
-        stage('Uninstalling K8s') {
+        stage('Running OS requirements K8s') {
             when {
                 expression { params.uninstall_kubespray == true }
             }
             steps {
-                ansiblePlaybook(
-                    playbook: "${env.WORKSPACE}/roles/Requirements/main.yaml",
-                    inventory: "${env.WORKSPACE}/inventory.ini",
-                    forks: 16,
-                    colorized: true,
-                    extras: '-u ${user} --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" -v',
-                    extraVars: [
-                        jenkins_workspace: "${env.WORKSPACE}/",
-                        http_proxy: "${params.http_proxy}",
-                        https_proxy: "${params.https_proxy}",
-                        apiserver_loadbalancer_address: "${params.apiserver_loadbalancer_address}"
-                    ]
-                )
+                script {
+                    try {
+                        ansiblePlaybook(
+                            playbook: "${env.WORKSPACE}/roles/tmp/kubespray/reset.yml",
+                            inventory: "${env.WORKSPACE}/inventory.ini",
+                            forks: 16,
+                            colorized: true,
+                            become: true,
+                            becomeUser: "root",
+                            extras: '-u ${user} --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" --flush-cache -v',
+                            extraVars: [
+                                http_proxy: "${params.http_proxy}",
+                                https_proxy: "${params.https_proxy}",
+                                no_proxy: "${params.no_proxy}",
+                                reset_confirmation: "yes"
+                            ]
+                        )
+
+                        ansiblePlaybook(
+                            playbook: "${env.WORKSPACE}/roles/Requirements/main.yaml",
+                            inventory: "${env.WORKSPACE}/inventory.ini",
+                            forks: 16,
+                            colorized: true,
+                            extras: '--ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" -v',
+                            extraVars: [
+                                jenkins_workspace: "${env.WORKSPACE}/",
+                                apiserver_loadbalancer_address: "${params.apiserver_loadbalancer_address}",
+                                http_proxy: "${params.http_proxy}"
+                            ]
+                        )
+
+                    } catch (Exception e) {
+                        echo 'Exception occurred: ' + e.toString()
+                        sh '''
+                        echo "Exception Handled"
+                        cd ${WORKSPACE}/
+                        '''
+                        ansiblePlaybook(
+                            playbook: "${env.WORKSPACE}/roles/Requirements/main.yaml",
+                            inventory: "${env.WORKSPACE}/inventory.ini",
+                            forks: 16,
+                            colorized: true,
+                            extras: '--ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" -v',
+                            extraVars: [
+                                jenkins_workspace: "${env.WORKSPACE}/",
+                                http_proxy: "${params.http_proxy}"
+                            ]
+                        )
+                    }
+                }
+
             }
         }
 
         stage('Setting KubeSpray Env') {
             steps {
                 sh '''
-                cd ${WORKSPACE}/
-                git clone https://github.com/kubernetes-sigs/kubespray.git ; cd ${WORKSPACE}/kubespray ; git checkout release-2.16
+                cd ${WORKSPACE}/kubespray ; git checkout release-2.16
                 cp ${WORKSPACE}/roles/scripts/kubeSpray_venv_install_requirements.sh .
                 chmod +x kubeSpray_venv_install_requirements.sh
                 ./kubeSpray_venv_install_requirements.sh
@@ -346,15 +382,6 @@ pipeline {
                 // deactivate ; echo -e "\n"s
             }
         }
-
-        // stage('Installing Addons') {
-        //     steps {
-        //         sh '''
-        //         cd ${WORKSPACE}/kubespray/
-        //         ansible-playbook -i ${WORKSPACE}/inventory.ini cluster.yml --tags apps -u ${user} --become --become-user=root -f 16 --extra-vars "http_proxy=${http_proxy} https_proxy=${https_proxy} no_proxy=${no_proxy}" -v
-        //         ''' 
-        //     }
-        // }
 
         // stage('Uninstalling K8s') {
         //     when {
