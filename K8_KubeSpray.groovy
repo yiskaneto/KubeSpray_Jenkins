@@ -62,11 +62,11 @@ pipeline {
             defaultValue: true,
             description: 'Uninstall previous installations K8s, this will force reboot weather is installed or not'
         )
-        // text(
-        //     name: 'inventory',
-        //     defaultValue: "${inventorySample}",
-        //     description: ''
-        // )
+        text(
+            name: 'inventory',
+            defaultValue: "${inventorySample}",
+            description: ''
+        )
         string(
             name: 'user',
             defaultValue: 'root',
@@ -92,25 +92,25 @@ pipeline {
             defaultValue: 'cluster.local',
             description: 'Leave empty if not needed'
         )
-        string(
-            name: 'kube_control_plane_nodes',
-            defaultValue: '192.168.0.10,192.168.0.11,192.168.0.12',
-            description: 'List of kube control planes IPs, separated by comas"'
-        )
-        string(
-            name: 'etcd_nodes',
-            defaultValue: '192.168.0.10,192.168.0.11,192.168.0.12',
-            description: 'List of kube control planes IPs, separated by comas"'
-        )
-        string(
-            name: 'kube_nodes',
-            defaultValue: '192.168.0.10,192.168.0.11,192.168.0.12',
-            description: 'List of kube control planes IPs, separated by comas"'
-        )
-        string(
-            name: 'calico_rr_nodes',
-            defaultValue: '192.168.0.10,192.168.0.11,192.168.0.12',
-            description: 'List of kube control planes IPs, separated by comas"'
+        // string(
+        //     name: 'kube_control_plane_nodes',
+        //     defaultValue: '192.168.0.10,192.168.0.11,192.168.0.12',
+        //     description: 'List of kube control planes IPs, separated by comas"'
+        // )
+        // string(
+        //     name: 'etcd_nodes',
+        //     defaultValue: '192.168.0.10,192.168.0.11,192.168.0.12',
+        //     description: 'List of kube control planes IPs, separated by comas"'
+        // )
+        // string(
+        //     name: 'kube_nodes',
+        //     defaultValue: '192.168.0.10,192.168.0.11,192.168.0.12',
+        //     description: 'List of kube control planes IPs, separated by comas"'
+        // )
+        // string(
+        //     name: 'calico_rr_nodes',
+        //     defaultValue: '192.168.0.10,192.168.0.11,192.168.0.12',
+        //     description: 'List of kube control planes IPs, separated by comas"'
         )
         choice(
             name: 'kube_network_plugin',
@@ -201,26 +201,26 @@ pipeline {
     stages {
         stage('Creating Inventory File') {
 			steps {
-                // sh '''
-                // echo "" > ${WORKSPACE}/inventory.ini
-                // '''
-                // writeFile file: "${WORKSPACE}/inventory.ini", text: "${inventory}"
-                // sh 'ls -lht ${WORKSPACE}/inventory.ini'
-                // sh 'cat ${WORKSPACE}/inventory.ini'
-				sh '''
-                echo ${kube_control_plane_nodes} | sed \'s/,/\\n/g\' | while read line ; do sed -i \'/\\[all\\]/a \\\'"${line}"\'\' ${WORKSPACE}/inventory.ini ; done
-                echo ${etcd_nodes} | sed \'s/,/\\n/g\' | while read line ; do sed -i \'/\\[all\\]/a \\\'"${line}"\'\' ${WORKSPACE}/inventory.ini ; done
-                echo ${kube_nodes} | sed \'s/,/\\n/g\' | while read line ; do sed -i \'/\\[all\\]/a \\\'"${line}"\'\' ${WORKSPACE}/inventory.ini ; done
-                echo ${calico_rr_nodes} | sed \'s/,/\\n/g\' | while read line ; do sed -i \'/\\[all\\]/a \\\'"${line}"\'\' ${WORKSPACE}/inventory.ini ; done
+                sh '''
+                echo "" > ${WORKSPACE}/inventory.ini
+                '''
+                writeFile file: "${WORKSPACE}/inventory.ini", text: "${inventory}"
+                sh 'ls -lht ${WORKSPACE}/inventory.ini'
+                sh 'cat ${WORKSPACE}/inventory.ini'
+				// sh '''
+                // echo ${kube_control_plane_nodes} | sed \'s/,/\\n/g\' | while read line ; do sed -i \'/\\[all\\]/a \\\'"${line}"\'\' ${WORKSPACE}/inventory.ini ; done
+                // echo ${etcd_nodes} | sed \'s/,/\\n/g\' | while read line ; do sed -i \'/\\[all\\]/a \\\'"${line}"\'\' ${WORKSPACE}/inventory.ini ; done
+                // echo ${kube_nodes} | sed \'s/,/\\n/g\' | while read line ; do sed -i \'/\\[all\\]/a \\\'"${line}"\'\' ${WORKSPACE}/inventory.ini ; done
+                // echo ${calico_rr_nodes} | sed \'s/,/\\n/g\' | while read line ; do sed -i \'/\\[all\\]/a \\\'"${line}"\'\' ${WORKSPACE}/inventory.ini ; done
 
-                echo ${main-master-node-install} | sed \'s/,/\\n/g\' | while read line ; do sed -i \'/\\[main-master-node-install\\]/a \\\'"${line}"\'\' ${WORKSPACE}/inventory.ini ; done
-                echo ${kube_control_plane_nodes} | sed \'s/,/\\n/g\' | while read line ; do sed -i \'/\\[kube_control_plane\\]/a \\\'"${line}"\'\' ${WORKSPACE}/inventory.ini ; done
-                echo ${etcd_nodes} | sed \'s/,/\\n/g\' | while read line ; do sed -i \'/\\[etcd\\]/a \\\'"${line}"\'\' ${WORKSPACE}/inventory.ini ; done
-                echo ${kube_nodes} | sed \'s/,/\\n/g\' | while read line ; do sed -i \'/\\[kube_node\\]/a \\\'"${line}"\'\' ${WORKSPACE}/inventory.ini ; done
-                echo ${calico_rr_nodes} | sed \'s/,/\\n/g\' | while read line ; do sed -i \'/\\[calico_rr\\]/a \\\'"${line}"\'\' ${WORKSPACE}/inventory.ini ; done
+                // echo ${main-master-node-install} | sed \'s/,/\\n/g\' | while read line ; do sed -i \'/\\[main-master-node-install\\]/a \\\'"${line}"\'\' ${WORKSPACE}/inventory.ini ; done
+                // echo ${kube_control_plane_nodes} | sed \'s/,/\\n/g\' | while read line ; do sed -i \'/\\[kube_control_plane\\]/a \\\'"${line}"\'\' ${WORKSPACE}/inventory.ini ; done
+                // echo ${etcd_nodes} | sed \'s/,/\\n/g\' | while read line ; do sed -i \'/\\[etcd\\]/a \\\'"${line}"\'\' ${WORKSPACE}/inventory.ini ; done
+                // echo ${kube_nodes} | sed \'s/,/\\n/g\' | while read line ; do sed -i \'/\\[kube_node\\]/a \\\'"${line}"\'\' ${WORKSPACE}/inventory.ini ; done
+                // echo ${calico_rr_nodes} | sed \'s/,/\\n/g\' | while read line ; do sed -i \'/\\[calico_rr\\]/a \\\'"${line}"\'\' ${WORKSPACE}/inventory.ini ; done
 
-                cat ${WORKSPACE}/inventory.ini		
-				'''
+                // cat ${WORKSPACE}/inventory.ini		
+				// '''
 			}
 		}
 
@@ -351,7 +351,7 @@ pipeline {
             steps {
                 sh '''
                 cd ${WORKSPACE}/kubespray/
-                ansible-playbook -i ${WORKSPACE}/inventory.ini cluster.yml --tags apps -u root --become --become-user=root -f 16 --extra-vars "http_proxy=${http_proxy} https_proxy=${https_proxy} no_proxy=${no_proxy}" -v
+                ansible-playbook -i ${WORKSPACE}/inventory.ini cluster.yml --tags apps -u ${user} --become --become-user=root -f 16 --extra-vars "http_proxy=${http_proxy} https_proxy=${https_proxy} no_proxy=${no_proxy}" -v
                 ''' 
             }
         }
