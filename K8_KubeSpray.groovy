@@ -158,6 +158,21 @@ pipeline {
             description: 'Whether or not to enable metrics'
         )
         booleanParam(
+            name: 'metrics_server_kubelet_insecure_tls',
+            defaultValue: true,
+            description: 'This will be consider if metrics_server_enabled is set to true'
+        )
+        string(
+            name: 'metrics_server_metric_resolution',
+            defaultValue: '60s',
+            description: 'Metrics scrape interval'
+        )
+        choice(
+            name: 'metrics_server_kubelet_preferred_address_types',
+            choices: ['InternalIP','ExternalIP','InternalDNS','ExternalDNS','Hostname']
+            description: 'Metrics scrape interval'
+        )            
+        booleanParam(
             name: 'helm_enabled',
             defaultValue: true,
             description: 'Whether or not to install HELM'
@@ -338,6 +353,9 @@ pipeline {
                         dashboard_enabled: "${params.dashboard_enabled}",
                         ingress_nginx_enabled: "${params.ingress_nginx_enabled}",
                         metrics_server_enabled: "${params.metrics_server_enabled}",
+                        metrics_server_kubelet_insecure_tls: "${params.metrics_server_kubelet_insecure_tls}",
+                        metrics_server_metric_resolution: "${params.metrics_server_metric_resolution}",
+                        metrics_server_kubelet_preferred_address_types: "${params.metrics_server_kubelet_preferred_address_types}",
                         helm_enabled: "${params.helm_enabled}",
                         cert_manager_enabled: "${params.cert_manager_enabled}",
                         use_internal_loadbalancer: "${params.use_internal_loadbalancer}",

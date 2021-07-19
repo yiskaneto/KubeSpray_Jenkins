@@ -6,20 +6,12 @@
     line: "dashboard_enabled: {{ dashboard_enabled }}"
   when: dashboard_enabled | bool == true
 
-# - name: Updating dashboard_enabled on inventory/mycluster/group_vars/k8s_cluster/k8s-cluster.yml
-#   shell: "echo 'dashboard_enabled: true' >> {{ jenkins_workspace }}kubespray/inventory/mycluster/group_vars/k8s_cluster/k8s-cluster.yml"
-#   when: dashboard_enabled | bool == true
-
 - name: Updating ingress_nginx_enabled on inventory/mycluster/group_vars/k8s_cluster/addons.yml
   ansible.builtin.lineinfile:
     path: "{{ jenkins_workspace }}kubespray/inventory/mycluster/group_vars/k8s_cluster/addons.yml"
     regexp: "^ingress_nginx_enabled: "
     line: "ingress_nginx_enabled: {{ ingress_nginx_enabled }}"
   when: ingress_nginx_enabled | bool == true
-
-# - name: Updating ingress_nginx_enabled on inventory/mycluster/group_vars/k8s_cluster/k8s-cluster.yml
-#   shell: "echo 'ingress_nginx_enabled: true' >> {{ jenkins_workspace }}kubespray/inventory/mycluster/group_vars/k8s_cluster/k8s-cluster.yml"
-#   when: ingress_nginx_enabled | bool == true
 
 - name: Updating ingress_nginx_host_network on inventory/mycluster/group_vars/k8s_cluster/addons.yml
   ansible.builtin.lineinfile:
@@ -28,20 +20,12 @@
     line: "ingress_nginx_host_network: {{ ingress_nginx_enabled }}"
   when: ingress_nginx_enabled | bool == true
 
-# - name: Updating ingress_nginx_host_network on inventory/mycluster/group_vars/k8s_cluster/k8s-cluster.yml
-#   shell: "echo 'ingress_nginx_host_network: true' >> {{ jenkins_workspace }}kubespray/inventory/mycluster/group_vars/k8s_cluster/k8s-cluster.yml"
-#   when: ingress_nginx_enabled | bool == true
-
 - name: Updating helm_enabled on inventory/mycluster/group_vars/k8s_cluster/addons.yml
   ansible.builtin.lineinfile:
     path: "{{ jenkins_workspace }}kubespray/inventory/mycluster/group_vars/k8s_cluster/addons.yml"
     regexp: "^helm_enabled: "
     line: "helm_enabled: {{ helm_enabled }}"
   when: helm_enabled | bool == true
-
-# - name: Updating helm_enabled on inventory/mycluster/group_vars/k8s_cluster/k8s-cluster.yml
-#   shell: "echo 'helm_enabled: true' >> {{ jenkins_workspace }}kubespray/inventory/mycluster/group_vars/k8s_cluster/k8s-cluster.yml"
-#   when: helm_enabled | bool == true
 
 - name: Updating metrics_server_enabled on inventory/mycluster/group_vars/k8s_cluster/addons.yml
   ansible.builtin.lineinfile:
@@ -50,9 +34,23 @@
     line: "metrics_server_enabled: {{ metrics_server_enabled }}"
   when: metrics_server_enabled | bool == true
 
-# - name: Updating metrics_server_enabled on inventory/mycluster/group_vars/k8s_cluster/k8s-cluster.yml
-#   shell: "echo 'metrics_server_enabled: true' >> {{ jenkins_workspace }}kubespray/inventory/mycluster/group_vars/k8s_cluster/k8s-cluster.yml"
-#   when: metrics_server_enabled | bool == true
+- name: Updating metrics_server_kubelet_insecure_tls on inventory/mycluster/group_vars/k8s_cluster/addons.yml
+  ansible.builtin.lineinfile:
+    path: "{{ jenkins_workspace }}kubespray/inventory/mycluster/group_vars/k8s_cluster/addons.yml"
+    regexp: "^# metrics_server_kubelet_insecure_tls: "
+    line: "metrics_server_kubelet_insecure_tls: {{ metrics_server_kubelet_insecure_tls }}"
+
+- name: Updating metrics_server_metric_resolution on inventory/mycluster/group_vars/k8s_cluster/addons.yml
+  ansible.builtin.lineinfile:
+    path: "{{ jenkins_workspace }}kubespray/inventory/mycluster/group_vars/k8s_cluster/addons.yml"
+    regexp: "^# metrics_server_metric_resolution: "
+    line: "metrics_server_metric_resolution: {{ metrics_server_metric_resolution }}"
+
+- name: Updating metrics_server_kubelet_preferred_address_types on inventory/mycluster/group_vars/k8s_cluster/addons.yml
+  ansible.builtin.lineinfile:
+    path: "{{ jenkins_workspace }}kubespray/inventory/mycluster/group_vars/k8s_cluster/addons.yml"
+    regexp: "^# metrics_server_kubelet_preferred_address_types: "
+    line: "metrics_server_kubelet_preferred_address_types: {{ metrics_server_kubelet_preferred_address_types }}"
 
 - name: Updating cert_manager_enabled on inventory/mycluster/group_vars/k8s_cluster/addons.yml
   ansible.builtin.lineinfile:
@@ -60,6 +58,3 @@
     regexp: "^cert_manager_enabled: "
     line: "cert_manager_enabled: {{ cert_manager_enabled }}"
   when: cert_manager_enabled | bool == true
-# - name: Updating cert_manager_enabled on inventory/mycluster/group_vars/k8s_cluster/k8s-cluster.yml
-#   shell: "echo 'cert_manager_enabled: true' >> {{ jenkins_workspace }}kubespray/inventory/mycluster/group_vars/k8s_cluster/k8s-cluster.yml"
-#   when: cert_manager_enabled | bool == true
