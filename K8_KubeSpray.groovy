@@ -190,7 +190,7 @@ pipeline {
         choice(
             name: 'loadbalancer_apiserver_type',
             choices: ['nginx','haproxy'],
-            description: 'What load balancer provider to use, this will only be consider if the parameter above was set to true'
+            description: 'What load balancer provider to use, this will only be consider if the loadbalancer_apiserver_type parameter is set to true'
 		)
         booleanParam(
             name: 'use_localhost_as_kubeapi_loadbalancer',
