@@ -169,7 +169,7 @@ pipeline {
         )
         choice(
             name: 'metrics_server_kubelet_preferred_address_types',
-            choices: ['InternalIP','ExternalIP','InternalDNS','ExternalDNS','Hostname']
+            choices: ['InternalIP','ExternalIP','InternalDNS','ExternalDNS','Hostname'],
             description: 'Metrics scrape interval'
         )            
         booleanParam(
