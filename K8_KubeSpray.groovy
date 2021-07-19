@@ -61,7 +61,7 @@ pipeline {
         booleanParam(
             name: 'uninstall_kubespray',
             defaultValue: true,
-            description: 'SUninstall previous installations K8s and set OS requiriments, this will force a reboot whether K8s is installed or not'
+            description: 'Uninstall previous installations K8s and set OS requirements, this will force a reboot whether K8s is installed or not'
         )
         text(
             name: 'inventory',
