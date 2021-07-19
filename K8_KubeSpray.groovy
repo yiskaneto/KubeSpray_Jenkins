@@ -160,7 +160,7 @@ pipeline {
         booleanParam(
             name: 'metrics_server_kubelet_insecure_tls',
             defaultValue: true,
-            description: 'This will be consider if metrics_server_enabled is set to true'
+            description: 'Do not verify CA of serving certificates presented by Kubelets.  For testing purposes only.. This will be consider if metrics_server_enabled is set to true'
         )
         string(
             name: 'metrics_server_metric_resolution',
