@@ -2,7 +2,7 @@
 - name: Updating dashboard_enabled on inventory/mycluster/group_vars/k8s_cluster/addons.yml
   ansible.builtin.lineinfile:
     path: "{{ jenkins_workspace }}kubespray/inventory/mycluster/group_vars/k8s_cluster/addons.yml"
-    regexp: "^# dashboard_enabled: s"
+    regexp: "^# dashboard_enabled: "
     line: "dashboard_enabled: {{ dashboard_enabled }}"
   when: dashboard_enabled | bool == true
 
