@@ -237,7 +237,7 @@ pipeline {
                 script {
                     try {
                         ansiblePlaybook(
-                            playbook: "${env.WORKSPACE}/roles/tmp/kubespray/reset.yml",
+                            playbook: "${env.WORKSPACE}/kubespray/reset.yml",
                             inventory: "${env.WORKSPACE}/inventory.ini",
                             forks: 16,
                             colorized: true,
