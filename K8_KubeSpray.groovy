@@ -321,7 +321,7 @@ pipeline {
             steps {         
                 // This is the recommended way of running ansible playbooks/roles from Jennkins
                 retry(2) {
-                    sh "cd ${WORKSPACE}/kubespray/ ; pwd"
+                    sh "cd ${WORKSPACE}/kubespray/"
                     ansiblePlaybook(
                         playbook: "${env.WORKSPACE}/kubespray/cluster.yml",
                         inventory: "${env.WORKSPACE}/kubespray/inventory/mycluster/inventory.ini",
@@ -347,14 +347,14 @@ pipeline {
             }
         }
 
-        stage('Installing Addons') {
-            steps {
-                sh '''
-                cd ${WORKSPACE}/kubespray/
-                ansible-playbook -i ${WORKSPACE}/inventory.ini cluster.yml --tags apps -u ${user} --become --become-user=root -f 16 --extra-vars "http_proxy=${http_proxy} https_proxy=${https_proxy} no_proxy=${no_proxy}" -v
-                ''' 
-            }
-        }
+        // stage('Installing Addons') {
+        //     steps {
+        //         sh '''
+        //         cd ${WORKSPACE}/kubespray/
+        //         ansible-playbook -i ${WORKSPACE}/inventory.ini cluster.yml --tags apps -u ${user} --become --become-user=root -f 16 --extra-vars "http_proxy=${http_proxy} https_proxy=${https_proxy} no_proxy=${no_proxy}" -v
+        //         ''' 
+        //     }
+        // }
 
         // stage('Uninstalling K8s') {
         //     when {
