@@ -247,7 +247,7 @@ pipeline {
                     inventory: "${env.WORKSPACE}/inventory.ini",
                     forks: 16,
                     colorized: true,
-                    extras: '-u ${user} -v --ssh-extra-args="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"'
+                    extras: '-u ${user} --ssh-extra-args="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" --flush-cache -v'
                 )
             }
         }
@@ -291,18 +291,19 @@ pipeline {
                             inventory: "${env.WORKSPACE}/inventory.ini",
                             forks: 16,
                             colorized: true,
-                            extras: '--ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" -v',
+                            extras: '-u ${user} --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" --flush-cache -v',
                             extraVars: [
                                 jenkins_workspace: "${env.WORKSPACE}/",
-                                apiserver_loadbalancer_address: "${params.apiserver_loadbalancer_address}",
-                                http_proxy: "${params.http_proxy}"
+                                http_proxy: "${params.http_proxy}",
+                                https_proxy: "${params.https_proxy}",
+                                no_proxy: "${params.no_proxy}"
                             ]
                         )
 
                     } catch (Exception e) {
                         echo 'Exception occurred: ' + e.toString()
                         sh '''
-                        echo "Exception Handled"
+                        echo "Taking care of the expection"
                         cd ${WORKSPACE}/
                         '''
                         ansiblePlaybook(
@@ -310,10 +311,12 @@ pipeline {
                             inventory: "${env.WORKSPACE}/inventory.ini",
                             forks: 16,
                             colorized: true,
-                            extras: '--ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" -v',
+                            extras: '-u ${user} --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" --flush-cache -v',
                             extraVars: [
                                 jenkins_workspace: "${env.WORKSPACE}/",
-                                http_proxy: "${params.http_proxy}"
+                                http_proxy: "${params.http_proxy}",
+                                https_proxy: "${params.https_proxy}",
+                                no_proxy: "${params.no_proxy}"
                             ]
                         )
                     }
@@ -379,11 +382,11 @@ pipeline {
                     ansiblePlaybook(
                         playbook: "${env.WORKSPACE}/kubespray/cluster.yml",
                         inventory: "${env.WORKSPACE}/kubespray/inventory/mycluster/inventory.ini",
+                        forks: 16,
                         become: true,
                         becomeUser: "root",
-                        forks: 16,
                         colorized: true,
-                        extras: '-u ${user} --become --become-user=root --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" -v',
+                        extras: '-u ${user} --become --become-user=root --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" --flush-cache -v',
                         extraVars: [
                             http_proxy: "${params.http_proxy}",
                             https_proxy: "${params.https_proxy}",
@@ -391,7 +394,7 @@ pipeline {
                         ]
                     )
                 }
-                // This also works but doesn't show the colors on the output which at the end could help us find easier error or warnings.
+                // This also works but doesn't show the colors on the output which could help us find error or warnings n a more visual way.
                 // sh '''
                 // cd ${WORKSPACE}/kubespray/ ; echo -e "\n"
                 // pwd ; echo -e "\n"
