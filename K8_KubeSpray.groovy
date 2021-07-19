@@ -231,7 +231,7 @@ pipeline {
                     inventory: "${env.WORKSPACE}/inventory.ini",
                     forks: 16,
                     colorized: true,
-                    extras: '-v --ssh-extra-args="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"'
+                    extras: '-u ${user} -v --ssh-extra-args="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"'
                 )
             }
         }
@@ -259,7 +259,7 @@ pipeline {
                     inventory: "${env.WORKSPACE}/inventory.ini",
                     forks: 16,
                     colorized: true,
-                    extras: '--ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" -v',
+                    extras: '-u ${user} --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" -v',
                     extraVars: [
                         jenkins_workspace: "${env.WORKSPACE}/",
                         http_proxy: "${params.http_proxy}",
@@ -288,7 +288,7 @@ pipeline {
                     inventory: "${env.WORKSPACE}/inventory.ini",
                     forks: 16,
                     colorized: true,
-                    extras: '--ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" --flush-cache -v',
+                    extras: '-u ${user} --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" --flush-cache -v',
                     extraVars: [
                         jenkins_workspace: "${env.WORKSPACE}/",
                         http_proxy: "${params.http_proxy}",
