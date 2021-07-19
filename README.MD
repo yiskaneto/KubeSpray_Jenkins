@@ -21,3 +21,6 @@ Jenkins pipeline to automate the installation of Kubernetes on CentOS by using t
    - This section runs the installation of K8s using KubeSpray, it could take from 7 to 30 mins, this will depend on the connection speed and the number of control plane and worker nodes.
 
 Make sure to distribute the Ansible host public keys to the K8s nodes.
+
+If metrics-server is enabled, once installed you can run the following command to get all the metrics-server options:
+sh `docker run --rm k8s.gcr.io/metrics-server/metrics-server:v0.4.2 --help`
