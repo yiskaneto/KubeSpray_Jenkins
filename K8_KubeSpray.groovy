@@ -160,17 +160,17 @@ pipeline {
         booleanParam(
             name: 'metrics_server_kubelet_insecure_tls',
             defaultValue: true,
-            description: 'Do not verify CA of serving certificates presented by Kubelets.  For testing purposes only.. This will be consider if metrics_server_enabled is set to true'
+            description: 'Do not verify CA of serving certificates presented by Kubelets.  For testing purposes only. This will only take effect if the metrics_server_enabled parameter is set to true'
         )
         string(
             name: 'metrics_server_metric_resolution',
             defaultValue: '60s',
-            description: 'Metrics scrape interval'
+            description: 'Metrics scrape interval. This will only take effect if the metrics_server_enabled parameter is set to true'
         )
         choice(
             name: 'metrics_server_kubelet_preferred_address_types',
             choices: ['InternalIP','ExternalIP','InternalDNS','ExternalDNS','Hostname'],
-            description: 'Metrics scrape interval'
+            description: 'The priority of node address types to use when determining which address to use to connect to a particular node. This will only take effect if the metrics_server_enabled parameter is set to true'
         )            
         booleanParam(
             name: 'helm_enabled',
