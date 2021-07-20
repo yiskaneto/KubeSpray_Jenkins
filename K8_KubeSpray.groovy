@@ -3,6 +3,7 @@ def setDescription() {
     item.setDescription("<h5><span style=\"color:#138D75\">KubeSpray Automation job. Before running this pipeline, make sure to read the README.MD from <a href='https://github.com/escanoru/KubeSpray_Jenkins'>https://github.com/escanoru/KubeSpray_Jenkins</a></span></h5>")
     item.save()
 }
+
 setDescription()
 
 
@@ -246,61 +247,7 @@ pipeline {
                                 https_proxy: "${params.https_proxy}",
                                 no_proxy: "${params.no_proxy}"
                             ]
-                        )
-                // script {
-                //     try {
-                //         ansiblePlaybook(
-                //             playbook: "${env.WORKSPACE}/kubespray/reset.yml",
-                //             inventory: "${env.WORKSPACE}/inventory.ini",
-                //             forks: 16,
-                //             colorized: true,
-                //             become: true,
-                //             becomeUser: "root",
-                //             extras: '-u ${user} --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" --flush-cache -v',
-                //             extraVars: [
-                //                 http_proxy: "${params.http_proxy}",
-                //                 https_proxy: "${params.https_proxy}",
-                //                 no_proxy: "${params.no_proxy}",
-                //                 reset_confirmation: "yes"
-                //             ]
-                //         )
-
-                //         ansiblePlaybook(
-                //             playbook: "${env.WORKSPACE}/roles/Requirements/main.yaml",
-                //             inventory: "${env.WORKSPACE}/inventory.ini",
-                //             forks: 16,
-                //             colorized: true,
-                //             extras: '-u ${user} --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" --flush-cache -v',
-                //             extraVars: [
-                //                 jenkins_workspace: "${env.WORKSPACE}/",
-                //                 http_proxy: "${params.http_proxy}",
-                //                 https_proxy: "${params.https_proxy}",
-                //                 no_proxy: "${params.no_proxy}"
-                //             ]
-                //         )
-
-                //     } catch (Exception e) {
-                //         echo 'Exception occurred: ' + e.toString()
-                //         sh '''
-                //         echo "Taking care of the expection"
-                //         cd ${WORKSPACE}/
-                //         '''
-                //         ansiblePlaybook(
-                //             playbook: "${env.WORKSPACE}/roles/Requirements/main.yaml",
-                //             inventory: "${env.WORKSPACE}/inventory.ini",
-                //             forks: 16,
-                //             colorized: true,
-                //             extras: '-u ${user} --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" --flush-cache -v',
-                //             extraVars: [
-                //                 jenkins_workspace: "${env.WORKSPACE}/",
-                //                 http_proxy: "${params.http_proxy}",
-                //                 https_proxy: "${params.https_proxy}",
-                //                 no_proxy: "${params.no_proxy}"
-                //             ]
-                //         )
-                //     }
-                // }
-
+                )
             }
         }
 
