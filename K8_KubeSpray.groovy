@@ -94,6 +94,11 @@ pipeline {
             defaultValue: 'cluster.local',
             description: 'Leave empty if not needed'
         )
+        string(
+            name: 'kube_version',
+            defaultValue: '1.21',
+            description: '<h5>Change this to use another Kubernetes version</h5>'
+        )
         choice(
             name: 'kube_network_plugin',
             choices: ['calico','flannel','cilium','weave','cloud'],
@@ -295,6 +300,7 @@ pipeline {
                         local_release_dir: "${params.kubespray_temp_dir}",
                         kube_service_addresses: "${params.kube_service_addresses}",
                         kube_pods_subnet: "${params.kube_pods_subnet}"
+                        kube_version: "${params.kube_version}"
                     ]
                 )
             }
