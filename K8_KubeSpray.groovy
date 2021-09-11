@@ -299,7 +299,7 @@ pipeline {
                         container_runtime: "${params.container_runtime}",
                         local_release_dir: "${params.kubespray_temp_dir}",
                         kube_service_addresses: "${params.kube_service_addresses}",
-                        kube_pods_subnet: "${params.kube_pods_subnet}"
+                        kube_pods_subnet: "${params.kube_pods_subnet}",
                         kube_version: "${params.kube_version}"
                     ]
                 )
