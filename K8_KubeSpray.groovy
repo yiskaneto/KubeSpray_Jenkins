@@ -55,7 +55,7 @@ pipeline {
 		// ansiColor('css')
 		// ansiColor('gnome-terminal')
 		
-		buildDiscarder(logRotator(daysToKeepStr: '7'))
+		buildDiscarder(logRotator(daysToKeepStr: '30'))
 		}
   
     parameters {
