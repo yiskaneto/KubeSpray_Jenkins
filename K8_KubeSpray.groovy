@@ -230,7 +230,7 @@ pipeline {
                 cd ${WORKSPACE}/
                 git clone https://github.com/kubernetes-sigs/kubespray.git
                 cd kubespray
-                git checkout release-2.16
+                git checkout release-2.17
                 '''
             }
         }
