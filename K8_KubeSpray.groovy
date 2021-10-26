@@ -259,7 +259,7 @@ pipeline {
         stage('Setting KubeSpray Env') {
             steps {
                 sh '''
-                cd ${WORKSPACE}/kubespray ; git checkout release-2.16
+                cd ${WORKSPACE}/kubespray ; git checkout release-2.17
                 cp ${WORKSPACE}/roles/scripts/kubeSpray_venv_install_requirements.sh .
                 chmod +x kubeSpray_venv_install_requirements.sh
                 ./kubeSpray_venv_install_requirements.sh
