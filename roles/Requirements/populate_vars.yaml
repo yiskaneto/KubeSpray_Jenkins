@@ -15,9 +15,10 @@
   tasks:
     - name: Cloning project on master node
       shell: |
-        rm -rf /opt/mycluster/
+        rm -rf /opt/kubespray_Jenkins_Copy
+        mkdir -p /opt/kubespray_Jenkins_Copy
 
     - name: Making a copy of the kubespray project on one of the control plane nodes
       copy:
-        src: "{{ jenkins_workspace }}kubespray/inventory/mycluster"
-        dest: /opt/
+        src: "{{ jenkins_workspace }}kubespray/"
+        dest: /opt/kubespray_Jenkins_Copy
