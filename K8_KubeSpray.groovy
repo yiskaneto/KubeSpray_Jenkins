@@ -301,7 +301,7 @@ pipeline {
 
         stage('Setting KubeSpray Env') {
             when {
-                expression { params.install_kubespray == true && params.only_uninstall_kubespray == false }
+                expression { params.run_requirements == true && params.only_uninstall_kubespray == false }
             }
             steps {
                 sh """
