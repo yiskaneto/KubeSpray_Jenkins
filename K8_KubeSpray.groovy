@@ -96,7 +96,7 @@ pipeline {
         )
         string(
             name: 'kube_version',
-            defaultValue: 'v1.21.0',
+            defaultValue: 'v1.23.5',
             description: '<h5>Change this to use another Kubernetes version</h5>'
         )
         choice(
