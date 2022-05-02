@@ -5,6 +5,7 @@
     rm -rf /opt/cni 
     rm -rf /opt/kubespray 
     rm -rf /opt/mycluster
+    rm -rf /opt/kube*
     rm -rf /opt/.*
     rm -rf /tmp/* 
     rm -rf /tmp/.* 
