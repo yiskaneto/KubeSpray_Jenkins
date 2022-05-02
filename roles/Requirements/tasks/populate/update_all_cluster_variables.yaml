@@ -1,31 +1,31 @@
 ---
-- name: Updating loadbalancer_apiserver on inventory/mycluster/group_vars/all/all.yml
+- name: Updating use_external_load_balancer on inventory/mycluster/group_vars/all/all.yml
   ansible.builtin.lineinfile:
     path: "{{ jenkins_workspace }}kubespray/inventory/mycluster/group_vars/all/all.yml"
     regexp: "^# loadbalancer_apiserver:"
     line: "loadbalancer_apiserver:"
-#  when: use_external_load_balancer | bool == true
+  when: use_external_load_balancer | bool == true
 
 - name: Updating apiserver_loadbalancer_domain_name on inventory/mycluster/group_vars/all/all.yml
   ansible.builtin.lineinfile:
     path: "{{ jenkins_workspace }}kubespray/inventory/mycluster/group_vars/all/all.yml"
     regexp: "^## apiserver_loadbalancer_domain_name: "
     line: "apiserver_loadbalancer_domain_name: {{ apiserver_loadbalancer_domain_name }}"
-#  when: use_external_load_balancer | bool == true
+  when: use_external_load_balancer | bool == true
 
 - name: Updating loadbalancer_apiserver address on inventory/mycluster/group_vars/all/all.yml
   ansible.builtin.lineinfile:
     path: "{{ jenkins_workspace }}kubespray/inventory/mycluster/group_vars/all/all.yml"
     regexp: "^#   address: "
     line: "  address: {{ apiserver_loadbalancer_address }}"
-#  when: use_external_load_balancer | bool == true
+  when: use_external_load_balancer | bool == true
 
 - name: Updating loadbalancer_apiserver port on inventory/mycluster/group_vars/all/all.yml
   ansible.builtin.lineinfile:
     path: "{{ jenkins_workspace }}kubespray/inventory/mycluster/group_vars/all/all.yml"
     regexp: "^#   port: "
     line: "  port: {{ apiserver_loadbalancer_port }}"
-#  when: use_external_load_balancer | bool == true
+  when: use_external_load_balancer | bool == true
 
 - name: Updating loadbalancer_apiserver_localhost on inventory/mycluster/group_vars/all/all.yml
   ansible.builtin.lineinfile:
