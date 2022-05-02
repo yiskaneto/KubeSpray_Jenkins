@@ -318,8 +318,11 @@ pipeline {
             steps {         
                 // This is the recommended way of running ansible playbooks/roles from Jennkins
                 retry(2) {
-                    sh "cd ${WORKSPACE}/kubespray/"
+                    sh """
+                    cd ${WORKSPACE}/kubespray/
+                    """
                     ansiblePlaybook(
+                        installation: "${WORKSPACE}/kubespray/venv/bin",
                         playbook: "${env.WORKSPACE}/kubespray/cluster.yml",
                         inventory: "${env.WORKSPACE}/kubespray/inventory/mycluster/inventory.ini",
                         forks: 16,
@@ -334,7 +337,7 @@ pipeline {
                         ]
                     )
                 }
-                // This also works but doesn't show the colors on the output which could help us find error or warnings n a more visual way.
+                // This also works but doesn't show the colors on the output which could help us find error or warnings in a more visual way.
                 // sh '''
                 // cd ${WORKSPACE}/kubespray/ ; echo -e "\n"
                 // pwd ; echo -e "\n"
