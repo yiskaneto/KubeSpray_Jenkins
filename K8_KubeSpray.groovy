@@ -64,6 +64,21 @@ pipeline {
             defaultValue: true,
             description: 'Uninstall previous installations K8s and set OS requirements, this will force a reboot whether K8s is installed or not'
         )
+        booleanParam(
+            name: 'only_uninstall_kubespray',
+            defaultValue: false,
+            description: 'Only uninstall, if this is set to true then the other stages will be skiped'
+        )
+        booleanParam(
+            name: 'run_requirements',
+            defaultValue: true,
+            description: 'Set OS requirements'
+        )
+        booleanParam(
+            name: 'install_kubespray',
+            defaultValue: true,
+            description: 'Set OS requirements'
+        )
         text(
             name: 'inventory',
             defaultValue: "${inventorySample}",
@@ -231,20 +246,30 @@ pipeline {
             }
         }
 
-        stage('Clonning KubeSpray project') {
+        stage('Uninstalling KubeSpray') {
+            when {
+                expression { params.uninstall_kubespray == true }
+            }
             steps {
-                sh """
-                cd ${WORKSPACE}/
-                git clone https://github.com/kubernetes-sigs/kubespray.git
-                cd kubespray
-                git checkout tags/v2.18.1
-                """
+                ansiblePlaybook(
+                            playbook: "${env.WORKSPACE}/roles/Requirements/main_uninstall.yaml",
+                            inventory: "${env.WORKSPACE}/inventory.ini",
+                            forks: 16,
+                            colorized: true,
+                            extras: '-u ${user} --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" --flush-cache -v',
+                            extraVars: [
+                                jenkins_workspace: "${env.WORKSPACE}/",
+                                http_proxy: "${params.http_proxy}",
+                                https_proxy: "${params.https_proxy}",
+                                no_proxy: "${params.no_proxy}"
+                            ]
+                )
             }
         }
 
         stage('Running OS requirements K8s') {
             when {
-                expression { params.uninstall_kubespray == true }
+                expression { params.run_requirements == true && params.only_uninstall_kubespray == false }
             }
             steps {
                 ansiblePlaybook(
@@ -263,7 +288,21 @@ pipeline {
             }
         }
 
+        stage('Clonning KubeSpray project') {
+            steps {
+                sh """
+                cd ${WORKSPACE}/
+                git clone https://github.com/kubernetes-sigs/kubespray.git
+                cd kubespray
+                git checkout tags/v2.18.1
+                """
+            }
+        }
+
         stage('Setting KubeSpray Env') {
+            when {
+                expression { params.only_uninstall_kubespray == false }
+            }
             steps {
                 sh """
                 cd ${WORKSPACE}/kubespray
@@ -315,6 +354,9 @@ pipeline {
         }
         
         stage('Running KubeSpray') {
+            when {
+                expression { params.only_uninstall_kubespray == false }
+            }
             steps {         
                 // This is the recommended way of running ansible playbooks/roles from Jennkins
                 retry(2) {

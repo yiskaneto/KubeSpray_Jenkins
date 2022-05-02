@@ -3,4 +3,4 @@
   shell: |
     setenforce 0
     sed -i 's/^SELINUX=enforcing$/SELINUX=permissive/' /etc/selinux/config
-  ignore_errors: yes
+  ignore_errors: True

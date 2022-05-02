@@ -1,6 +1,11 @@
 ---
 - name: Removing /opt/containerd /opt/cni
   shell: |
-    rm -rf /opt/containerd /opt/cni /opt/kubespray /opt/mycluster
-    rm -rf /tmp/* /tmp/.* /root/.ansible
-  ignore_errors: yes
+    rm -rf /opt/containerd 
+    rm -rf /opt/cni 
+    rm -rf /opt/kubespray 
+    rm -rf /opt/mycluster
+    rm -rf /tmp/* 
+    rm -rf /tmp/.* 
+    rm -rf /root/.ansible
+  ignore_errors: True
