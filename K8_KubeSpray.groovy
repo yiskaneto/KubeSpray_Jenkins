@@ -105,8 +105,13 @@ pipeline {
 		)
         choice(
             name: 'container_runtime',
-            choices: ['docker','crio','containerd'],
+            choices: ['containerd','crio','docker'],
             description: 'docker for docker, crio for cri-o and containerd for containerd.'
+		)
+        choice(
+            name: 'resolvconf_mode',
+            choices: ['host_resolvconf','docker_dns','none'],
+            description: 'Can be docker_dns, host_resolvconf or none'
 		)
         booleanParam(
             name: 'use_external_load_balancer',
@@ -299,6 +304,7 @@ pipeline {
                         use_localhost_as_kubeapi_loadbalancer: "${params.use_localhost_as_kubeapi_loadbalancer}",
                         kube_network_plugin: "${params.kube_network_plugin}",
                         container_runtime: "${params.container_runtime}",
+                        resolvconf_mode: "${params.resolvconf_mode}",
                         local_release_dir: "${params.kubespray_temp_dir}",
                         kube_service_addresses: "${params.kube_service_addresses}",
                         kube_pods_subnet: "${params.kube_pods_subnet}",
