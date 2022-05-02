@@ -1,5 +1,13 @@
 # KubeSpray Jenkins Automation Pipeline
 
+## Requirements
+
+You must copy the public ssh key to the target nodes, it should the key of the user that is running the Jenkins job, for example:
+bash ```
+cat /var/lib/jenkins/.ssh/id_rsa.pub | ssh <node> "mkdir -p ~/.ssh && cat >> ~/.ssh/authorized_keys"
+
+```
+
 For now this project only works on CentOS/RHEL 7/8.
 Jenkins pipeline to automate the installation of Kubernetes on CentOS by using the Kubespray project, the pipeline has 5 Stages
 
@@ -24,3 +32,4 @@ Make sure to distribute the Ansible host public keys to the K8s nodes.
 
 If metrics-server is enabled, once installed you can run the following command to get all the metrics-server options:
 sh `docker run --rm k8s.gcr.io/metrics-server/metrics-server:v0.4.2 --help`
+```
