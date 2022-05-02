@@ -289,6 +289,9 @@ pipeline {
         }
 
         stage('Clonning KubeSpray project') {
+            when {
+                expression { params.run_requirements == true && params.only_uninstall_kubespray == false }
+            }
             steps {
                 sh """
                 cd ${WORKSPACE}/
