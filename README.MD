@@ -5,7 +5,7 @@ Jenkins pipeline to automate the installation of Kubernetes on CentOS by using t
 
 1. Create the inventory file:
    - Takes the passed hostname on the host parameters and fills a pre-built inventory file
-2. Create the SSH key pairs, only of they don't exist.
+2. Create the SSH key pairs, only if they don't exist.
 3. Running requirements:
    - SElinux_disable
    - disable_firewalld
