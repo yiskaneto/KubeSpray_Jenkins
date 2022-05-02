@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-echo "\n\n\nStarting python3 -m venv venv"
+echo "\n\n\nStarting python -m venv venv"
 python -m venv venv ; echo -e "\n\n"
 
 echo "Starting source venv/bin/activate"
