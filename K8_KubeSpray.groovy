@@ -290,7 +290,7 @@ pipeline {
 
         stage('Clonning KubeSpray project') {
             when {
-                expression { (params.run_requirements == true || params.install_kubespray == true) && params.only_uninstall_kubespray == false }
+                expression { ( params.run_requirements == true || params.install_kubespray == true ) && params.only_uninstall_kubespray == false }
             }
             steps {
                 sh """
@@ -304,7 +304,7 @@ pipeline {
 
         stage('Setting KubeSpray Env') {
             when {
-                expression { (params.run_requirements == true || params.install_kubespray == true) && params.only_uninstall_kubespray == false }
+                expression { ( params.run_requirements == true || params.install_kubespray == true ) && params.only_uninstall_kubespray == false }
             }
             steps {
                 sh """
