@@ -355,7 +355,7 @@ pipeline {
         
         stage('Running KubeSpray') {
             when {
-                expression { params.only_uninstall_kubespray == false }
+                expression { params.install_kubespray == true && params.only_uninstall_kubespray == false }
             }
             steps {         
                 // This is the recommended way of running ansible playbooks/roles from Jennkins
