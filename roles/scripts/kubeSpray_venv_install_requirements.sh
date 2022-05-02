@@ -1,4 +1,4 @@
-#! /usr/bin/env bash
+#!/usr/bin/env bash
 
 echo "\n\n\nStarting python3 -m venv venv"
 python3 -m venv venv ; echo -e "\n\n"
@@ -10,7 +10,8 @@ echo -e "Verifying current directory"
 pwd ; echo -e "\n"
 
 echo -e "Running /usr/local/bin/pip3 install -r requirements.txt\n"
-/usr/local/bin/pip3 install -r requirements.txt ; echo -e "\n\n"
+# /usr/local/bin/pip3 install -r requirements.txt ; echo -e "\n\n"
+python3 -m pip3 install -r requirements.txt ; echo -e "\n\n"
 
 echo -e "Verifying current directory"
 pwd ; echo -e "\n"

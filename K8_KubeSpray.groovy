@@ -203,12 +203,14 @@ pipeline {
     stages {
         stage('Creating Inventory File') {
 			steps {
-                sh '''
+                sh """
                 echo "" > ${WORKSPACE}/inventory.ini
-                '''
+                """
                 writeFile file: "${WORKSPACE}/inventory.ini", text: "${inventory}"
-                sh 'ls -lht ${WORKSPACE}/inventory.ini'
-                sh 'cat ${WORKSPACE}/inventory.ini'
+                sh """
+                ls -lht ${WORKSPACE}/inventory.ini
+                cat ${WORKSPACE}/inventory.ini
+                """
 			}
 		}
 
@@ -226,12 +228,12 @@ pipeline {
 
         stage('Clonning KubeSpray project') {
             steps {
-                sh '''
+                sh """
                 cd ${WORKSPACE}/
                 git clone https://github.com/kubernetes-sigs/kubespray.git
                 cd kubespray
-                git checkout release-2.17
-                '''
+                git checkout tags/v2.18.1
+                """
             }
         }
 
@@ -258,8 +260,8 @@ pipeline {
 
         stage('Setting KubeSpray Env') {
             steps {
-                sh '''
-                cd ${WORKSPACE}/kubespray ; git checkout release-2.17
+                sh """
+                cd ${WORKSPACE}/kubespray
                 cp ${WORKSPACE}/roles/scripts/kubeSpray_venv_install_requirements.sh .
                 chmod +x kubeSpray_venv_install_requirements.sh
                 ./kubeSpray_venv_install_requirements.sh
@@ -267,7 +269,7 @@ pipeline {
                 cp -rfp ${WORKSPACE}/kubespray/inventory/sample/ ${WORKSPACE}/kubespray/inventory/mycluster/
                 rm -rf ${WORKSPACE}/kubespray/inventory/mycluster/inventory.ini
                 cp ${WORKSPACE}/inventory.ini ${WORKSPACE}/kubespray/inventory/mycluster/inventory.ini
-                '''
+                """
                 ansiblePlaybook(
                     playbook: "${env.WORKSPACE}/roles/Requirements/populate_vars.yaml",
                     inventory: "${env.WORKSPACE}/inventory.ini",
