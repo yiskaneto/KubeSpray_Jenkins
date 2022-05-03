@@ -4,6 +4,7 @@
     fuser -k 6443/tcp
     fuser -k 8080/tcp
     fuser -k 8081/tcp
+    fuser -k 8383/tcp
     fuser -k 9254/tcp
     fuser -k 9256/tcp
     fuser -k 10250/tcp
@@ -17,6 +18,7 @@
     fuser -k 6443/tcp
     fuser -k 8080/tcp
     fuser -k 8081/tcp
+    fuser -k 8383/tcp
     fuser -k 9254/tcp
     fuser -k 9256/tcp
     fuser -k 10250/tcp
@@ -30,6 +32,7 @@
     fuser -k 6443/tcp
     fuser -k 8080/tcp
     fuser -k 8081/tcp
+    fuser -k 8383/tcp
     fuser -k 9254/tcp
     fuser -k 9256/tcp
     fuser -k 10250/tcp
