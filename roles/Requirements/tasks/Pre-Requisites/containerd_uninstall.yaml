@@ -1,0 +1,25 @@
+---  
+- name: "Uninstalling @container-toolz (if exists)"
+  shell: |
+    yum remove -y @container-tool
+  ignore_errors: True
+
+- name: "Uninstalling container-toolz (if exists)"
+  shell: |
+    yum remove -y @container-tool
+  ignore_errors: True
+
+- name: "Uninstalling runc (if exists)"
+  shell: |
+    yum remove -y runc
+  ignore_errors: True
+
+- name: "Uninstalling docker* (if exists)"
+  shell: |
+    yum remove -y docker*
+  ignore_errors: True
+
+- name: "yum clean all "
+  shell: |
+    yum clean all
+  ignore_errors: True
