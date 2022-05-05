@@ -90,6 +90,16 @@ pipeline {
             description: '<h5>Username that will run the installation, the user must have enough privileges for writing SSL keys in /etc/, installing packages and interacting with various systemd daemons</h5>'
         )
         string(
+            name: 'kube_version',
+            defaultValue: 'v1.23.5',
+            description: '<h5>Change this to use another Kubernetes version</h5>'
+        )
+        string(
+            name: 'cluster_name',
+            defaultValue: 'cluster.local',
+            description: 'Leave empty if not needed'
+        )
+        string(
             name: 'http_proxy',
             defaultValue: '',
             description: '<h5>e.g http://my_proxy.com:8080</h5>'
@@ -104,20 +114,15 @@ pipeline {
             defaultValue: '127.0.0.1,localhost',
             description: 'list of hostnames or range of domains to exclude from the proxy'
         )
-        string(
-            name: 'cluster_name',
-            defaultValue: 'cluster.local',
-            description: 'Leave empty if not needed'
-        )
-        string(
-            name: 'kube_version',
-            defaultValue: 'v1.23.5',
-            description: '<h5>Change this to use another Kubernetes version</h5>'
-        )
         choice(
             name: 'kube_network_plugin',
             choices: ['calico','flannel','cilium','weave','cloud'],
 		)
+        string(
+            name: 'etcd_data_dir',
+            defaultValue: '/var/lib/etcd',
+            description: 'Directory where etcd data stored'
+        )
         choice(
             name: 'container_runtime',
             choices: ['containerd','crio','docker'],
@@ -335,10 +340,12 @@ pipeline {
                     extras: '-u ${user} --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" --flush-cache -v',
                     extraVars: [
                         jenkins_workspace: "${env.WORKSPACE}/",
+                        kube_version: "${params.kube_version}"
+                        cluster_name: "${params.cluster_name}",
                         http_proxy: "${params.http_proxy}",
                         https_proxy: "${params.https_proxy}",
                         no_proxy: "${params.no_proxy}",
-                        cluster_name: "${params.cluster_name}",
+                        etcd_data_dir: "${params.etcd_data_dir}",
                         use_external_load_balancer: "${params.use_external_load_balancer}",
                         apiserver_loadbalancer_domain_name: "${params.apiserver_loadbalancer_domain_name}",
                         apiserver_loadbalancer_address: "${params.apiserver_loadbalancer_address}",
@@ -361,8 +368,7 @@ pipeline {
                         docker_log_opts: "${params.docker_log_opts}",
                         local_release_dir: "${params.kubespray_temp_dir}",
                         kube_service_addresses: "${params.kube_service_addresses}",
-                        kube_pods_subnet: "${params.kube_pods_subnet}",
-                        kube_version: "${params.kube_version}"
+                        kube_pods_subnet: "${params.kube_pods_subnet}"
                     ]
                 )
             }

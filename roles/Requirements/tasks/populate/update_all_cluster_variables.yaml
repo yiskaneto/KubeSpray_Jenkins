@@ -1,4 +1,10 @@
 ---
+- name: Updating etcd_data_dir on inventory/mycluster/group_vars/all/all.yml
+  ansible.builtin.lineinfile:
+    path: "{{ jenkins_workspace }}kubespray/inventory/mycluster/group_vars/all/all.yml"
+    regexp: "^etcd_data_dir: "
+    line: "etcd_data_dir: {{ etcd_data_dir }}"
+
 - name: Updating use_external_load_balancer on inventory/mycluster/group_vars/all/all.yml
   ansible.builtin.lineinfile:
     path: "{{ jenkins_workspace }}kubespray/inventory/mycluster/group_vars/all/all.yml"
