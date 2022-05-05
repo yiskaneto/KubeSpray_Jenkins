@@ -8,3 +8,4 @@
   shell: |
     sed -i "/{{ apiserver_loadbalancer_address }}/d" /etc/hosts
   ignore_errors: True
+  when: use_external_load_balancer | bool == true
