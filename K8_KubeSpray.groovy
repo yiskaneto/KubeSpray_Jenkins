@@ -345,7 +345,7 @@ pipeline {
                     extras: '-u ${user} --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" --flush-cache -v',
                     extraVars: [
                         jenkins_workspace: "${env.WORKSPACE}/",
-                        kube_version: "${params.kube_version}"
+                        kube_version: "${params.kube_version}",
                         cluster_name: "${params.cluster_name}",
                         http_proxy: "${params.http_proxy}",
                         https_proxy: "${params.https_proxy}",
