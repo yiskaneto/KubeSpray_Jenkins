@@ -118,6 +118,11 @@ pipeline {
             name: 'kube_network_plugin',
             choices: ['calico','flannel','cilium','weave','cloud'],
 		)
+        choice(
+            name: 'etcd_deployment_type',
+            choices: ['host','docker'],
+            description: 'Set this to docker if you are using container_manager: docker'
+        )
         string(
             name: 'etcd_data_dir',
             defaultValue: '/var/lib/etcd',
@@ -345,6 +350,7 @@ pipeline {
                         http_proxy: "${params.http_proxy}",
                         https_proxy: "${params.https_proxy}",
                         no_proxy: "${params.no_proxy}",
+                        etcd_deployment_type: "${params.etcd_deployment_type}",
                         etcd_data_dir: "${params.etcd_data_dir}",
                         use_external_load_balancer: "${params.use_external_load_balancer}",
                         apiserver_loadbalancer_domain_name: "${params.apiserver_loadbalancer_domain_name}",

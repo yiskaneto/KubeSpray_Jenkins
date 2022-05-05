@@ -1,0 +1,6 @@
+---
+- name: Updating etcd_deployment_type on inventory/mycluster/group_vars/etcd.yml
+  ansible.builtin.lineinfile:
+    path: "{{ jenkins_workspace }}kubespray/inventory/mycluster/group_vars/etcd.yml"
+    regexp: "^etcd_deployment_type: "
+    line: "etcd_deployment_type: {{ etcd_deployment_type }}"

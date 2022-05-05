@@ -34,3 +34,6 @@ cert_manager_enabled: "{{ cert_manager_enabled }}"
 # File from KubeSpray kubeSpray/inventory/mycluster/group_vars/all/docker.yml
 docker_daemon_graph: "{{ docker_daemon_graph }}"
 docker_log_opts: "{{ docker_log_opts }}"
+
+# File from KubeSpray kubeSpray/inventory/mycluster/group_vars/etcd.yml
+etcd_deployment_type: "{{ etcd_deployment_type }}"
