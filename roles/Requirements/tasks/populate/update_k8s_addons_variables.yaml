@@ -10,15 +10,15 @@
   ansible.builtin.lineinfile:
     path: "{{ jenkins_workspace }}kubespray/inventory/mycluster/group_vars/k8s_cluster/addons.yml"
     regexp: "^ingress_nginx_enabled: "
-    line: "ingress_nginx_enabled: {{ ingress_nginx_enabled }}"
-  when: ingress_nginx_enabled | bool == true
+    line: "ingress_nginx_enabled: {{ i_ingress_nginx_enabled }}"
+  when: i_ingress_nginx_enabled | bool == true
 
-- name: Updating ingress_nginx_host_network on inventory/mycluster/group_vars/k8s_cluster/addons.yml
-  ansible.builtin.lineinfile:
-    path: "{{ jenkins_workspace }}kubespray/inventory/mycluster/group_vars/k8s_cluster/addons.yml"
-    regexp: "^# ingress_nginx_host_network: "
-    line: "ingress_nginx_host_network: {{ ingress_nginx_enabled }}"
-  when: ingress_nginx_enabled | bool == true
+# - name: Updating ingress_nginx_host_network on inventory/mycluster/group_vars/k8s_cluster/addons.yml
+#   ansible.builtin.lineinfile:
+#     path: "{{ jenkins_workspace }}kubespray/inventory/mycluster/group_vars/k8s_cluster/addons.yml"
+#     regexp: "^# ingress_nginx_host_network: "
+#     line: "ingress_nginx_host_network: {{ i_ingress_nginx_enabled }}"
+#   when: i_ingress_nginx_enabled | bool == true
 
 - name: Updating helm_enabled on inventory/mycluster/group_vars/k8s_cluster/addons.yml
   ansible.builtin.lineinfile:

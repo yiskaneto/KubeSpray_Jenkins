@@ -357,6 +357,7 @@ pipeline {
                         kube_network_plugin: "${params.kube_network_plugin}",
                         container_runtime: "${params.container_runtime}",
                         resolvconf_mode: "${params.resolvconf_mode}",
+                        docker_daemon_graph: "${params.docker_daemon_graph}",
                         local_release_dir: "${params.kubespray_temp_dir}",
                         kube_service_addresses: "${params.kube_service_addresses}",
                         kube_pods_subnet: "${params.kube_pods_subnet}",
