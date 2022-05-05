@@ -128,14 +128,14 @@ pipeline {
             choices: ['host_resolvconf','docker_dns','none'],
             description: 'Can be docker_dns, host_resolvconf or none'
 		)
-        booleanParam(
+        string(
             name: 'docker_daemon_graph',
-            defaultValue: false,
+            defaultValue: '/var/lib/docker',
             description: 'Path used to store Docker data'
         )
-        booleanParam(
+        string(
             name: 'docker_log_opts',
-            defaultValue: false,
+            defaultValue: '--log-opt max-size=50m --log-opt max-file=5',
             description: 'Rotate container stderr/stdout logs option'
         )
         booleanParam(
@@ -358,6 +358,7 @@ pipeline {
                         container_runtime: "${params.container_runtime}",
                         resolvconf_mode: "${params.resolvconf_mode}",
                         docker_daemon_graph: "${params.docker_daemon_graph}",
+                        docker_log_opts: "${params.docker_log_opts}",
                         local_release_dir: "${params.kubespray_temp_dir}",
                         kube_service_addresses: "${params.kube_service_addresses}",
                         kube_pods_subnet: "${params.kube_pods_subnet}",

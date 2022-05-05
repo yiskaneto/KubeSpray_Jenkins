@@ -14,6 +14,7 @@
     - /tmp/* 
     - /tmp/.* 
     - /root/.ansible
+    - /var/lib/etcd
     - /etc/docker/ 
     - /var/lib/dockershim/
     - /var/lib/containerd/
