@@ -129,6 +129,16 @@ pipeline {
             description: 'Can be docker_dns, host_resolvconf or none'
 		)
         booleanParam(
+            name: 'docker_daemon_graph',
+            defaultValue: false,
+            description: 'Path used to store Docker data'
+        )
+        booleanParam(
+            name: 'docker_log_opts',
+            defaultValue: false,
+            description: 'Rotate container stderr/stdout logs option'
+        )
+        booleanParam(
             name: 'use_external_load_balancer',
             defaultValue: false,
             description: 'Whether or not to use an external load balancer fpr the kube api'

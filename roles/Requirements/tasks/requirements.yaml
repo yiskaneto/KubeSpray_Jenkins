@@ -8,5 +8,5 @@
 #- import_tasks: Pre-Requisites/upgrade_packages.yaml
 #- import_tasks: Pre-Requisites/install_packages.yaml
 - import_tasks: Pre-Requisites/uninstall_calico.yaml
-- import_tasks: Pre-Requisites/clean_opt.yaml
+- import_tasks: Pre-Requisites/clean_directories.yaml
 - import_tasks: Pre-Requisites/killing_process_using_target_ports.yaml

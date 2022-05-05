@@ -1,0 +1,28 @@
+---
+- name: Cleaning directories
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: absent
+  with_items:
+    - /opt/containerd 
+    - /opt/cni 
+    - /opt/kubespray 
+    - /opt/mycluster
+    - /opt/kube*
+    - /opt/.*
+    - /tmp/* 
+    - /tmp/.* 
+    - /root/.ansible
+    - /etc/docker/ 
+    - /var/lib/dockershim/
+    - /var/lib/containerd/
+    - /var/lib/docker*
+    - /run/docker*
+    - /usr/local/bin/kube*
+    - /usr/local/bin/calico*
+    - /usr/local/bin/container*
+    - /usr/local/bin/crict*
+    - /usr/local/bin/runc
+  ignore_errors: True
+  async: 900
+  poll: 10
