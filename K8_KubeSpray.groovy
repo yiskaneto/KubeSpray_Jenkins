@@ -272,17 +272,17 @@ pipeline {
             }
             steps {
                 ansiblePlaybook(
-                            playbook: "${env.WORKSPACE}/roles/Requirements/main_uninstall.yaml",
-                            inventory: "${env.WORKSPACE}/inventory.ini",
-                            forks: 16,
-                            colorized: true,
-                            extras: '-u ${user} --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" --flush-cache -v',
-                            extraVars: [
-                                jenkins_workspace: "${env.WORKSPACE}/",
-                                http_proxy: "${params.http_proxy}",
-                                https_proxy: "${params.https_proxy}",
-                                no_proxy: "${params.no_proxy}"
-                            ]
+                    playbook: "${env.WORKSPACE}/roles/Requirements/main_uninstall.yaml",
+                    inventory: "${env.WORKSPACE}/inventory.ini",
+                    forks: 16,
+                    colorized: true,
+                    extras: '-u ${user} --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" --flush-cache -v',
+                    extraVars: [
+                        jenkins_workspace: "${env.WORKSPACE}/",
+                        http_proxy: "${params.http_proxy}",
+                        https_proxy: "${params.https_proxy}",
+                        no_proxy: "${params.no_proxy}"
+                    ]
                 )
             }
         }
@@ -293,17 +293,17 @@ pipeline {
             }
             steps {
                 ansiblePlaybook(
-                            playbook: "${env.WORKSPACE}/roles/Requirements/main.yaml",
-                            inventory: "${env.WORKSPACE}/inventory.ini",
-                            forks: 16,
-                            colorized: true,
-                            extras: '-u ${user} --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" --flush-cache -v',
-                            extraVars: [
-                                jenkins_workspace: "${env.WORKSPACE}/",
-                                http_proxy: "${params.http_proxy}",
-                                https_proxy: "${params.https_proxy}",
-                                no_proxy: "${params.no_proxy}"
-                            ]
+                    playbook: "${env.WORKSPACE}/roles/Requirements/main.yaml",
+                    inventory: "${env.WORKSPACE}/inventory.ini",
+                    forks: 16,
+                    colorized: true,
+                    extras: '-u ${user} --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" --flush-cache -v',
+                    extraVars: [
+                        jenkins_workspace: "${env.WORKSPACE}/",
+                        http_proxy: "${params.http_proxy}",
+                        https_proxy: "${params.https_proxy}",
+                        no_proxy: "${params.no_proxy}"
+                    ]
                 )
             }
         }
@@ -328,6 +328,7 @@ pipeline {
             }
             steps {
                 sh """
+                echo "Setting KubeSpray Env"
                 cd ${WORKSPACE}/kubespray
                 cp ${WORKSPACE}/roles/scripts/kubeSpray_venv_install_requirements.sh .
                 chmod +x kubeSpray_venv_install_requirements.sh
@@ -388,6 +389,7 @@ pipeline {
                 // This is the recommended way of running ansible playbooks/roles from Jennkins
                 retry(2) {
                     sh """
+                    echo "Starting KubeSpray deployment"
                     cd ${WORKSPACE}/kubespray/
                     """
                     ansiblePlaybook(

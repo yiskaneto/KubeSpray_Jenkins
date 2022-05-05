@@ -20,11 +20,13 @@
     - /var/lib/containerd/
     - /var/lib/docker*
     - /run/docker*
+    - /usr/local/bin/kubernetes-scripts
     - /usr/local/bin/kube*
     - /usr/local/bin/calico*
     - /usr/local/bin/container*
     - /usr/local/bin/crict*
     - /usr/local/bin/runc
+    - /usr/libexec/kuber*
     - "{{ etcd_data_dir }}"
     - "{{ docker_daemon_graph }}"
   ignore_errors: True
