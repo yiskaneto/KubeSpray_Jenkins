@@ -33,7 +33,7 @@
   ansible.builtin.lineinfile:
     path: "{{ jenkins_workspace }}kubespray/inventory/mycluster/group_vars/k8s_cluster/k8s-cluster.yml"
     regexp: "^container_manager: "
-    line: "container_manager: {{ container_runtime }}"
+    line: "container_manager: {{ container_manager }}"
 
 - name: Updating resolvconf_mode inventory/mycluster/group_vars/k8s_cluster/k8s-cluster.yml
   ansible.builtin.lineinfile:

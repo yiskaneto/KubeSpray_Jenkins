@@ -129,7 +129,7 @@ pipeline {
             description: 'Directory where etcd data stored'
         )
         choice(
-            name: 'container_runtime',
+            name: 'container_manager',
             choices: ['containerd','crio','docker'],
             description: 'docker for docker, crio for cri-o and containerd for containerd.'
 		)
@@ -368,7 +368,7 @@ pipeline {
                         loadbalancer_apiserver_type: "${params.loadbalancer_apiserver_type}",
                         use_localhost_as_kubeapi_loadbalancer: "${params.use_localhost_as_kubeapi_loadbalancer}",
                         kube_network_plugin: "${params.kube_network_plugin}",
-                        container_runtime: "${params.container_runtime}",
+                        container_manager: "${params.container_manager}",
                         resolvconf_mode: "${params.resolvconf_mode}",
                         docker_daemon_graph: "${params.docker_daemon_graph}",
                         docker_log_opts: "${params.docker_log_opts}",
