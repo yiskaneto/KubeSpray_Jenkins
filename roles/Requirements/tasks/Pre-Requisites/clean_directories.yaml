@@ -4,6 +4,7 @@
     path: "{{ item }}"
     state: absent
   with_items:
+    - /var/log/messages-*
     - /opt/containerd 
     - /opt/cni 
     - /opt/kubespray 
