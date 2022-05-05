@@ -29,3 +29,6 @@ metrics_server_metric_resolution: "{{ metrics_server_metric_resolution }}"
 metrics_server_kubelet_preferred_address_types: "{{ metrics_server_kubelet_preferred_address_types }}"
 helm_enabled: "{{ helm_enabled }}"
 cert_manager_enabled: "{{ cert_manager_enabled }}"
+
+# File from KubeSpray kubeSpray/inventory/mycluster/group_vars/all/docker.yml
+docker_daemon_graph: "{{ docker_daemon_graph }}"

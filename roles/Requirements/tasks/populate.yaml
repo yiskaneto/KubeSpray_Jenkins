@@ -2,3 +2,4 @@
 - import_tasks: populate/update_all_cluster_variables.yaml
 - import_tasks: populate/update_k8s_cluster_variables.yaml
 - import_tasks: populate/update_k8s_addons_variables.yaml
+- import_tasks: populate/update_all_docker.yaml
