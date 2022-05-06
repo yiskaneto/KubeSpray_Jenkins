@@ -17,6 +17,8 @@
   shell: |
      docker rmi $(docker images -a -q)
   ignore_errors: True
+  async: 180
+  poll: 10
   
 - name: Stopping Docker (if exists)
   shell: |
@@ -31,6 +33,8 @@
   shell: |
     yum -y remove docker-ce docker-ce-cli containerd.io
   ignore_errors: True
+  async: 120
+  poll: 10
 
 - name: Unmounting /var/run/docker/*/* (if exists)
   shell: |
@@ -43,3 +47,5 @@
   shell: |
     rm -rf /var/lib/docker* /etc/docker/ /var/lib/containerd/ /run/docker*
   ignore_errors: True
+  async: 120
+  poll: 10
