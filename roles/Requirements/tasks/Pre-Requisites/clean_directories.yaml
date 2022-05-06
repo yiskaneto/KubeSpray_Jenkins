@@ -11,11 +11,11 @@
     - /opt/kube*
     - /opt/.*
     - /tmp/* 
-    - /tmp/.* 
+    - /tmp/.*
     - /root/.ansible
-    - /var/lib/etcd
-    - /etc/docker/
+    - /etc/docke*
     - /etc/kuber*
+    - /var/lib/etcd
     - /var/lib/dockershim/
     - /var/lib/containerd/
     - /var/lib/docker*
