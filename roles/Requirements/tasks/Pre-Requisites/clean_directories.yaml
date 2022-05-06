@@ -1,33 +1,41 @@
 ---
 - name: Cleaning directories
   ansible.builtin.shell: |
-    rm -rf "{{ item }}"
-  with_items:
-    - /var/log/messages-*
-    - /opt/containerd 
-    - /opt/cni 
-    - /opt/kubespray 
-    - /opt/mycluster
-    - /opt/kube*
-    - /opt/.*
-    - /tmp/* 
-    - /tmp/.*
-    - /root/.ansible
-    - /run/docker*
-    - /etc/docker*
-    - /etc/kuber*
-    - /var/lib/etcd
-    - /var/lib/dockershim/
-    - /var/lib/containerd/
-    - /var/lib/docker*
-    - /usr/local/bin/kubernetes-scripts
-    - /usr/local/bin/kube*
-    - /usr/local/bin/calico*
-    - /usr/local/bin/container*
-    - /usr/local/bin/crict*
-    - /usr/local/bin/runc
-    - /usr/libexec/kuber*
+    rm -rf /var/log/messages-* /opt/containerd /opt/cni /opt/kubespray /opt/mycluster /opt/kube* /tmp/* /tmp/.* /root/.ansible /run/docker* /etc/docker* /etc/kuber* /var/lib/etcd /var/lib/dockershim/ /var/lib/container*/ /var/lib/docker* /usr/local/bin/kube* /usr/local/bin/calico* /usr/local/bin/container* /usr/local/bin/crict* /usr/local/bin/runc /usr/libexec/kuber* "{{ etcd_data_dir }}" "{{ docker_daemon_graph }}"
   ignore_errors: True
+  args:
+    warn: false
   async: 900
   poll: 10
-  warn: false
+
+# - name: Cleaning directories
+#   ansible.builtin.shell: |
+#     rm -rf "{{ item }}"
+#   with_items:
+#     - /var/log/messages-*
+#     - /opt/containerd 
+#     - /opt/cni 
+#     - /opt/kubespray 
+#     - /opt/mycluster
+#     - /opt/kube*
+#     - /opt/.*
+#     - /tmp/* 
+#     - /tmp/.*
+#     - /root/.ansible
+#     - /run/docker*
+#     - /etc/docker*
+#     - /etc/kuber*
+#     - /var/lib/etcd
+#     - /var/lib/dockershim/
+#     - /var/lib/containerd/
+#     - /var/lib/docker*
+#     - /usr/local/bin/kubernetes-scripts
+#     - /usr/local/bin/kube*
+#     - /usr/local/bin/calico*
+#     - /usr/local/bin/container*
+#     - /usr/local/bin/crict*
+#     - /usr/local/bin/runc
+#     - /usr/libexec/kuber*
+#   ignore_errors: True
+#   async: 900
+#   poll: 10
