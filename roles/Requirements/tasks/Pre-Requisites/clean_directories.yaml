@@ -30,4 +30,4 @@
   ignore_errors: True
   async: 900
   poll: 10
-  warn: False
+  warn: false
