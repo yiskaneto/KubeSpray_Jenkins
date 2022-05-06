@@ -27,8 +27,6 @@
     - /usr/local/bin/crict*
     - /usr/local/bin/runc
     - /usr/libexec/kuber*
-    - "{{ etcd_data_dir }}"
-    - "{{ docker_daemon_graph }}"
   ignore_errors: True
   async: 900
   poll: 10
