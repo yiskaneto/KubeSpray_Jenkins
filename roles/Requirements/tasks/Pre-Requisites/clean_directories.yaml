@@ -13,13 +13,13 @@
     - /tmp/* 
     - /tmp/.*
     - /root/.ansible
-    - /etc/docke*
+    - /run/docker*
+    - /etc/docker*
     - /etc/kuber*
     - /var/lib/etcd
     - /var/lib/dockershim/
     - /var/lib/containerd/
     - /var/lib/docker*
-    - /run/docker*
     - /usr/local/bin/kubernetes-scripts
     - /usr/local/bin/kube*
     - /usr/local/bin/calico*
