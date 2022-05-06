@@ -3,11 +3,15 @@
   shell: |
     docker kill $(docker ps -a -q)
   ignore_errors: True
+  async: 120
+  poll: 10
   
 - name: Removing all Docker containers (if Docker exists)
   shell: |
     docker rm $(docker ps -a -q)
   ignore_errors: True
+  async: 120
+  poll: 10
   
 - name: Removing all Docker images (if Docker exists)
   shell: |
@@ -20,6 +24,8 @@
     systemctl disable docker --now
     pkill -9 -f docker
   ignore_errors: True
+  async: 120
+  poll: 10
   
 - name: Uninstalling previous versions of Docker (if exists)
   shell: |
@@ -30,6 +36,8 @@
   shell: |
     umount /var/run/docker/*/*
   ignore_errors: True
+  async: 180
+  poll: 10
 
 - name: Removing old Docker files (if exists)
   shell: |
