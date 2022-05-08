@@ -24,6 +24,8 @@
   shell: |
     systemctl stop docker --now
     systemctl disable docker --now
+    systemctl stop docker.socket --now
+    systemctl disable docker.socket --now
     pkill -9 -f docker
   ignore_errors: True
   async: 120
