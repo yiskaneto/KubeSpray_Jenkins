@@ -47,7 +47,7 @@
 
 - name: Removing old Docker files (if exists)
   shell: |
-    rm -rf /var/lib/docker* /etc/docker/ /var/lib/containerd/ /run/docker*
+    rm -rf /var/lib/docker /etc/docker/ /var/lib/containerd/ /run/docker*
   ignore_errors: True
   async: 120
   poll: 10
