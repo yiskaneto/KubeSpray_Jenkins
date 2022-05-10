@@ -1,7 +1,7 @@
 ---
 - name: Running "kubeadm reset", if k8s exists
   shell: |
-    yes | yes | yes | kubeadm reset
+    yes | yes | kubeadm reset
   ignore_errors: True
 
 - name: Uninstalling previous versions of K8S(if present)
