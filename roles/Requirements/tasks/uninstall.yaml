@@ -5,7 +5,7 @@
 - import_tasks: Pre-Requisites/docker_uninstall.yaml
 - import_tasks: Pre-Requisites/k8s_uninstall.yaml
 - import_tasks: Pre-Requisites/uninstall_calico.yaml
-- import_tasks: Pre-Requisites/containerd_uninstall.yaml
+- import_tasks: Pre-Requisites/etcd_uninstall.yaml
 - import_tasks: Pre-Requisites/clean_directories.yaml
 - import_tasks: Pre-Requisites/killing_process_using_target_ports.yaml
 - import_tasks: Pre-Requisites/reboot_target_node_ansible_way.yaml

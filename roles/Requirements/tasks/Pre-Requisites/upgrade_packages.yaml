@@ -1,4 +1,4 @@
-- name: Install required pacakges
+- name: Install required packages
   yum:
     name: yum-utils
     state: latest

@@ -35,7 +35,7 @@
     rm -rf ~/.kube
   ignore_errors: True
 
-- name: Removing /var/lib/etcd /var/lib/kubelet /etc/kubernetes/ /var/lib/dockershim /var/run/kubernetes /var/lib/cni (If they exist)
+- name: Removing /var/lib/kubelet /etc/kubernetes/ /var/lib/dockershim /var/run/kubernetes /var/lib/cni (If they exist)
   shell: |
-    rm -rf /var/lib/etcd/ /var/lib/kubelet/ /etc/kubernetes/* /etc/kubernetes/ /var/lib/dockershim/ /var/run/kubernetes/ /var/lib/cni/ /etc/cni/
+    rm -rf /var/lib/kubelet/ /etc/kubernetes/* /etc/kubernetes/ /var/lib/dockershim/ /var/run/kubernetes/ /var/lib/cni/ /etc/cni/
   ignore_errors: True
