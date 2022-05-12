@@ -35,5 +35,8 @@ cert_manager_enabled: "{{ cert_manager_enabled }}"
 docker_daemon_graph: "{{ docker_daemon_graph }}"
 docker_log_opts: "{{ docker_log_opts }}"
 
+# File from KubeSpray kubeSpray/inventory/mycluster/group_vars/all/containerd.yml
+containerd_storage_dir: "{{ containerd_storage_dir }}"
+
 # File from KubeSpray kubeSpray/inventory/mycluster/group_vars/etcd.yml
 etcd_deployment_type: "{{ etcd_deployment_type }}"

@@ -141,7 +141,12 @@ pipeline {
         string(
             name: 'docker_daemon_graph',
             defaultValue: '/var/lib/docker',
-            description: 'Path used to store Docker data'
+            description: 'Path used to store Docker data. ONLY valid if container_manager is set to docker'
+        )
+        string(
+            name: 'containerd_storage_dir',
+            defaultValue: '/var/lib/container',
+            description: 'Path used to store containerd data. ONLY valid if container_manager is set to containerd'
         )
         string(
             name: 'docker_log_opts',
@@ -374,6 +379,7 @@ pipeline {
                         container_manager: "${params.container_manager}",
                         resolvconf_mode: "${params.resolvconf_mode}",
                         docker_daemon_graph: "${params.docker_daemon_graph}",
+                        containerd_storage_dir: "${params.containerd_storage_dir}",
                         docker_log_opts: "${params.docker_log_opts}",
                         local_release_dir: "${params.kubespray_temp_dir}",
                         kube_service_addresses: "${params.kube_service_addresses}",
