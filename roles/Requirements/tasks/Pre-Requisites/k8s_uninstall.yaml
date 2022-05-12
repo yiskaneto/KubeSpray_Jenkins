@@ -11,6 +11,7 @@
     - kubelet
     - kubeadm
     - kubectl
+  ignore_errors: True
 
 - name: "Disabling {{ item }}"
   shell: |
@@ -19,6 +20,7 @@
     - kubelet
     - kubeadm
     - kubectl
+  ignore_errors: True
 
 - name: Uninstalling previous versions of K8S(if present)
   shell: |

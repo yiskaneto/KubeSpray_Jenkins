@@ -35,7 +35,6 @@
 - name: Force Docker to stop
   shell: |
     pkill -9 -f docker
-    pkill -9 -f docker*
   ignore_errors: True
   async: 120
   poll: 10 
@@ -56,7 +55,7 @@
 
 - name: Removing old Docker files (if exists)
   shell: |
-    rm -rf /var/lib/docker /etc/docker/ /var/lib/containerd/ /run/docker*
+    rm -rf /var/lib/docker /etc/docker/ /var/lib/containerd/ /run/docker* /etc/systemd/system/containerd.service*
   ignore_errors: True
   async: 120
   poll: 10
