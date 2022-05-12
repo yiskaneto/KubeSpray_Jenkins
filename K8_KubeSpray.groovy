@@ -288,6 +288,7 @@ pipeline {
                         https_proxy: "${params.https_proxy}",
                         no_proxy: "${params.no_proxy}",
                         use_external_load_balancer: "${params.use_external_load_balancer}",
+                        etcd_data_dir: "${params.etcd_data_dir}",
                         docker_daemon_graph: "${params.docker_daemon_graph}",
                         containerd_storage_dir: "${params.containerd_storage_dir}",
                         local_release_dir: "${params.kubespray_temp_dir}"
@@ -313,6 +314,7 @@ pipeline {
                         https_proxy: "${params.https_proxy}",
                         no_proxy: "${params.no_proxy}",
                         use_external_load_balancer: "${params.use_external_load_balancer}",
+                        etcd_data_dir: "${params.etcd_data_dir}",
                         docker_daemon_graph: "${params.docker_daemon_graph}",
                         containerd_storage_dir: "${params.containerd_storage_dir}",
                         local_release_dir: "${params.kubespray_temp_dir}"
