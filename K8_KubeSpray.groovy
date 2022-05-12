@@ -287,7 +287,10 @@ pipeline {
                         http_proxy: "${params.http_proxy}",
                         https_proxy: "${params.https_proxy}",
                         no_proxy: "${params.no_proxy}",
-                        use_external_load_balancer: "${params.use_external_load_balancer}"
+                        use_external_load_balancer: "${params.use_external_load_balancer}",
+                        docker_daemon_graph: "${params.docker_daemon_graph}",
+                        containerd_storage_dir: "${params.containerd_storage_dir}",
+                        local_release_dir: "${params.kubespray_temp_dir}"
                     ]
                 )
             }
@@ -309,7 +312,10 @@ pipeline {
                         http_proxy: "${params.http_proxy}",
                         https_proxy: "${params.https_proxy}",
                         no_proxy: "${params.no_proxy}",
-                        use_external_load_balancer: "${params.use_external_load_balancer}"
+                        use_external_load_balancer: "${params.use_external_load_balancer}",
+                        docker_daemon_graph: "${params.docker_daemon_graph}",
+                        containerd_storage_dir: "${params.containerd_storage_dir}",
+                        local_release_dir: "${params.kubespray_temp_dir}"
                     ]
                 )
             }
@@ -381,9 +387,9 @@ pipeline {
                         docker_daemon_graph: "${params.docker_daemon_graph}",
                         containerd_storage_dir: "${params.containerd_storage_dir}",
                         docker_log_opts: "${params.docker_log_opts}",
-                        local_release_dir: "${params.kubespray_temp_dir}",
                         kube_service_addresses: "${params.kube_service_addresses}",
-                        kube_pods_subnet: "${params.kube_pods_subnet}"
+                        kube_pods_subnet: "${params.kube_pods_subnet}",
+                        local_release_dir: "${params.kubespray_temp_dir}"
                     ]
                 )
             }
