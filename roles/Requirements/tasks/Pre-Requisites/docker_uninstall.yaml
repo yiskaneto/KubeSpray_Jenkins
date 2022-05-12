@@ -27,13 +27,22 @@
     systemctl stop docker.socket --now
     systemctl disable docker.socket --now
     pkill -9 -f docker
+    pkill -9 -f docker*
   ignore_errors: True
   async: 120
   poll: 10
+
+- name: Force Docker to stop
+  shell: |
+    pkill -9 -f docker
+    pkill -9 -f docker*
+  ignore_errors: True
+  async: 120
+  poll: 10 
   
 - name: Uninstalling previous versions of Docker (if exists)
   shell: |
-    yum -y remove docker-ce docker-ce-cli containerd.io
+    yum remove docker docker-client docker-client-latest docker-common docker-latest docker-latest-logrotate docker-logrotate docker-engine podman runc
   ignore_errors: True
   async: 120
   poll: 10

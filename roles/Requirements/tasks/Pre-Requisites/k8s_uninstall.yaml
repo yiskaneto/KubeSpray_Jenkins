@@ -4,9 +4,25 @@
     yes | yes | kubeadm reset
   ignore_errors: True
 
+- name: "Stopping {{ item }}"
+  shell: |
+    systemctl stop {{ item }} --now
+  with_items:
+    - kubelet
+    - kubeadm
+    - kubectl
+
+- name: "Disabling {{ item }}"
+  shell: |
+    systemctl disable {{ item }} --now
+  with_items:
+    - kubelet
+    - kubeadm
+    - kubectl
+
 - name: Uninstalling previous versions of K8S(if present)
   shell: |
-    yum remove -y kubeadm kubectl kubelet kubernetes-cni kube*
+    yum remove -y kubeadm kubectl kubelet kubernetes-cni
   ignore_errors: True
 
 - name: yum autoremove

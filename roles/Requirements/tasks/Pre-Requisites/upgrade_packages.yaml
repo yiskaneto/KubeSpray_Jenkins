@@ -1,5 +1,18 @@
-- name: Upgrade all packages, excluding kernel
+- name: Install required pacakges
   yum:
-    name: '*'
+    name: yum-utils
     state: latest
-    exclude: kernel**
+  async: 600
+  poll: 10
+
+- name: Add Docker stable repo
+  yum_repository:
+    name: epel
+    description: Docker stable
+    baseurl: https://download.docker.com/linux/centos/docker-ce.repo
+
+# - name: Upgrade all packages, excluding kernel
+#   yum:
+#     name: '*'
+#     state: latest
+#     exclude: kernel**
