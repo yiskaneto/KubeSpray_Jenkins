@@ -5,7 +5,7 @@
   tasks:
     - name: Cleaning directories
       ansible.builtin.shell: |
-        rm -rf /var/log/messages-* /tmp/*
+        rm -rf /var/log/messages-* /tmp/* /var/cache/yum/*
       ignore_errors: True
       args:
         warn: false
