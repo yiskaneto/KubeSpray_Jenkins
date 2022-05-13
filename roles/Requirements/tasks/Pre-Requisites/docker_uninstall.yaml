@@ -41,7 +41,7 @@
   
 - name: Uninstalling previous versions of Docker (if exists)
   shell: |
-    yum remove docker docker-client docker-client-latest docker-common docker-latest docker-latest-logrotate docker-logrotate docker-engine podman runc
+    yum remove -y docker docker-client docker-client-latest docker-common docker-latest docker-latest-logrotate docker-logrotate docker-engine podman runc
   ignore_errors: True
   async: 120
   poll: 10
