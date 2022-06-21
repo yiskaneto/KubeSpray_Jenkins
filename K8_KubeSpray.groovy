@@ -326,7 +326,7 @@ pipeline {
                 sh """
                 cd ${WORKSPACE}/
                 whoami
-                echo ${HTTP_PROXY}
+                echo ${https_proxy}
                 git clone https://github.com/kubernetes-sigs/kubespray.git
                 cd kubespray
                 git checkout tags/v2.18.1
