@@ -293,7 +293,9 @@ pipeline {
                 ansiblePlaybook(
                     playbook: "${env.WORKSPACE}/kubespray/reset.yml",
                     inventory: "${env.WORKSPACE}/inventory.ini",
-                    forks: 16,
+                    become: true,
+                    becomeUser: "root",
+                    forks: 8,
                     colorized: true,
                     extras: '-u ${user} --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" --flush-cache -v',
                     extraVars: [
@@ -301,7 +303,6 @@ pipeline {
                         http_proxy: "${params.http_proxy}",
                         https_proxy: "${params.https_proxy}",
                         no_proxy: "${params.no_proxy}",
-                        use_external_load_balancer: "${params.use_external_load_balancer}",
                     ]
                 )
             }
