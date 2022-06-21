@@ -271,31 +271,31 @@ pipeline {
             }
         }
 
-        stage('Uninstalling KubeSpray') {
-            when {
-                expression { params.uninstall_kubespray == true }
-            }
-            steps {
-                ansiblePlaybook(
-                    playbook: "${env.WORKSPACE}/roles/Requirements/main_uninstall.yaml",
-                    inventory: "${env.WORKSPACE}/inventory.ini",
-                    forks: 16,
-                    colorized: true,
-                    extras: '-u ${user} --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" --flush-cache -v',
-                    extraVars: [
-                        jenkins_workspace: "${env.WORKSPACE}/",
-                        http_proxy: "${params.http_proxy}",
-                        https_proxy: "${params.https_proxy}",
-                        no_proxy: "${params.no_proxy}",
-                        use_external_load_balancer: "${params.use_external_load_balancer}",
-                        etcd_data_dir: "${params.etcd_data_dir}",
-                        docker_daemon_graph: "${params.docker_daemon_graph}",
-                        containerd_storage_dir: "${params.containerd_storage_dir}",
-                        local_release_dir: "${params.kubespray_temp_dir}"
-                    ]
-                )
-            }
-        }
+        // stage('Uninstalling KubeSpray') {
+        //     when {
+        //         expression { params.uninstall_kubespray == true }
+        //     }
+        //     steps {
+        //         ansiblePlaybook(
+        //             playbook: "${env.WORKSPACE}/roles/Requirements/main_uninstall.yaml",
+        //             inventory: "${env.WORKSPACE}/inventory.ini",
+        //             forks: 16,
+        //             colorized: true,
+        //             extras: '-u ${user} --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" --flush-cache -v',
+        //             extraVars: [
+        //                 jenkins_workspace: "${env.WORKSPACE}/",
+        //                 http_proxy: "${params.http_proxy}",
+        //                 https_proxy: "${params.https_proxy}",
+        //                 no_proxy: "${params.no_proxy}",
+        //                 use_external_load_balancer: "${params.use_external_load_balancer}",
+        //                 etcd_data_dir: "${params.etcd_data_dir}",
+        //                 docker_daemon_graph: "${params.docker_daemon_graph}",
+        //                 containerd_storage_dir: "${params.containerd_storage_dir}",
+        //                 local_release_dir: "${params.kubespray_temp_dir}"
+        //             ]
+        //         )
+        //     }
+        // }
 
         stage('Running OS requirements K8s') {
             when {
