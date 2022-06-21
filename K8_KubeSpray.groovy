@@ -273,7 +273,7 @@ pipeline {
 
         stage('Clonning KubeSpray project') {
             when {
-                expression {params.run_requirements == true || params.install_kubespray == true}
+                expression {params.run_requirements == true}
             }
             steps {
                 sh """
