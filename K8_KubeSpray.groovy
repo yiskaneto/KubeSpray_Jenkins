@@ -280,6 +280,9 @@ pipeline {
                 git clone https://github.com/kubernetes-sigs/kubespray.git
                 cd kubespray
                 git checkout tags/v2.18.1
+                cp ${WORKSPACE}/roles/scripts/kubeSpray_venv_install_requirements.sh .
+                chmod +x kubeSpray_venv_install_requirements.sh
+                ./kubeSpray_venv_install_requirements.sh
                 """
             }
         }
@@ -290,6 +293,7 @@ pipeline {
             }
             steps {
                 ansiblePlaybook(
+                    installation: "${WORKSPACE}/kubespray/venv/bin",
                     playbook: "${env.WORKSPACE}/kubespray/reset.yml",
                     inventory: "${env.WORKSPACE}/inventory.ini",
                     become: true,
