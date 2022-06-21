@@ -259,23 +259,23 @@ pipeline {
 			}
 		}
 
-        stage('SSH Key Pair Tasks') {
-            steps {
-                ansiblePlaybook(
-                    playbook: "${env.WORKSPACE}/roles/playbooks/ssh_keys_tasks.yaml",
-                    inventory: "${env.WORKSPACE}/inventory.ini",
-                    forks: 16,
-                    colorized: true,
-                    extras: '-u ${user} --ssh-extra-args="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" --flush-cache -v'
-                )
-            }
-        }
+        // stage('SSH Key Pair Tasks') {
+        //     steps {
+        //         ansiblePlaybook(
+        //             playbook: "${env.WORKSPACE}/roles/playbooks/ssh_keys_tasks.yaml",
+        //             inventory: "${env.WORKSPACE}/inventory.ini",
+        //             forks: 16,
+        //             colorized: true,
+        //             extras: '-u ${user} --ssh-extra-args="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" --flush-cache -v'
+        //         )
+        //     }
+        // }
 
         stage('Clonning KubeSpray project') {
             steps {
                 sh """
                 cd ${WORKSPACE}/
-                pwd
+                whoami
                 git clone https://github.com/kubernetes-sigs/kubespray.git
                 cd kubespray
                 git checkout tags/v2.18.1
