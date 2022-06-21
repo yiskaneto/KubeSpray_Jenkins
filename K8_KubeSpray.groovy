@@ -275,6 +275,7 @@ pipeline {
             steps {
                 sh """
                 cd ${WORKSPACE}/
+                pwd
                 git clone https://github.com/kubernetes-sigs/kubespray.git
                 cd kubespray
                 git checkout tags/v2.18.1
