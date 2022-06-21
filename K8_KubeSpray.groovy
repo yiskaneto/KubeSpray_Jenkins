@@ -271,29 +271,41 @@ pipeline {
         //     }
         // }
 
+        stage('Clonning KubeSpray project') {
+            steps {
+                sh """
+                cd ${WORKSPACE}/
+                whoami
+                echo ${https_proxy}
+                git clone https://github.com/kubernetes-sigs/kubespray.git
+                cd kubespray
+                git checkout tags/v2.18.1
+                """
+            }
+        }
 
-        // stage('Reset K8s Cluster') {
-        //     when {
-        //         expression { params.reset_k8s_cluster == true }
-        //     }
-        //     steps {
-        //         ansiblePlaybook(
-        //             playbook: "${env.WORKSPACE}/kubespray/reset.yml",
-        //             inventory: "${env.WORKSPACE}/inventory.ini",
-        //             become: true,
-        //             becomeUser: "root",
-        //             forks: 8,
-        //             colorized: true,
-        //             extras: '-u ${user} --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" --flush-cache -v',
-        //             extraVars: [
-        //                 jenkins_workspace: "${env.WORKSPACE}/",
-        //                 http_proxy: "${params.http_proxy}",
-        //                 https_proxy: "${params.https_proxy}",
-        //                 no_proxy: "${params.no_proxy}",
-        //             ]
-        //         )
-        //     }
-        // }
+        stage('Reset K8s Cluster') {
+            when {
+                expression { params.reset_k8s_cluster == true }
+            }
+            steps {
+                ansiblePlaybook(
+                    playbook: "${env.WORKSPACE}/kubespray/reset.yml",
+                    inventory: "${env.WORKSPACE}/inventory.ini",
+                    become: true,
+                    becomeUser: "root",
+                    forks: 8,
+                    colorized: true,
+                    extras: '-u ${user} --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" --flush-cache -v',
+                    extraVars: [
+                        jenkins_workspace: "${env.WORKSPACE}/",
+                        http_proxy: "${params.http_proxy}",
+                        https_proxy: "${params.https_proxy}",
+                        no_proxy: "${params.no_proxy}",
+                    ]
+                )
+            }
+        }
 
         stage('Running OS requirements K8s') {
             when {
@@ -318,19 +330,6 @@ pipeline {
                         kubespray_temp_dir: "${params.kubespray_temp_dir}"
                     ]
                 )
-            }
-        }
-
-        stage('Clonning KubeSpray project') {
-            steps {
-                sh """
-                cd ${WORKSPACE}/
-                whoami
-                echo ${https_proxy}
-                git clone https://github.com/kubernetes-sigs/kubespray.git
-                cd kubespray
-                git checkout tags/v2.18.1
-                """
             }
         }
 
