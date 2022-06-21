@@ -302,6 +302,7 @@ pipeline {
                         http_proxy: "${params.http_proxy}",
                         https_proxy: "${params.https_proxy}",
                         no_proxy: "${params.no_proxy}",
+                        reset_confirmation: "yes"
                     ]
                 )
             }
