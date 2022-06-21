@@ -272,9 +272,6 @@ pipeline {
         }
 
         stage('Clonning KubeSpray project') {
-            when {
-                expression {params.run_requirements == true}
-            }
             steps {
                 sh """
                 cd ${WORKSPACE}/
