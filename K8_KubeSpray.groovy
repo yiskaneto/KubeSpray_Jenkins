@@ -291,7 +291,7 @@ pipeline {
         //                 etcd_data_dir: "${params.etcd_data_dir}",
         //                 docker_daemon_graph: "${params.docker_daemon_graph}",
         //                 containerd_storage_dir: "${params.containerd_storage_dir}",
-        //                 local_release_dir: "${params.kubespray_temp_dir}"
+        //                 kubespray_temp_dir: "${params.kubespray_temp_dir}"
         //             ]
         //         )
         //     }
@@ -317,7 +317,7 @@ pipeline {
                         etcd_data_dir: "${params.etcd_data_dir}",
                         docker_daemon_graph: "${params.docker_daemon_graph}",
                         containerd_storage_dir: "${params.containerd_storage_dir}",
-                        local_release_dir: "${params.kubespray_temp_dir}"
+                        kubespray_temp_dir: "${params.kubespray_temp_dir}"
                     ]
                 )
             }
