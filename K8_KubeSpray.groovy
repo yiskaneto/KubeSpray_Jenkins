@@ -50,7 +50,7 @@ calico_rr'''
 pipeline {
 	agent { label 'ansible' }
 	options {
-		ansiColor('xterm')
+		ansiColor('gnome-terminal')
 		// ansiColor('vga')
 		// ansiColor('css')
 		// ansiColor('gnome-terminal')
