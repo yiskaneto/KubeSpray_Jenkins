@@ -349,9 +349,9 @@ pipeline {
         }  
 
         stage('Setting KubeSpray Env') {
-            // when {
-            //     expression { ( params.run_requirements == true || params.install_kubespray == true ) && params.only_reset_k8s_cluster == false }
-            // }
+            when {
+                expression { ( params.run_requirements == true || params.install_kubespray == true ) && params.only_reset_k8s_cluster == false }
+            }
             steps {
                 sh """
                 echo "Setting KubeSpray Env"
