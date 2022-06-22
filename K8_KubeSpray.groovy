@@ -279,8 +279,10 @@ pipeline {
                 echo ${https_proxy}
                 git clone https://github.com/kubernetes-sigs/kubespray.git
                 cd kubespray
-                git checkout -b tags/v2.8.2
-                sudo pip install -r requirements.txt
+                git checkout tags/v2.18.1
+                cp ${WORKSPACE}/roles/scripts/kubeSpray_venv_install_requirements.sh .
+                chmod +x kubeSpray_venv_install_requirements.sh
+                ./kubeSpray_venv_install_requirements.sh
                 """
             }
         }
