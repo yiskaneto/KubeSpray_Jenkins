@@ -352,23 +352,30 @@ pipeline {
                 expression { params.reset_k8s_cluster == true }
             }
             steps {
-                ansiblePlaybook(
-                    installation: "${WORKSPACE}/kubespray/venv/bin",
-                    playbook: "${env.WORKSPACE}/kubespray/reset.yml",
-                    inventory: "${env.WORKSPACE}/inventory.ini",
-                    become: true,
-                    becomeUser: "root",
-                    forks: 8,
-                    colorized: true,
-                    extras: '-u ${user} --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" --flush-cache -v',
-                    extraVars: [
-                        jenkins_workspace: "${env.WORKSPACE}/",
-                        http_proxy: "${params.http_proxy}",
-                        https_proxy: "${params.https_proxy}",
-                        no_proxy: "${params.no_proxy}",
-                        reset_confirmation: "yes"
-                    ]
-                )
+                // ansiblePlaybook(
+                //     installation: "${WORKSPACE}/kubespray/venv/bin",
+                //     playbook: "${env.WORKSPACE}/kubespray/reset.yml",
+                //     inventory: "${env.WORKSPACE}/inventory.ini",
+                //     become: true,
+                //     becomeUser: "root",
+                //     forks: 8,
+                //     colorized: true,
+                //     extras: '-u ${user} --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"',
+                //     extraVars: [
+                //         jenkins_workspace: "${env.WORKSPACE}/",
+                //         http_proxy: "${params.http_proxy}",
+                //         https_proxy: "${params.https_proxy}",
+                //         no_proxy: "${params.no_proxy}",
+                //         reset_confirmation: "yes"
+                //     ]
+                // )
+                sh '''
+                cd ${WORKSPACE}/kubespray/ ; echo -e "\n"
+                pwd ; echo -e "\n"
+                source venv/bin/activate ; echo -e "\n\n"
+                until time ansible-playbook -i ${WORKSPACE}/inventory.ini reset.yml -u root --become --become-user=root --extra-vars "http_proxy=${http_proxy} https_proxy=${https_proxy} no_proxy=${no_proxy}" ; do sleep 5 ; done
+                deactivate ; echo -e "\n"s
+                '''
             }
         }
 
