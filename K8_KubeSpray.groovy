@@ -313,7 +313,7 @@ pipeline {
                 cd ${WORKSPACE}/kubespray/ ; echo -e "\n"
                 pwd ; echo -e "\n"
                 source venv/bin/activate ; echo -e "\n\n"
-                until time ansible-playbook -i ${WORKSPACE}/inventory.ini reset.yml -u root --become --become-user=root --extra-vars "http_proxy=${http_proxy} https_proxy=${https_proxy} no_proxy=${no_proxy}" ; do sleep 5 ; done
+                until time ansible-playbook -i ${WORKSPACE}/inventory.ini reset.yml -u root --become --become-user=root --extra-vars "http_proxy=${http_proxy} https_proxy=${https_proxy} no_proxy=${no_proxy} reset_confirmation='yes'" ; do sleep 5 ; done
                 deactivate ; echo -e "\n"s
                 '''
             }
