@@ -3,4 +3,4 @@
   ansible.builtin.lineinfile:
     path: "{{ jenkins_workspace }}kubespray/inventory/mycluster/group_vars/k8s_cluster/k8s-cluster.yml"
     regexp: "^kube_apiserver_ip: "
-    line: "kube_apiserver_ip: {{ ansible_hostname }}"
+    line: "kube_apiserver_ip: {{ ansible_host }}"
