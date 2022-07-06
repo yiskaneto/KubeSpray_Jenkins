@@ -240,7 +240,7 @@ pipeline {
         )
         string(
             name: 'nodelocaldns_ip',
-            defaultValue: '10.233.64.0/18',
+            defaultValue: '10.233.0.10',
             description: 'Internal network. When used, it will assign IP addresses from this range to individual pods. This network must be unused in your network infrastructure!'
         )
         string(
