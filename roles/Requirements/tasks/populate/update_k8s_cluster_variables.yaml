@@ -23,6 +23,12 @@
     regexp: "^kube_pods_subnet: "
     line: "kube_pods_subnet: {{ kube_pods_subnet }}"
 
+- name: Updating nodelocaldns_ip inventory/mycluster/group_vars/k8s_cluster/k8s-cluster.yml
+  ansible.builtin.lineinfile:
+    path: "{{ jenkins_workspace }}kubespray/inventory/mycluster/group_vars/k8s_cluster/k8s-cluster.yml"
+    regexp: "^nodelocaldns_ip: "
+    line: "nodelocaldns_ip: {{ nodelocaldns_ip }}"
+
 - name: Updating cluster_name inventory/mycluster/group_vars/k8s_cluster/k8s-cluster.yml
   ansible.builtin.lineinfile:
     path: "{{ jenkins_workspace }}kubespray/inventory/mycluster/group_vars/k8s_cluster/k8s-cluster.yml"

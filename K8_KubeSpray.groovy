@@ -239,6 +239,11 @@ pipeline {
             description: 'Internal network. When used, it will assign IP addresses from this range to individual pods. This network must be unused in your network infrastructure!'
         )
         string(
+            name: 'nodelocaldns_ip',
+            defaultValue: '10.233.64.0/18',
+            description: 'Internal network. When used, it will assign IP addresses from this range to individual pods. This network must be unused in your network infrastructure!'
+        )
+        string(
             name: 'kubespray_temp_dir',
             defaultValue: '/tmp/kubespray_temp_dir',
             description: "Where the binaries will be downloaded. Note: ensure that you've enough disk space (about 1G)"
@@ -402,6 +407,7 @@ pipeline {
                         docker_log_opts: "${params.docker_log_opts}",
                         kube_service_addresses: "${params.kube_service_addresses}",
                         kube_pods_subnet: "${params.kube_pods_subnet}",
+                        nodelocaldns_ip: "${params.nodelocaldns_ip}",
                         local_release_dir: "${params.kubespray_temp_dir}"
                     ]
                 )
