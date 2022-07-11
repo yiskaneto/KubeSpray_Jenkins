@@ -117,6 +117,7 @@ pipeline {
         choice(
             name: 'kube_network_plugin',
             choices: ['calico','flannel','cilium','weave','cloud'],
+            description: 'valid values: calico, flannel, weave, cloud'
 		)
         choice(
             name: 'etcd_deployment_type',
