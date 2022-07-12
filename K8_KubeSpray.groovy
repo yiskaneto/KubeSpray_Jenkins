@@ -359,7 +359,7 @@ pipeline {
             }
         }
 
-        // stage('Running OS requirements K8s') {
+        // stage('Running OS requirements K8s') { 
         //     when {
         //         expression { params.run_requirements == true && params.only_reset_k8s_cluster == false }
         //     }
