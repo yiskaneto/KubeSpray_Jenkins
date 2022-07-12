@@ -251,8 +251,8 @@ pipeline {
         )
         string(
             name: 'nodelocaldns_ip',
-            defaultValue: '10.233.0.10',
-            description: 'Internal network. When used, it will assign IP addresses from this range to individual pods. This network must be unused in your network infrastructure!'
+            defaultValue: '169.254.25.10',
+            description: "node local dns ip, which will be a be added in the nodes' /etc/resolve.conf"
         )
         string(
             name: 'kubespray_temp_dir',
