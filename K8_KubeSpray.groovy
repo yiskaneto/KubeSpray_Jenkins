@@ -229,6 +229,11 @@ pipeline {
             defaultValue: false,
             description: 'Whether or not to use localhost as kubeapi loadbalancer'
         )
+        choice(
+            name: 'kube_proxy_mode',
+            choices: ['ipvs','iptables'],
+            description: 'Valid values: ipvs, iptables. Use ipvs for Red Hat-Based Linux Distributions'
+		)
         string(
             name: 'kube_service_addresses',
             defaultValue: '10.233.0.0/18',
