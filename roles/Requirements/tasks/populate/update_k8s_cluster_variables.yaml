@@ -11,6 +11,12 @@
     regexp: "^kube_network_plugin: "
     line: "kube_network_plugin: {{ kube_network_plugin }}"
 
+- name: Updating kube_proxy_mode inventory/mycluster/group_vars/k8s_cluster/k8s-cluster.yml
+  ansible.builtin.lineinfile:
+    path: "{{ jenkins_workspace }}kubespray/inventory/mycluster/group_vars/k8s_cluster/k8s-cluster.yml"
+    regexp: "^kube_proxy_mode: "
+    line: "kube_proxy_mode: {{ kube_proxy_mode }}"
+
 - name: Updating kube_service_addresses inventory/mycluster/group_vars/k8s_cluster/k8s-cluster.yml
   ansible.builtin.lineinfile:
     path: "{{ jenkins_workspace }}kubespray/inventory/mycluster/group_vars/k8s_cluster/k8s-cluster.yml"

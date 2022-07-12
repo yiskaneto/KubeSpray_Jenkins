@@ -411,6 +411,7 @@ pipeline {
                         docker_daemon_graph: "${params.docker_daemon_graph}",
                         containerd_storage_dir: "${params.containerd_storage_dir}",
                         docker_log_opts: "${params.docker_log_opts}",
+                        kube_proxy_mode: "${params.kube_proxy_mode}",
                         kube_service_addresses: "${params.kube_service_addresses}",
                         kube_pods_subnet: "${params.kube_pods_subnet}",
                         nodelocaldns_ip: "${params.nodelocaldns_ip}",
