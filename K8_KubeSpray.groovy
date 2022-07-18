@@ -256,7 +256,7 @@ pipeline {
         )
         string(
             name: 'nodelocaldns_ip',
-            defaultValue: '169.254.25.10',
+            defaultValue: '10.233.0.10',
             description: "node local dns ip, which will be a be added in the nodes' /etc/resolve.conf"
         )
         string(
