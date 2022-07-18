@@ -42,3 +42,6 @@ containerd_storage_dir: "{{ containerd_storage_dir }}"
 
 # File from KubeSpray kubeSpray/inventory/mycluster/group_vars/etcd.yml
 etcd_deployment_type: "{{ etcd_deployment_type }}"
+
+# File from KubeSpray kubeSpray/inventory/mycluster/group_vars/k8s_cluster/k8s-net-calico.yml
+calico_iptables_backend: "{{ calico_iptables_backend }}"

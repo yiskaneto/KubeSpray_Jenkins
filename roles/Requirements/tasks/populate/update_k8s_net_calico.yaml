@@ -1,0 +1,6 @@
+---
+- name: Updating calico_iptables_backend on inventory/mycluster/group_vars/k8s_cluster/k8s-net-calico.yml
+  ansible.builtin.lineinfile:
+    path: "{{ jenkins_workspace }}kubespray/inventory/mycluster/group_vars/k8s_cluster/k8s-net-calico.yml"
+    regexp: "^calico_iptables_backend: "
+    line: "calico_iptables_backend: {{ calico_iptables_backend }}"

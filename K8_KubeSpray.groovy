@@ -122,7 +122,12 @@ pipeline {
         choice(
             name: 'kube_network_plugin',
             choices: ['calico','flannel','cilium','weave','cloud','canal'],
-            description: 'valid values: calico, flannel, weave, cloud, canal'
+            description: 'valid values: calico, flannel, cilium, weave, cloud, canal'
+		)
+        choice(
+            name: 'calico_iptables_backend',
+            choices: ['NFT','Auto','Legacy'],
+            description: 'valid values: NFT, Auto, Legacy. '
 		)
         choice(
             name: 'etcd_deployment_type',
@@ -414,6 +419,7 @@ pipeline {
                         http_proxy: "${params.http_proxy}",
                         https_proxy: "${params.https_proxy}",
                         no_proxy: "${params.no_proxy}",
+                        calico_iptables_backend: "${params.calico_iptables_backend}",
                         etcd_deployment_type: "${params.etcd_deployment_type}",
                         etcd_data_dir: "${params.etcd_data_dir}",
                         use_external_load_balancer: "${params.use_external_load_balancer}",
