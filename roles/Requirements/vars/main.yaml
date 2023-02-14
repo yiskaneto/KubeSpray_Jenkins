@@ -15,8 +15,10 @@ no_proxy: "{{ no_proxy }}"
 # File from KubeSpray kubeSpray/inventory/mycluster/group_vars/k8s_cluster/k8s_cluster.yml
 cluster_name: "{{ cluster_name }}"
 local_release_dir: "{{ local_release_dir }}"
+kube_proxy_mode: "{{ kube_proxy_mode }}"
 kube_service_addresses: "{{ kube_service_addresses }}"
 kube_pods_subnet: "{{ kube_pods_subnet }}"
+nodelocaldns_ip: "{{ nodelocaldns_ip }}"
 container_manager: "{{ container_manager }}"
 resolvconf_mode: "{{ resolvconf_mode }}"
 kube_network_plugin: "{{ kube_network_plugin }}"
@@ -40,3 +42,6 @@ containerd_storage_dir: "{{ containerd_storage_dir }}"
 
 # File from KubeSpray kubeSpray/inventory/mycluster/group_vars/etcd.yml
 etcd_deployment_type: "{{ etcd_deployment_type }}"
+
+# File from KubeSpray kubeSpray/inventory/mycluster/group_vars/k8s_cluster/k8s-net-calico.yml
+calico_iptables_backend: "{{ calico_iptables_backend }}"

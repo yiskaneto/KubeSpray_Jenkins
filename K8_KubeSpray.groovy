@@ -70,6 +70,11 @@ pipeline {
             description: 'Only uninstall, if this is set to true then the other stages will be skiped'
         )
         booleanParam(
+            name: 'restart_node',
+            defaultValue: false,
+            description: 'Recommended after resseting k8s'
+        )
+        booleanParam(
             name: 'run_requirements',
             defaultValue: true,
             description: 'Set OS requirements'
@@ -116,7 +121,13 @@ pipeline {
         )
         choice(
             name: 'kube_network_plugin',
-            choices: ['calico','flannel','cilium','weave','cloud'],
+            choices: ['calico','flannel','cilium','weave','cloud','canal'],
+            description: 'valid values: calico, flannel, cilium, weave, cloud, canal'
+		)
+        choice(
+            name: 'calico_iptables_backend',
+            choices: ['NFT','Auto','Legacy'],
+            description: 'valid values: NFT, Auto, Legacy. '
 		)
         choice(
             name: 'etcd_deployment_type',
@@ -228,6 +239,11 @@ pipeline {
             defaultValue: false,
             description: 'Whether or not to use localhost as kubeapi loadbalancer'
         )
+        choice(
+            name: 'kube_proxy_mode',
+            choices: ['ipvs','iptables'],
+            description: 'Valid values: ipvs, iptables. Use ipvs for Red Hat-Based Linux Distributions'
+		)
         string(
             name: 'kube_service_addresses',
             defaultValue: '10.233.0.0/18',
@@ -237,6 +253,11 @@ pipeline {
             name: 'kube_pods_subnet',
             defaultValue: '10.233.64.0/18',
             description: 'Internal network. When used, it will assign IP addresses from this range to individual pods. This network must be unused in your network infrastructure!'
+        )
+        string(
+            name: 'nodelocaldns_ip',
+            defaultValue: '10.233.0.10',
+            description: "node local dns ip, which will be a be added in the nodes' /etc/resolve.conf"
         )
         string(
             name: 'kubespray_temp_dir',
@@ -322,7 +343,28 @@ pipeline {
             }
         }
 
-        // stage('Running OS requirements K8s') {
+        stage('Reboot Nodes') {
+            when {
+                expression { params.restart_node == true }
+            }
+            steps {
+                sh """
+                echo "Rebooting nodes"
+                """
+                ansiblePlaybook(
+                    playbook: "${env.WORKSPACE}/roles/Requirements/reboot_target_nodes.yaml",
+                    inventory: "${env.WORKSPACE}/inventory.ini",
+                    forks: 16,
+                    colorized: true,
+                    extras: '-u ${user} --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" --flush-cache -v',
+                    extraVars: [
+                        jenkins_workspace: "${env.WORKSPACE}/"
+                    ]
+                )
+            }
+        }
+
+        // stage('Running OS requirements K8s') { 
         //     when {
         //         expression { params.run_requirements == true && params.only_reset_k8s_cluster == false }
         //     }
@@ -377,6 +419,7 @@ pipeline {
                         http_proxy: "${params.http_proxy}",
                         https_proxy: "${params.https_proxy}",
                         no_proxy: "${params.no_proxy}",
+                        calico_iptables_backend: "${params.calico_iptables_backend}",
                         etcd_deployment_type: "${params.etcd_deployment_type}",
                         etcd_data_dir: "${params.etcd_data_dir}",
                         use_external_load_balancer: "${params.use_external_load_balancer}",
@@ -400,13 +443,15 @@ pipeline {
                         docker_daemon_graph: "${params.docker_daemon_graph}",
                         containerd_storage_dir: "${params.containerd_storage_dir}",
                         docker_log_opts: "${params.docker_log_opts}",
+                        kube_proxy_mode: "${params.kube_proxy_mode}",
                         kube_service_addresses: "${params.kube_service_addresses}",
                         kube_pods_subnet: "${params.kube_pods_subnet}",
+                        nodelocaldns_ip: "${params.nodelocaldns_ip}",
                         local_release_dir: "${params.kubespray_temp_dir}"
                     ]
                 )
             }
-        }     
+        }
         
         stage('Running KubeSpray') {
             when {
