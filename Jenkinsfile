@@ -300,13 +300,8 @@ pipeline {
                 echo ${https_proxy}
                 git clone -b v2.21.0 https://github.com/kubernetes-sigs/kubespray.git
                 cd kubespray
-                VENVDIR=kubespray-venv
-                ANSIBLE_VERSION=2.12
-                python -m venv \$VENVDIR
-                source \$VENVDIR/bin/activate
-                test -f requirements-\$ANSIBLE_VERSION.yml && ansible-galaxy role install -r requirements-\$ANSIBLE_VERSION.yml && ansible-galaxy collection -r requirements-\$ANSIBLE_VERSION.yml
-                which python
-                pwd
+                cp ${WORKSPACE}/roles/scripts/kubeSpray_venv_install_requirements.sh .
+                bash kubeSpray_venv_install_requirements.sh
                 """
             }
         }

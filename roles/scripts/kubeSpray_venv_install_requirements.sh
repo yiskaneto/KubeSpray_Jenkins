@@ -1,20 +1,22 @@
 #!/usr/bin/env bash
 
-echo "\n\n\nStarting python -m venv venv"
-python -m venv venv ; echo -e "\n\n"
+ANSIBLE_VERSION=2.12
+
+echo "\n\n\nStarting python venv kubespray-venv"
+python -m venv kubespray-venv ; echo -e "\n\n"
 
 echo "Starting source venv/bin/activate"
-source venv/bin/activate ; echo -e "\n\n"
+source kubespray-venv/bin/activate ; echo -e "\n\n"
 
 echo -e "Verifying current directory"
-pwd ; echo -e "\n"
+pwd ; echo -e "\n\n"
 
 echo -e "Running /usr/local/bin/pip3 install -r requirements.txt\n"
-# /usr/local/bin/pip3 install -r requirements.txt ; echo -e "\n\n"
-python -m pip install -r requirements.txt ; echo -e "\n\n"
+test -f requirements-$ANSIBLE_VERSION.yml && ansible-galaxy role install -r requirements-$ANSIBLE_VERSION.yml && ansible-galaxy collection -r requirements-$ANSIBLE_VERSION.yml
 
 echo -e "Verifying current directory"
 pwd ; echo -e "\n"
 
 # echo "Deactivating venv"
-# deactivate ; echo -e "\n"
+# deactivate ; echo -e "\n"                
+                
