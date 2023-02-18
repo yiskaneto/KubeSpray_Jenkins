@@ -267,18 +267,18 @@ pipeline {
     }
             	
     stages {
-        // stage('Creating Inventory File') {
-		// 	steps {
-        //         sh """
-        //         echo "" > ${WORKSPACE}/inventory.ini
-        //         """
-        //         writeFile file: "${WORKSPACE}/inventory.ini", text: "${inventory}"
-        //         sh """
-        //         ls -lht ${WORKSPACE}/inventory.ini
-        //         cat ${WORKSPACE}/inventory.ini
-        //         """
-		// 	}
-		// }
+        stage('Creating Inventory File') {
+			steps {
+                sh """
+                echo "" > ${WORKSPACE}/inventory.ini
+                """
+                writeFile file: "${WORKSPACE}/inventory.ini", text: "${inventory}"
+                sh """
+                ls -lht ${WORKSPACE}/inventory.ini
+                cat ${WORKSPACE}/inventory.ini
+                """
+			}
+		}
 
         // stage('SSH Key Pair Tasks') {
         //     steps {
