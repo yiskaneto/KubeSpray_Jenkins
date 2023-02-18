@@ -267,18 +267,18 @@ pipeline {
     }
             	
     stages {
-        stage('Creating Inventory File') {
-			steps {
-                sh """
-                echo "" > ${WORKSPACE}/inventory.ini
-                """
-                writeFile file: "${WORKSPACE}/inventory.ini", text: "${inventory}"
-                sh """
-                ls -lht ${WORKSPACE}/inventory.ini
-                cat ${WORKSPACE}/inventory.ini
-                """
-			}
-		}
+        // stage('Creating Inventory File') {
+		// 	steps {
+        //         sh """
+        //         echo "" > ${WORKSPACE}/inventory.ini
+        //         """
+        //         writeFile file: "${WORKSPACE}/inventory.ini", text: "${inventory}"
+        //         sh """
+        //         ls -lht ${WORKSPACE}/inventory.ini
+        //         cat ${WORKSPACE}/inventory.ini
+        //         """
+		// 	}
+		// }
 
         // stage('SSH Key Pair Tasks') {
         //     steps {
@@ -300,69 +300,73 @@ pipeline {
                 echo ${https_proxy}
                 git clone https://github.com/kubernetes-sigs/kubespray.git
                 cd kubespray
-                git checkout tags/v2.18.1
+                pwd
+                git checkout tags/v2.21.0
+                VENVDIR=kubespray-venv
+                KUBESPRAYDIR=kubespray
+                ANSIBLE_VERSION=2.12
+                python -m venv \$VENVDIR
+                source \$VENVDIR/bin/activate
                 cp ${WORKSPACE}/roles/scripts/kubeSpray_venv_install_requirements.sh .
-                chmod +x kubeSpray_venv_install_requirements.sh
-                ./kubeSpray_venv_install_requirements.sh
                 """
             }
         }
 
-        stage('Reset K8s Cluster') {
-            when {
-                expression { params.reset_k8s_cluster == true }
-            }
-            steps {
-                // ansiblePlaybook(
-                //     installation: "${WORKSPACE}/kubespray/venv/bin",
-                //     playbook: "${env.WORKSPACE}/kubespray/reset.yml",
-                //     inventory: "${env.WORKSPACE}/inventory.ini",
-                //     become: true,
-                //     becomeUser: "root",
-                //     forks: 8,
-                //     colorized: true,
-                //     extras: '-u ${user} --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"',
-                //     extraVars: [
-                //         jenkins_workspace: "${env.WORKSPACE}/",
-                //         http_proxy: "${params.http_proxy}",
-                //         https_proxy: "${params.https_proxy}",
-                //         no_proxy: "${params.no_proxy}",
-                //         reset_confirmation: "yes"
-                //     ]
-                // )
-                ansiColor('xterm') {
-                    sh '''
-                    cd ${WORKSPACE}/kubespray/ ; echo -e "\n"
-                    pwd ; echo -e "\n"
-                    source venv/bin/activate ; echo -e "\n\n"
-                    until time ansible-playbook -i ${WORKSPACE}/inventory.ini reset.yml -u root --become --become-user=root --extra-vars "http_proxy=${http_proxy} https_proxy=${https_proxy} no_proxy=${no_proxy} reset_confirmation='yes'" ; do sleep 5 ; done
-                    deactivate ; echo -e "\n"s
-                    '''
-                }
+        // stage('Reset K8s Cluster') {
+        //     when {
+        //         expression { params.reset_k8s_cluster == true }
+        //     }
+        //     steps {
+        //         // ansiblePlaybook(
+        //         //     installation: "${WORKSPACE}/kubespray/venv/bin",
+        //         //     playbook: "${env.WORKSPACE}/kubespray/reset.yml",
+        //         //     inventory: "${env.WORKSPACE}/inventory.ini",
+        //         //     become: true,
+        //         //     becomeUser: "root",
+        //         //     forks: 8,
+        //         //     colorized: true,
+        //         //     extras: '-u ${user} --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"',
+        //         //     extraVars: [
+        //         //         jenkins_workspace: "${env.WORKSPACE}/",
+        //         //         http_proxy: "${params.http_proxy}",
+        //         //         https_proxy: "${params.https_proxy}",
+        //         //         no_proxy: "${params.no_proxy}",
+        //         //         reset_confirmation: "yes"
+        //         //     ]
+        //         // )
+        //         ansiColor('xterm') {
+        //             sh '''
+        //             cd ${WORKSPACE}/kubespray/ ; echo -e "\n"
+        //             pwd ; echo -e "\n"
+        //             source venv/bin/activate ; echo -e "\n\n"
+        //             until time ansible-playbook -i ${WORKSPACE}/inventory.ini reset.yml -u root --become --become-user=root --extra-vars "http_proxy=${http_proxy} https_proxy=${https_proxy} no_proxy=${no_proxy} reset_confirmation='yes'" ; do sleep 5 ; done
+        //             deactivate ; echo -e "\n"s
+        //             '''
+        //         }
                 
-            }
-        }
+        //     }
+        // }
 
-        stage('Reboot Nodes') {
-            when {
-                expression { params.restart_node == true }
-            }
-            steps {
-                sh """
-                echo "Rebooting nodes"
-                """
-                ansiblePlaybook(
-                    playbook: "${env.WORKSPACE}/roles/Requirements/reboot_target_nodes.yaml",
-                    inventory: "${env.WORKSPACE}/inventory.ini",
-                    forks: 16,
-                    colorized: true,
-                    extras: '-u ${user} --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" --flush-cache -v',
-                    extraVars: [
-                        jenkins_workspace: "${env.WORKSPACE}/"
-                    ]
-                )
-            }
-        }
+        // stage('Reboot Nodes') {
+        //     when {
+        //         expression { params.restart_node == true }
+        //     }
+        //     steps {
+        //         sh """
+        //         echo "Rebooting nodes"
+        //         """
+        //         ansiblePlaybook(
+        //             playbook: "${env.WORKSPACE}/roles/Requirements/reboot_target_nodes.yaml",
+        //             inventory: "${env.WORKSPACE}/inventory.ini",
+        //             forks: 16,
+        //             colorized: true,
+        //             extras: '-u ${user} --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" --flush-cache -v',
+        //             extraVars: [
+        //                 jenkins_workspace: "${env.WORKSPACE}/"
+        //             ]
+        //         )
+        //     }
+        // }
 
         // stage('Running OS requirements K8s') { 
         //     when {
@@ -390,106 +394,106 @@ pipeline {
         //     }
         // }  
 
-        stage('Setting KubeSpray Env') {
-            when {
-                expression { params.only_reset_k8s_cluster == false }
-            }
-            steps {
-                sh """
-                echo "Setting KubeSpray Env"
-                cd ${WORKSPACE}/kubespray
-                cp ${WORKSPACE}/roles/scripts/kubeSpray_venv_install_requirements.sh .
-                chmod +x kubeSpray_venv_install_requirements.sh
-                ./kubeSpray_venv_install_requirements.sh
-                rm -rf inventory/mycluster/
-                cp -rfp ${WORKSPACE}/kubespray/inventory/sample/ ${WORKSPACE}/kubespray/inventory/mycluster/
-                rm -rf ${WORKSPACE}/kubespray/inventory/mycluster/inventory.ini
-                cp ${WORKSPACE}/inventory.ini ${WORKSPACE}/kubespray/inventory/mycluster/inventory.ini
-                """
-                ansiblePlaybook(
-                    playbook: "${env.WORKSPACE}/roles/Requirements/populate_vars.yaml",
-                    inventory: "${env.WORKSPACE}/inventory.ini",
-                    forks: 16,
-                    colorized: true,
-                    extras: '-u ${user} --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" --flush-cache -v',
-                    extraVars: [
-                        jenkins_workspace: "${env.WORKSPACE}/",
-                        kube_version: "${params.kube_version}",
-                        cluster_name: "${params.cluster_name}",
-                        http_proxy: "${params.http_proxy}",
-                        https_proxy: "${params.https_proxy}",
-                        no_proxy: "${params.no_proxy}",
-                        calico_iptables_backend: "${params.calico_iptables_backend}",
-                        etcd_deployment_type: "${params.etcd_deployment_type}",
-                        etcd_data_dir: "${params.etcd_data_dir}",
-                        use_external_load_balancer: "${params.use_external_load_balancer}",
-                        apiserver_loadbalancer_domain_name: "${params.apiserver_loadbalancer_domain_name}",
-                        apiserver_loadbalancer_address: "${params.apiserver_loadbalancer_address}",
-                        apiserver_loadbalancer_port: "${params.apiserver_loadbalancer_port}",
-                        dashboard_enabled: "${params.dashboard_enabled}",
-                        ingress_nginx_enabled: "${params.ingress_nginx_enabled}",
-                        metrics_server_enabled: "${params.metrics_server_enabled}",
-                        metrics_server_kubelet_insecure_tls: "${params.metrics_server_kubelet_insecure_tls}",
-                        metrics_server_metric_resolution: "${params.metrics_server_metric_resolution}",
-                        metrics_server_kubelet_preferred_address_types: "${params.metrics_server_kubelet_preferred_address_types}",
-                        helm_enabled: "${params.helm_enabled}",
-                        cert_manager_enabled: "${params.cert_manager_enabled}",
-                        use_internal_loadbalancer: "${params.use_internal_loadbalancer}",
-                        loadbalancer_apiserver_type: "${params.loadbalancer_apiserver_type}",
-                        use_localhost_as_kubeapi_loadbalancer: "${params.use_localhost_as_kubeapi_loadbalancer}",
-                        kube_network_plugin: "${params.kube_network_plugin}",
-                        container_manager: "${params.container_manager}",
-                        resolvconf_mode: "${params.resolvconf_mode}",
-                        docker_daemon_graph: "${params.docker_daemon_graph}",
-                        containerd_storage_dir: "${params.containerd_storage_dir}",
-                        docker_log_opts: "${params.docker_log_opts}",
-                        kube_proxy_mode: "${params.kube_proxy_mode}",
-                        kube_service_addresses: "${params.kube_service_addresses}",
-                        kube_pods_subnet: "${params.kube_pods_subnet}",
-                        nodelocaldns_ip: "${params.nodelocaldns_ip}",
-                        local_release_dir: "${params.kubespray_temp_dir}"
-                    ]
-                )
-            }
-        }
+        // stage('Setting KubeSpray Env') {
+        //     when {
+        //         expression { params.only_reset_k8s_cluster == false }
+        //     }
+        //     steps {
+        //         sh """
+        //         echo "Setting KubeSpray Env"
+        //         cd ${WORKSPACE}/kubespray
+        //         cp ${WORKSPACE}/roles/scripts/kubeSpray_venv_install_requirements.sh .
+        //         chmod +x kubeSpray_venv_install_requirements.sh
+        //         ./kubeSpray_venv_install_requirements.sh
+        //         rm -rf inventory/mycluster/
+        //         cp -rfp ${WORKSPACE}/kubespray/inventory/sample/ ${WORKSPACE}/kubespray/inventory/mycluster/
+        //         rm -rf ${WORKSPACE}/kubespray/inventory/mycluster/inventory.ini
+        //         cp ${WORKSPACE}/inventory.ini ${WORKSPACE}/kubespray/inventory/mycluster/inventory.ini
+        //         """
+        //         ansiblePlaybook(
+        //             playbook: "${env.WORKSPACE}/roles/Requirements/populate_vars.yaml",
+        //             inventory: "${env.WORKSPACE}/inventory.ini",
+        //             forks: 16,
+        //             colorized: true,
+        //             extras: '-u ${user} --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" --flush-cache -v',
+        //             extraVars: [
+        //                 jenkins_workspace: "${env.WORKSPACE}/",
+        //                 kube_version: "${params.kube_version}",
+        //                 cluster_name: "${params.cluster_name}",
+        //                 http_proxy: "${params.http_proxy}",
+        //                 https_proxy: "${params.https_proxy}",
+        //                 no_proxy: "${params.no_proxy}",
+        //                 calico_iptables_backend: "${params.calico_iptables_backend}",
+        //                 etcd_deployment_type: "${params.etcd_deployment_type}",
+        //                 etcd_data_dir: "${params.etcd_data_dir}",
+        //                 use_external_load_balancer: "${params.use_external_load_balancer}",
+        //                 apiserver_loadbalancer_domain_name: "${params.apiserver_loadbalancer_domain_name}",
+        //                 apiserver_loadbalancer_address: "${params.apiserver_loadbalancer_address}",
+        //                 apiserver_loadbalancer_port: "${params.apiserver_loadbalancer_port}",
+        //                 dashboard_enabled: "${params.dashboard_enabled}",
+        //                 ingress_nginx_enabled: "${params.ingress_nginx_enabled}",
+        //                 metrics_server_enabled: "${params.metrics_server_enabled}",
+        //                 metrics_server_kubelet_insecure_tls: "${params.metrics_server_kubelet_insecure_tls}",
+        //                 metrics_server_metric_resolution: "${params.metrics_server_metric_resolution}",
+        //                 metrics_server_kubelet_preferred_address_types: "${params.metrics_server_kubelet_preferred_address_types}",
+        //                 helm_enabled: "${params.helm_enabled}",
+        //                 cert_manager_enabled: "${params.cert_manager_enabled}",
+        //                 use_internal_loadbalancer: "${params.use_internal_loadbalancer}",
+        //                 loadbalancer_apiserver_type: "${params.loadbalancer_apiserver_type}",
+        //                 use_localhost_as_kubeapi_loadbalancer: "${params.use_localhost_as_kubeapi_loadbalancer}",
+        //                 kube_network_plugin: "${params.kube_network_plugin}",
+        //                 container_manager: "${params.container_manager}",
+        //                 resolvconf_mode: "${params.resolvconf_mode}",
+        //                 docker_daemon_graph: "${params.docker_daemon_graph}",
+        //                 containerd_storage_dir: "${params.containerd_storage_dir}",
+        //                 docker_log_opts: "${params.docker_log_opts}",
+        //                 kube_proxy_mode: "${params.kube_proxy_mode}",
+        //                 kube_service_addresses: "${params.kube_service_addresses}",
+        //                 kube_pods_subnet: "${params.kube_pods_subnet}",
+        //                 nodelocaldns_ip: "${params.nodelocaldns_ip}",
+        //                 local_release_dir: "${params.kubespray_temp_dir}"
+        //             ]
+        //         )
+        //     }
+        // }
         
-        stage('Running KubeSpray') {
-            when {
-                expression { params.install_kubespray == true && params.only_reset_k8s_cluster == false }
-            }
-            steps {         
-                // This is the recommended way of running ansible playbooks/roles from Jennkins
-                retry(2) {
-                    sh """
-                    echo "Starting KubeSpray deployment"
-                    cd ${WORKSPACE}/kubespray/
-                    """
-                    ansiblePlaybook(
-                        installation: "${WORKSPACE}/kubespray/venv/bin",
-                        playbook: "${env.WORKSPACE}/kubespray/cluster.yml",
-                        inventory: "${env.WORKSPACE}/kubespray/inventory/mycluster/inventory.ini",
-                        forks: 16,
-                        become: true,
-                        becomeUser: "root",
-                        colorized: true,
-                        extras: '-u ${user} --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" --flush-cache -v',
-                        extraVars: [
-                            http_proxy: "${params.http_proxy}",
-                            https_proxy: "${params.https_proxy}",
-                            no_proxy: "${params.no_proxy}"
-                        ]
-                    )
-                }
-                // This also works but doesn't show the colors on the output which could help us find error or warnings in a more visual way.
-                // sh '''
-                // cd ${WORKSPACE}/kubespray/ ; echo -e "\n"
-                // pwd ; echo -e "\n"
-                // source venv/bin/activate ; echo -e "\n\n"
-                // until time ansible-playbook -i ${WORKSPACE}/inventory.ini cluster.yml -u root --become --become-user=root --extra-vars "http_proxy=${http_proxy} https_proxy=${https_proxy} no_proxy=${no_proxy}" ; do sleep 5 ; done
-                // deactivate ; echo -e "\n"s
-            }
-        }
-    }
+    //     stage('Running KubeSpray') {
+    //         when {
+    //             expression { params.install_kubespray == true && params.only_reset_k8s_cluster == false }
+    //         }
+    //         steps {         
+    //             // This is the recommended way of running ansible playbooks/roles from Jennkins
+    //             retry(2) {
+    //                 sh """
+    //                 echo "Starting KubeSpray deployment"
+    //                 cd ${WORKSPACE}/kubespray/
+    //                 """
+    //                 ansiblePlaybook(
+    //                     installation: "${WORKSPACE}/kubespray/venv/bin",
+    //                     playbook: "${env.WORKSPACE}/kubespray/cluster.yml",
+    //                     inventory: "${env.WORKSPACE}/kubespray/inventory/mycluster/inventory.ini",
+    //                     forks: 16,
+    //                     become: true,
+    //                     becomeUser: "root",
+    //                     colorized: true,
+    //                     extras: '-u ${user} --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" --flush-cache -v',
+    //                     extraVars: [
+    //                         http_proxy: "${params.http_proxy}",
+    //                         https_proxy: "${params.https_proxy}",
+    //                         no_proxy: "${params.no_proxy}"
+    //                     ]
+    //                 )
+    //             }
+    //             // This also works but doesn't show the colors on the output which could help us find error or warnings in a more visual way.
+    //             // sh '''
+    //             // cd ${WORKSPACE}/kubespray/ ; echo -e "\n"
+    //             // pwd ; echo -e "\n"
+    //             // source venv/bin/activate ; echo -e "\n\n"
+    //             // until time ansible-playbook -i ${WORKSPACE}/inventory.ini cluster.yml -u root --become --become-user=root --extra-vars "http_proxy=${http_proxy} https_proxy=${https_proxy} no_proxy=${no_proxy}" ; do sleep 5 ; done
+    //             // deactivate ; echo -e "\n"s
+    //         }
+    //     }
+    // }
   
     post {
         always {
