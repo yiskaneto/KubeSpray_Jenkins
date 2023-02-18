@@ -304,6 +304,7 @@ pipeline {
                 ANSIBLE_VERSION=2.12
                 python -m venv \$VENVDIR
                 source \$VENVDIR/bin/activate
+                test -f requirements-\$ANSIBLE_VERSION.yml && ansible-galaxy role install -r requirements-\$ANSIBLE_VERSION.yml && ansible-galaxy collection -r requirements-\$ANSIBLE_VERSION.yml
                 which python
                 pwd
                 """
