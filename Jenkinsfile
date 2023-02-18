@@ -301,11 +301,11 @@ pipeline {
                 git clone -b v2.21.0 https://github.com/kubernetes-sigs/kubespray.git
                 cd kubespray
                 VENVDIR=kubespray-venv
-                KUBESPRAYDIR=kubespray
                 ANSIBLE_VERSION=2.12
                 python -m venv \$VENVDIR
                 source \$VENVDIR/bin/activate
-                cp ${WORKSPACE}/roles/scripts/kubeSpray_venv_install_requirements.sh .
+                which python
+                pwd
                 """
             }
         }
