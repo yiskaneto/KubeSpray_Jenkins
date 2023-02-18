@@ -298,10 +298,8 @@ pipeline {
                 cd ${WORKSPACE}/
                 whoami
                 echo ${https_proxy}
-                git clone https://github.com/kubernetes-sigs/kubespray.git
+                git clone -b v2.21.0 https://github.com/kubernetes-sigs/kubespray.git
                 cd kubespray
-                pwd
-                git checkout tags/v2.21.0
                 VENVDIR=kubespray-venv
                 KUBESPRAYDIR=kubespray
                 ANSIBLE_VERSION=2.12
