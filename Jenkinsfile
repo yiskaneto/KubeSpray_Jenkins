@@ -268,7 +268,6 @@ pipeline {
             steps {
                 withCredentials([string(credentialsId: 'ansible_become', variable: 'BECOME')]) {
                     ansiblePlaybook(
-                        // installation: "/opt/python-venvs/ansible-2.12/bin/",
                         disableHostKeyChecking : true,
                         credentialsId: "${params.private_key_credential}",
                         playbook: "${env.WORKSPACE}/kubespray/reset.yml",
