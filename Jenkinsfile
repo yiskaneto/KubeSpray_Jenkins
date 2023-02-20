@@ -305,9 +305,9 @@ pipeline {
                     sh"""
                     source ${python_venv}/bin/activate ; echo -e "\n\n"
                     export ANSIBLE_CONFIG=/home/${ansible_user}/.ansible.cfg
-                    echo \${ANSIBLE_CONFIG}
+                    cd ${WORKSPACE}/kubespray
                     which ansible
-                    until time ansible-playbook -i ${WORKSPACE}/inventory.ini reset.yml -u ${ansible_user} --become --become-user=root -e reset_confirmation=yes --private-key ${params.private_key_path} -e '${ANSIBLE_VAULT}' --vault-password-file ${DECRYPT_VAULT} ; do sleep 5 ; done
+                    until time ansible-playbook -i ${WORKSPACE}/inventory.ini reset.yml -u ${ansible_user} --become --become-user=root -e reset_confirmation=yes --private-key ${params.private_key_path} -e '${ANSIBLE_VAULT}' --vault-password-file '${DECRYPT_VAULT}' ; do sleep 5 ; done
                     deactivate ; echo -e "\n"
                     """
                 }
