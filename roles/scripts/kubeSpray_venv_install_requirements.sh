@@ -2,15 +2,15 @@
 
 set -e
 
-venv=${1}
+python_venv=${1}
 
 ANSIBLE_VERSION=2.12
 
 echo -e "\nStarting python venv kubespray-venv\n"
-python -m venv ${venv} && echo -e "\n"
+python -m venv ${python_venv} && echo -e "\n"
 
 echo "\nStarting source venv/bin/activate\n"
-source ${venv}/bin/activate && which python && echo -e "\n\n"
+source ${python_venv}/bin/activate && which python && echo -e "\n\n"
 
 echo -e "\nVerifying current directory\n" && pwd
 
@@ -22,5 +22,4 @@ python -m pip install -r requirements-$ANSIBLE_VERSION.txt
 
 echo -e "\nVerifying current directory\n" && pwd && echo -e "\n"
 
-# echo "Deactivating venv"
-# deactivate ; echo -e "\n"                
+deactivate ; echo -e "\n"          
