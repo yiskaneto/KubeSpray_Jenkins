@@ -59,6 +59,11 @@ pipeline {
 		}
   
     parameters {
+        string(
+            name: 'python_venv',
+            defaultValue: '/opt/python_venv/ansible-12.2',
+            description: '<h5>Username that will run the installation, the user must have enough privileges for writing SSL keys in /etc/, installing packages and interacting with various systemd daemons</h5>'
+        )
         booleanParam(
             name: 'reset_k8s_cluster',
             defaultValue: true,
@@ -269,10 +274,10 @@ pipeline {
                 // )
                 ansiColor('xterm') {
                     sh """
-                    export ANSIBLE_CONFIG=/home/ansible/.ansible.cfg
                     cd ${WORKSPACE}/kubespray/ ; echo -e "\n"
                     pwd ; echo -e "\n"
                     source kubespray-venv/bin/activate ; echo -e "\n\n"
+                    export ANSIBLE_CONFIG=/home/ansible/.ansible.cfg
                     until time ansible-playbook -i ${WORKSPACE}/inventory.ini reset.yml -u ${user} --become --become-user=root -e reset_confirmation=yes ; do sleep 5 ; done
                     deactivate ; echo -e "\n"
                     """

@@ -22,4 +22,3 @@ echo -e "\nVerifying current directory\n" && pwd && echo -e "\n"
 
 # echo "Deactivating venv"
 # deactivate ; echo -e "\n"                
-                
