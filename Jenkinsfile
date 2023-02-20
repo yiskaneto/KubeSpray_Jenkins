@@ -61,7 +61,7 @@ pipeline {
     parameters {
         string(
             name: 'python_venv',
-            defaultValue: '/opt/python-venvs/ansible-12.2',
+            defaultValue: '/opt/python-venvs/ansible-2.12',
             description: '<h5>Folder where the Python ven will be created, the user must have rwx permission</h5>'
         )
         booleanParam(
@@ -277,7 +277,7 @@ pipeline {
                     pwd ; echo -e "\n"
                     echo "running whoami"
                     whoami
-                    source ${python_venv}/activate ; echo -e "\n\n"
+                    source ${python_venv}/bin/activate ; echo -e "\n\n"
                     export ANSIBLE_CONFIG=/home/ansible/.ansible.cfg
                     until time ansible-playbook -i ${WORKSPACE}/inventory.ini reset.yml -u ${user} --become --become-user=root -e reset_confirmation=yes ; do sleep 5 ; done
                     deactivate ; echo -e "\n"
