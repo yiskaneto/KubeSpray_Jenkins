@@ -275,7 +275,8 @@ pipeline {
                     sh """
                     cd ${WORKSPACE}/kubespray/ ; pwd ; echo -e "\n" ; whoami
                     source ${python_venv}/bin/activate ; echo -e "\n\n"
-                    export ANSIBLE_CONFIG=/home/ansible/.ansible.cfg
+                    export ANSIBLE_CONFIG=/home/${user}/.ansible.cfg
+                    echo ${ANSIBLE_CONFIG}
                     which ansible
                     until time ansible-playbook -i ${WORKSPACE}/inventory.ini reset.yml -u ${user} --become --become-user=root -e reset_confirmation=yes ; do sleep 5 ; done
                     deactivate ; echo -e "\n"
