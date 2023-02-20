@@ -284,31 +284,6 @@ pipeline {
                         ]
                     )
                 }
-                // ansiblePlaybook(
-                //     // installation: "/opt/python-venvs/ansible-2.12/bin/",
-                //     disableHostKeyChecking : true,
-                //     credentialsId: 'ansible_private_key',
-                //     playbook: "${env.WORKSPACE}/kubespray/reset.yml",
-                //     inventory: "${env.WORKSPACE}/inventory.ini",
-                //     become: true,
-                //     colorized: true,
-                //     extras: '-u ${ansible_user} --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"',
-                //     extraVars: [
-                //         ansible_become_password: 
-                //         http_proxy: "${params.http_proxy}",
-                //         https_proxy: "${params.https_proxy}",
-                //         no_proxy: "${params.no_proxy}",
-                //         reset_confirmation: 'yes'
-                //     ]
-                // )
-                // withCredentials([string(credentialsId: 'ansible_become', variable: 'PRKEY')]) {
-                //     sh"""
-                //     cd ${WORKSPACE}/kubespray/ ; pwd ; echo -e "\n" ; whoami
-                //     source ${python_venv}/bin/activate ; echo -e "\n\n"
-                //     which ansible
-                //     until time ansible-playbook -i ${WORKSPACE}/inventory.ini reset.yml -u ${ansible_user} --become --become-user=root -e reset_confirmation=yes --private-key ${params.private_key_path} -e ansible_become_pass=$PRKEY ; do sleep 5 ; done
-                //     """
-                // }
                 // ansiColor('xterm') {
                 //     sh"""
                 //     source ${python_venv}/bin/activate ; echo -e "\n\n"
