@@ -306,6 +306,8 @@ pipeline {
                 echo "Rebooting nodes"
                 """
                 ansiblePlaybook(
+                    disableHostKeyChecking : true,
+                    credentialsId: "${params.private_key_credential}",
                     playbook: "${env.WORKSPACE}/roles/Requirements/reboot_target_nodes.yaml",
                     inventory: "${env.WORKSPACE}/inventory.ini",
                     forks: 16,
