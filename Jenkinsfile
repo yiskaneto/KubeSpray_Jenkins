@@ -277,7 +277,7 @@ pipeline {
                         colorized: true,
                         extras: '-u ${ansible_user} --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"',
                         extraVars: [
-                            ansible_become_password: [value: '$BECOME', hidden: true]
+                            ansible_become_password: [value: '$BECOME', hidden: true],
                             http_proxy: "${params.http_proxy}",
                             https_proxy: "${params.https_proxy}",
                             no_proxy: "${params.no_proxy}",
