@@ -71,9 +71,9 @@ pipeline {
             description: '<h5>Username that will run the installation</h5>'
         )
         string(
-            name: 'private_key_path',
+            name: 'private_key_secret',
             defaultValue: 'REPLACE_THIS',
-            description: '<h5>Path in the ansible to the private key to be able to connecto to the target nodes</h5>'
+            description: '<h5>Jenkins credential holding the private key to connect to the target nodes</h5>'
         )
         string(
             name: 'become_credentials',
@@ -270,7 +270,7 @@ pipeline {
                     ansiblePlaybook(
                         // installation: "/opt/python-venvs/ansible-2.12/bin/",
                         disableHostKeyChecking : true,
-                        // credentialsId: 'ansible_private_key',
+                        credentialsId: "${params.private_key_secret}",
                         playbook: "${env.WORKSPACE}/kubespray/reset.yml",
                         inventory: "${env.WORKSPACE}/inventory.ini",
                         become: true,
