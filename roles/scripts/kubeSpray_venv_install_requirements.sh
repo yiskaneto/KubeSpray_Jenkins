@@ -10,7 +10,7 @@ echo -e "\nStarting python venv kubespray-venv\n"
 python -m venv ${venv} && echo -e "\n"
 
 echo "\nStarting source venv/bin/activate\n"
-source ${venv}bin/activate && which python && echo -e "\n\n"
+source ${venv}/bin/activate && which python && echo -e "\n\n"
 
 echo -e "\nVerifying current directory\n" && pwd
 

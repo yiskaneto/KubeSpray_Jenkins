@@ -240,9 +240,6 @@ pipeline {
             steps {
                 sh """
                 cd ${WORKSPACE}/
-                echo "running whoami"
-                whoami
-                echo ${https_proxy}
                 git clone -b v2.21.0 https://github.com/kubernetes-sigs/kubespray.git
                 cd kubespray
                 cp ${WORKSPACE}/roles/scripts/kubeSpray_venv_install_requirements.sh .
@@ -277,8 +274,9 @@ pipeline {
                     sh """
                     cd ${WORKSPACE}/kubespray/ ; echo -e "\n"
                     pwd ; echo -e "\n"
-                    whomai
-                    source kubespray-venv/bin/activate ; echo -e "\n\n"
+                    echo "running whoami"
+                    whoami
+                    source ${python_venv}/activate ; echo -e "\n\n"
                     export ANSIBLE_CONFIG=/home/ansible/.ansible.cfg
                     until time ansible-playbook -i ${WORKSPACE}/inventory.ini reset.yml -u ${user} --become --become-user=root -e reset_confirmation=yes ; do sleep 5 ; done
                     deactivate ; echo -e "\n"
