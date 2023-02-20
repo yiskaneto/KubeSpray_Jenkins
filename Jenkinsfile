@@ -1,6 +1,6 @@
 def setDescription() {
     def item = Jenkins.instance.getItemByFullName(env.JOB_NAME)
-    item.setDescription("<h5><span style=\"color:#138D75\">KubeSpray Automation job. Before running this pipeline, make sure to read the README.MD from <a href='https://github.com/escanoru/KubeSpray_Jenkins'>https://github.com/escanoru/KubeSpray_Jenkins</a></span></h5>")
+    item.setDescription("<h5><span style=\"color:#138D75\">KubeSpray Automation v2.21.0 https://github.com/kubernetes-sigs/kubespray/releases/tag/v2.21.0. Before running this pipeline, make sure to read the README.MD from <a href='https://github.com/escanoru/KubeSpray_Jenkins'>https://github.com/escanoru/KubeSpray_Jenkins</a></span></h5>")
     item.save()
 }
 
@@ -91,93 +91,78 @@ pipeline {
         )
         string(
             name: 'user',
-            defaultValue: 'root',
+            defaultValue: 'ansible',
             description: '<h5>Username that will run the installation, the user must have enough privileges for writing SSL keys in /etc/, installing packages and interacting with various systemd daemons</h5>'
         )
         string(
             name: 'kube_version',
-            defaultValue: 'v1.23.5',
-            description: '<h5>Change this to use another Kubernetes version</h5>'
+            defaultValue: 'v1.25.6',
+            description: '<h5>Kubernetes version, found on inventory/mycluster/group_vars/k8s_cluster/k8s-cluster.yml</h5>'
         )
         string(
             name: 'cluster_name',
             defaultValue: 'cluster.local',
-            description: 'Leave empty if not needed'
+            description: 'Found on inventory/mycluster/group_vars/k8s_cluster/k8s-cluster.yml'
         )
         string(
             name: 'http_proxy',
             defaultValue: '',
-            description: '<h5>e.g http://my_proxy.com:8080</h5>'
+            description: '<h5>e.g http://my_proxy.com:8080, found on inventory/mycluster/group_vars/all/all.yml</h5>'
         )
         string(
             name: 'https_proxy',
             defaultValue: '',
-            description: '<h5>e.g http://my_proxy.com:8080</h5>'
+            description: '<h5>e.g http://my_proxy.com:8080, found on inventory/mycluster/group_vars/all/all.yml</h5>'
         )
         string(
             name: 'no_proxy',
-            defaultValue: '127.0.0.1,localhost',
-            description: 'list of hostnames or range of domains to exclude from the proxy'
+            defaultValue: '127.0.0.1,localhost,10.233.0.1,169.254.25.10',
+            description: 'list of to exclude from the proxy, found on inventory/mycluster/group_vars/all/all.yml'
         )
         choice(
             name: 'kube_network_plugin',
             choices: ['calico','flannel','cilium','weave','cloud','canal'],
-            description: 'valid values: calico, flannel, cilium, weave, cloud, canal'
+            description: 'Found on inventory/mycluster/group_vars/k8s_cluster/k8s-cluster.yml'
 		)
-        choice(
-            name: 'calico_iptables_backend',
-            choices: ['NFT','Auto','Legacy'],
-            description: 'valid values: NFT, Auto, Legacy. '
-		)
-        choice(
-            name: 'etcd_deployment_type',
-            choices: ['host','docker'],
-            description: 'Set this to docker if you are using container_manager: docker'
-        )
-        string(
-            name: 'etcd_data_dir',
-            defaultValue: '/var/lib/etcd',
-            description: 'Directory where etcd data stored'
-        )
         choice(
             name: 'container_manager',
-            choices: ['containerd','crio','docker'],
-            description: 'docker for docker, crio for cri-o and containerd for containerd.'
+            choices: ['containerd','crio'],
+            description: 'Found on inventory/mycluster/group_vars/k8s_cluster/k8s-cluster.yml'
 		)
         choice(
             name: 'resolvconf_mode',
-            choices: ['host_resolvconf','docker_dns','none'],
-            description: 'Can be docker_dns, host_resolvconf or none'
+            choices: ['host_resolvconf','none'],
+            description: 'Found on inventory/mycluster/group_vars/k8s_cluster/k8s-cluster.yml'
 		)
-        string(
-            name: 'docker_daemon_graph',
-            defaultValue: '/var/lib/docker',
-            description: 'Path used to store Docker data. ONLY valid if container_manager is set to docker'
-        )
-        string(
-            name: 'containerd_storage_dir',
-            defaultValue: '/var/lib/container',
-            description: 'Path used to store containerd data. ONLY valid if container_manager is set to containerd'
-        )
-        string(
-            name: 'docker_log_opts',
-            defaultValue: '--log-opt max-size=50m --log-opt max-file=5',
-            description: 'Rotate container stderr/stdout logs option'
-        )
+        choice(
+            name: 'kube_proxy_mode',
+            choices: ['iptables','ipvs'],
+            description: 'Found on inventory/mycluster/group_vars/k8s_cluster/k8s-cluster.yml'
+		)
         booleanParam(
-            name: 'use_external_load_balancer',
-            defaultValue: false,
-            description: 'Whether or not to use an external load balancer fpr the kube api'
+            name: 'loadbalancer_apiserver_localhost',
+            defaultValue: true,
+            description: 'Found on inventory/mycluster/group_vars/all/all.yml'
+        )
+        choice(
+            name: 'loadbalancer_apiserver_type',
+            choices: ['nginx','haproxy'],
+            description: 'Found on inventory/mycluster/group_vars/all/all.yml'
+		)
+        booleanParam(
+            name: 'use_localhost_as_kubeapi_loadbalancer',
+            defaultValue: true,
+            description: 'Found on inventory/mycluster/group_vars/all/all.yml'
         )
         string(
             name: 'apiserver_loadbalancer_domain_name',
             defaultValue: '',
-            description: 'VIP domain name for external Load Balancer. Leave empty if not needed'
+            description: 'Found on inventory/mycluster/group_vars/all/all.yml'
         )
         string(
             name: 'apiserver_loadbalancer_address',
             defaultValue: '',
-            description: 'VIP ip address for external Load Balancer. Leave empty if not needed'
+            description: 'Found on inventory/mycluster/group_vars/all/all.yml'
         )
         string(
             name: 'apiserver_loadbalancer_port',
@@ -186,82 +171,37 @@ pipeline {
         )
         booleanParam(
             name: 'dashboard_enabled',
-            defaultValue: true,
-            description: 'Whether or not to install nginx ingress'
+            defaultValue: false,
+            description: 'RBAC required. Found on inventory/mycluster/group_vars/k8s_cluster/addons.yml'
         )
         booleanParam(
-            name: 'ingress_nginx_enabled',
-            defaultValue: true,
-            description: 'Whether or not to install nginx ingress'
+            name: 'helm_enabled',
+            defaultValue: false,
+            description: 'Found on inventory/mycluster/group_vars/k8s_cluster/addons.yml'
+        )
+        booleanParam(
+            name: 'registry_enabled',
+            defaultValue: false,
+            description: 'Found on inventory/mycluster/group_vars/k8s_cluster/addons.yml'
         )
         booleanParam(
             name: 'metrics_server_enabled',
             defaultValue: true,
-            description: 'Whether or not to enable metrics'
+            description: 'Found on inventory/mycluster/group_vars/k8s_cluster/addons.yml'
         )
         booleanParam(
-            name: 'metrics_server_kubelet_insecure_tls',
-            defaultValue: true,
-            description: 'Do not verify CA of serving certificates presented by Kubelets.  For testing purposes only. This will only take effect if the metrics_server_enabled parameter is set to true'
-        )
-        string(
-            name: 'metrics_server_metric_resolution',
-            defaultValue: '60s',
-            description: 'Metrics scrape interval. This will only take effect if the metrics_server_enabled parameter is set to true'
-        )
-        choice(
-            name: 'metrics_server_kubelet_preferred_address_types',
-            choices: ['InternalIP','ExternalIP','InternalDNS','ExternalDNS','Hostname'],
-            description: 'The priority of node address types to use when determining which address to use to connect to a particular node. This will only take effect if the metrics_server_enabled parameter is set to true'
-        )            
-        booleanParam(
-            name: 'helm_enabled',
-            defaultValue: true,
-            description: 'Whether or not to install HELM'
+            name: 'ingress_nginx_enabled',
+            defaultValue: false,
+            description: 'Found on inventory/mycluster/group_vars/k8s_cluster/addons.yml'
         )
         booleanParam(
             name: 'cert_manager_enabled',
-            defaultValue: true,
-            description: 'Whether or not to install cert manager'
-        )
-        booleanParam(
-            name: 'use_internal_loadbalancer',
             defaultValue: false,
-            description: 'Whether or not to use internal loadbalancers for kube api servers'
-        )
-        choice(
-            name: 'loadbalancer_apiserver_type',
-            choices: ['nginx','haproxy'],
-            description: 'What load balancer provider to use, this will only be consider if the loadbalancer_apiserver_type parameter is set to true'
-		)
-        booleanParam(
-            name: 'use_localhost_as_kubeapi_loadbalancer',
-            defaultValue: false,
-            description: 'Whether or not to use localhost as kubeapi loadbalancer'
-        )
-        choice(
-            name: 'kube_proxy_mode',
-            choices: ['ipvs','iptables'],
-            description: 'Valid values: ipvs, iptables. Use ipvs for Red Hat-Based Linux Distributions'
-		)
-        string(
-            name: 'kube_service_addresses',
-            defaultValue: '10.233.0.0/18',
-            description: 'Kubernetes internal network for services, unused block of space.'
+            description: 'Found on inventory/mycluster/group_vars/k8s_cluster/addons.yml'
         )
         string(
-            name: 'kube_pods_subnet',
-            defaultValue: '10.233.64.0/18',
-            description: 'Internal network. When used, it will assign IP addresses from this range to individual pods. This network must be unused in your network infrastructure!'
-        )
-        string(
-            name: 'nodelocaldns_ip',
-            defaultValue: '10.233.0.10',
-            description: "node local dns ip, which will be a be added in the nodes' /etc/resolve.conf"
-        )
-        string(
-            name: 'kubespray_temp_dir',
-            defaultValue: '/tmp/kubespray_temp_dir',
+            name: 'local_release_dir',
+            defaultValue: '/tmp/local_release_dir',
             description: "Where the binaries will be downloaded. Note: ensure that you've enough disk space (about 1G)"
         )
     }
@@ -274,7 +214,6 @@ pipeline {
                 """
                 writeFile file: "${WORKSPACE}/inventory.ini", text: "${inventory}"
                 sh """
-                ls -lht ${WORKSPACE}/inventory.ini
                 cat ${WORKSPACE}/inventory.ini
                 """
 			}
@@ -306,40 +245,40 @@ pipeline {
             }
         }
 
-        // stage('Reset K8s Cluster') {
-        //     when {
-        //         expression { params.reset_k8s_cluster == true }
-        //     }
-        //     steps {
-        //         // ansiblePlaybook(
-        //         //     installation: "${WORKSPACE}/kubespray/venv/bin",
-        //         //     playbook: "${env.WORKSPACE}/kubespray/reset.yml",
-        //         //     inventory: "${env.WORKSPACE}/inventory.ini",
-        //         //     become: true,
-        //         //     becomeUser: "root",
-        //         //     forks: 8,
-        //         //     colorized: true,
-        //         //     extras: '-u ${user} --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"',
-        //         //     extraVars: [
-        //         //         jenkins_workspace: "${env.WORKSPACE}/",
-        //         //         http_proxy: "${params.http_proxy}",
-        //         //         https_proxy: "${params.https_proxy}",
-        //         //         no_proxy: "${params.no_proxy}",
-        //         //         reset_confirmation: "yes"
-        //         //     ]
-        //         // )
-        //         ansiColor('xterm') {
-        //             sh '''
-        //             cd ${WORKSPACE}/kubespray/ ; echo -e "\n"
-        //             pwd ; echo -e "\n"
-        //             source venv/bin/activate ; echo -e "\n\n"
-        //             until time ansible-playbook -i ${WORKSPACE}/inventory.ini reset.yml -u root --become --become-user=root --extra-vars "http_proxy=${http_proxy} https_proxy=${https_proxy} no_proxy=${no_proxy} reset_confirmation='yes'" ; do sleep 5 ; done
-        //             deactivate ; echo -e "\n"s
-        //             '''
-        //         }
+        stage('Reset K8s Cluster') {
+            when {
+                expression { params.reset_k8s_cluster == true }
+            }
+            steps {
+                // ansiblePlaybook(
+                //     installation: "${WORKSPACE}/kubespray/venv/bin",
+                //     playbook: "${env.WORKSPACE}/kubespray/reset.yml",
+                //     inventory: "${env.WORKSPACE}/inventory.ini",
+                //     become: true,
+                //     becomeUser: "root",
+                //     forks: 8,
+                //     colorized: true,
+                //     extras: '-u ${user} --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"',
+                //     extraVars: [
+                //         jenkins_workspace: "${env.WORKSPACE}/",
+                //         http_proxy: "${params.http_proxy}",
+                //         https_proxy: "${params.https_proxy}",
+                //         no_proxy: "${params.no_proxy}",
+                //         reset_confirmation: "yes"
+                //     ]
+                // )
+                ansiColor('xterm') {
+                    sh '''
+                    cd ${WORKSPACE}/kubespray/ ; echo -e "\n"
+                    pwd ; echo -e "\n"
+                    source kubespray-venv/bin/activate ; echo -e "\n\n"
+                    until time ansible-playbook -i ${WORKSPACE}/inventory.ini reset.yml -u ${user} --become --become-user=root --extra-vars "reset_confirmation='yes'" ; do sleep 5 ; done
+                    deactivate ; echo -e "\n"s
+                    '''
+                }
                 
-        //     }
-        // }
+            }
+        }
 
         // stage('Reboot Nodes') {
         //     when {
@@ -378,11 +317,7 @@ pipeline {
         //                 http_proxy: "${params.http_proxy}",
         //                 https_proxy: "${params.https_proxy}",
         //                 no_proxy: "${params.no_proxy}",
-        //                 use_external_load_balancer: "${params.use_external_load_balancer}",
-        //                 etcd_data_dir: "${params.etcd_data_dir}",
-        //                 docker_daemon_graph: "${params.docker_daemon_graph}",
-        //                 containerd_storage_dir: "${params.containerd_storage_dir}",
-        //                 kubespray_temp_dir: "${params.kubespray_temp_dir}"
+        //                 local_release_dir: "${params.local_release_dir}"
         //             ]
         //         )
         //     }
@@ -417,35 +352,22 @@ pipeline {
         //                 http_proxy: "${params.http_proxy}",
         //                 https_proxy: "${params.https_proxy}",
         //                 no_proxy: "${params.no_proxy}",
-        //                 calico_iptables_backend: "${params.calico_iptables_backend}",
-        //                 etcd_deployment_type: "${params.etcd_deployment_type}",
-        //                 etcd_data_dir: "${params.etcd_data_dir}",
-        //                 use_external_load_balancer: "${params.use_external_load_balancer}",
         //                 apiserver_loadbalancer_domain_name: "${params.apiserver_loadbalancer_domain_name}",
         //                 apiserver_loadbalancer_address: "${params.apiserver_loadbalancer_address}",
         //                 apiserver_loadbalancer_port: "${params.apiserver_loadbalancer_port}",
         //                 dashboard_enabled: "${params.dashboard_enabled}",
         //                 ingress_nginx_enabled: "${params.ingress_nginx_enabled}",
         //                 metrics_server_enabled: "${params.metrics_server_enabled}",
-        //                 metrics_server_kubelet_insecure_tls: "${params.metrics_server_kubelet_insecure_tls}",
-        //                 metrics_server_metric_resolution: "${params.metrics_server_metric_resolution}",
-        //                 metrics_server_kubelet_preferred_address_types: "${params.metrics_server_kubelet_preferred_address_types}",
         //                 helm_enabled: "${params.helm_enabled}",
         //                 cert_manager_enabled: "${params.cert_manager_enabled}",
-        //                 use_internal_loadbalancer: "${params.use_internal_loadbalancer}",
+        //                 loadbalancer_apiserver_localhost: "${params.loadbalancer_apiserver_localhost}",
         //                 loadbalancer_apiserver_type: "${params.loadbalancer_apiserver_type}",
         //                 use_localhost_as_kubeapi_loadbalancer: "${params.use_localhost_as_kubeapi_loadbalancer}",
         //                 kube_network_plugin: "${params.kube_network_plugin}",
         //                 container_manager: "${params.container_manager}",
         //                 resolvconf_mode: "${params.resolvconf_mode}",
-        //                 docker_daemon_graph: "${params.docker_daemon_graph}",
-        //                 containerd_storage_dir: "${params.containerd_storage_dir}",
-        //                 docker_log_opts: "${params.docker_log_opts}",
         //                 kube_proxy_mode: "${params.kube_proxy_mode}",
-        //                 kube_service_addresses: "${params.kube_service_addresses}",
-        //                 kube_pods_subnet: "${params.kube_pods_subnet}",
-        //                 nodelocaldns_ip: "${params.nodelocaldns_ip}",
-        //                 local_release_dir: "${params.kubespray_temp_dir}"
+        //                 local_release_dir: "${params.local_release_dir}"
         //             ]
         //         )
         //     }

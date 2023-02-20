@@ -9,7 +9,7 @@ cat /var/lib/jenkins/.ssh/id_rsa.pub | ssh <node> "mkdir -p ~/.ssh && cat >> ~/.
 
 ```
 
-For now this project only works on CentOS/RHEL 7/8.
+Works on RHEL8 distributions.
 Jenkins pipeline to automate the installation of Kubernetes on CentOS by using the Kubespray project, the pipeline has 5 Stages
 
 1. Create the inventory file:
