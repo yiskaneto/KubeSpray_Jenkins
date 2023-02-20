@@ -1,6 +1,5 @@
 ---
 - hosts: all
-  remote_user: root
   gather_facts: false
   tasks:
     - name: Rebooting all nodes using ansible module
