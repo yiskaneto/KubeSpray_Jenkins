@@ -272,7 +272,7 @@ pipeline {
                     cd ${WORKSPACE}/kubespray/ ; echo -e "\n"
                     pwd ; echo -e "\n"
                     source kubespray-venv/bin/activate ; echo -e "\n\n"
-                    until time ansible-playbook -i ${WORKSPACE}/inventory.ini reset.yml -u ${user} --become --become-user=root --extra-vars "reset_confirmation='yes'" ; do sleep 5 ; done
+                    until time ansible-playbook -i ${WORKSPACE}/inventory.ini reset.yml -u ${user} --become --become-user=root -e reset_confirmation=yes ; do sleep 5 ; done
                     deactivate ; echo -e "\n"s
                     '''
                 }
