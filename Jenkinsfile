@@ -261,11 +261,6 @@ pipeline {
         }
 
         stage('Reset K8s Cluster') {
-            environment {
-                ANSIBLE_VAULT = credentials("${vault_file}")
-                DECRYPT_VAULT = credentials("${vault_decryptor}")
-                    
-            }
             when {
                 expression { params.reset_k8s_cluster == true }
             }
