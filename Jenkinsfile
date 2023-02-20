@@ -61,7 +61,7 @@ pipeline {
     parameters {
         string(
             name: 'python_venv',
-            defaultValue: '/opt/ansible-12.2',
+            defaultValue: '/opt/python-venvs/ansible-12.2',
             description: '<h5>Folder where the Python ven will be created, the user must have rwx permission</h5>'
         )
         booleanParam(
