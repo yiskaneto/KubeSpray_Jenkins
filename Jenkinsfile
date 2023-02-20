@@ -265,23 +265,23 @@ pipeline {
                 expression { params.reset_k8s_cluster == true }
             }
             steps {
-                ansiblePlaybook(
-                    installation: "${params.python_venv}/bin/",
-                    disableHostKeyChecking : true,
-                    credentialsId: 'ansible_private_key',
-                    playbook: "${env.WORKSPACE}/kubespray/reset.yml",
-                    inventory: "${env.WORKSPACE}/inventory.ini",
-                    become: true,
-                    forks: 8,
-                    colorized: true,
-                    extras: '-u ${ansible_user} --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"',
-                    extraVars: [
-                        http_proxy: "${params.http_proxy}",
-                        https_proxy: "${params.https_proxy}",
-                        no_proxy: "${params.no_proxy}",
-                        reset_confirmation: 'yes'
-                    ]
-                )
+                // ansiblePlaybook(
+                //     installation: "${params.python_venv}/bin/",
+                //     disableHostKeyChecking : true,
+                //     credentialsId: 'ansible_private_key',
+                //     playbook: "${env.WORKSPACE}/kubespray/reset.yml",
+                //     inventory: "${env.WORKSPACE}/inventory.ini",
+                //     become: true,
+                //     forks: 8,
+                //     colorized: true,
+                //     extras: '-u ${ansible_user} --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"',
+                //     extraVars: [
+                //         http_proxy: "${params.http_proxy}",
+                //         https_proxy: "${params.https_proxy}",
+                //         no_proxy: "${params.no_proxy}",
+                //         reset_confirmation: 'yes'
+                //     ]
+                // )
                 // withCredentials([string(credentialsId: 'ansible_become', variable: 'PRKEY')]) {
                 //     sh"""
                 //     cd ${WORKSPACE}/kubespray/ ; pwd ; echo -e "\n" ; whoami
@@ -290,15 +290,15 @@ pipeline {
                 //     until time ansible-playbook -i ${WORKSPACE}/inventory.ini reset.yml -u ${ansible_user} --become --become-user=root -e reset_confirmation=yes --private-key ${params.private_key_path} -e ansible_become_pass=$PRKEY ; do sleep 5 ; done
                 //     """
                 // }
-                // ansiColor('xterm') {
-                //     sh"""
-                //     source ${python_venv}/bin/activate ; echo -e "\n\n"
-                //     cd ${WORKSPACE}/kubespray
-                //     which ansible
-                //     until time ansible-playbook -i ${WORKSPACE}/inventory.ini reset.yml -u ${ansible_user} --become --become-user=root -e reset_confirmation=yes --private-key ${params.private_key_path} -e '${ANSIBLE_VAULT}' --vault-password-file '${DECRYPT_VAULT}' ; do sleep 5 ; done
-                //     deactivate ; echo -e "\n"
-                //     """
-                // }
+                ansiColor('xterm') {
+                    sh"""
+                    source ${python_venv}/bin/activate ; echo -e "\n\n"
+                    cd ${WORKSPACE}/kubespray
+                    which ansible
+                    until time ansible-playbook -i ${WORKSPACE}/inventory.ini reset.yml -u ${ansible_user} -K --become --become-user=root -e reset_confirmation=yes --private-key ${params.private_key_path} ; do sleep 5 ; done
+                    deactivate ; echo -e "\n"
+                    """
+                }
                 
             }
         }
