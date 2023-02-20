@@ -64,6 +64,16 @@ pipeline {
             defaultValue: '/opt/python-venvs/ansible-2.12',
             description: '<h5>Folder where the Python ven will be created, the user must have rwx permission</h5>'
         )
+        string(
+            name: 'ansible_user',
+            defaultValue: 'REPLACE_THIS',
+            description: '<h5>Username that will run the installation</h5>'
+        )
+        string(
+            name: 'private_key',
+            defaultValue: 'REPLACE_THIS',
+            description: '<h5>The Jenkins credentials holding the private key of ansible_user</h5>'
+        )
         booleanParam(
             name: 'reset_k8s_cluster',
             defaultValue: true,
@@ -93,11 +103,6 @@ pipeline {
             name: 'inventory',
             defaultValue: "${inventorySample}",
             description: ''
-        )
-        string(
-            name: 'user',
-            defaultValue: 'ansible',
-            description: '<h5>Username that will run the installation, the user must have enough privileges for writing SSL keys in /etc/, installing packages and interacting with various systemd daemons</h5>'
         )
         string(
             name: 'kube_version',
@@ -231,7 +236,7 @@ pipeline {
         //             inventory: "${env.WORKSPACE}/inventory.ini",
         //             forks: 16,
         //             colorized: true,
-        //             extras: '-u ${user} --ssh-extra-args="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" --flush-cache -v'
+        //             extras: '-u ${ansible_user} --ssh-extra-args="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" --flush-cache -v'
         //         )
         //     }
         // }
@@ -262,7 +267,7 @@ pipeline {
                 //     becomeUser: "root",
                 //     forks: 8,
                 //     colorized: true,
-                //     extras: '-u ${user} --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"',
+                //     extras: '-u ${ansible_user} --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"',
                 //     extraVars: [
                 //         jenkins_workspace: "${env.WORKSPACE}/",
                 //         http_proxy: "${params.http_proxy}",
@@ -271,17 +276,28 @@ pipeline {
                 //         reset_confirmation: "yes"
                 //     ]
                 // )
-                ansiColor('xterm') {
+                withCredentials([usernameColonPassword(credentialsId: 'ansible_pr_key', variable: 'PRKEY')]) {
                     sh """
                     cd ${WORKSPACE}/kubespray/ ; pwd ; echo -e "\n" ; whoami
                     source ${python_venv}/bin/activate ; echo -e "\n\n"
-                    export ANSIBLE_CONFIG=/home/${user}/.ansible.cfg
+                    export ANSIBLE_CONFIG=/home/${ansible_user}/.ansible.cfg
                     echo \${ANSIBLE_CONFIG}
                     which ansible
-                    until time ansible-playbook -i ${WORKSPACE}/inventory.ini reset.yml -u ${user} --become --become-user=root -e reset_confirmation=yes ; do sleep 5 ; done
+                    until time ansible-playbook -i ${WORKSPACE}/inventory.ini reset.yml -u ${ansible_user} --become --become-user=root -e reset_confirmation=yes ; do sleep 5 ; done
                     deactivate ; echo -e "\n"
                     """
                 }
+                // ansiColor('xterm') {
+                //     sh """
+                //     cd ${WORKSPACE}/kubespray/ ; pwd ; echo -e "\n" ; whoami
+                //     source ${python_venv}/bin/activate ; echo -e "\n\n"
+                //     export ANSIBLE_CONFIG=/home/${ansible_user}/.ansible.cfg
+                //     echo \${ANSIBLE_CONFIG}
+                //     which ansible
+                //     until time ansible-playbook -i ${WORKSPACE}/inventory.ini reset.yml -u ${ansible_user} --become --become-user=root -e reset_confirmation=yes ; do sleep 5 ; done
+                //     deactivate ; echo -e "\n"
+                //     """
+                // }
                 
             }
         }
@@ -299,7 +315,7 @@ pipeline {
         //             inventory: "${env.WORKSPACE}/inventory.ini",
         //             forks: 16,
         //             colorized: true,
-        //             extras: '-u ${user} --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" --flush-cache -v',
+        //             extras: '-u ${ansible_user} --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" --flush-cache -v',
         //             extraVars: [
         //                 jenkins_workspace: "${env.WORKSPACE}/"
         //             ]
@@ -317,7 +333,7 @@ pipeline {
         //             inventory: "${env.WORKSPACE}/inventory.ini",
         //             forks: 16,
         //             colorized: true,
-        //             extras: '-u ${user} --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" --flush-cache -v',
+        //             extras: '-u ${ansible_user} --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" --flush-cache -v',
         //             extraVars: [
         //                 jenkins_workspace: "${env.WORKSPACE}/",
         //                 http_proxy: "${params.http_proxy}",
@@ -350,7 +366,7 @@ pipeline {
         //             inventory: "${env.WORKSPACE}/inventory.ini",
         //             forks: 16,
         //             colorized: true,
-        //             extras: '-u ${user} --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" --flush-cache -v',
+        //             extras: '-u ${ansible_user} --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" --flush-cache -v',
         //             extraVars: [
         //                 jenkins_workspace: "${env.WORKSPACE}/",
         //                 kube_version: "${params.kube_version}",
@@ -398,7 +414,7 @@ pipeline {
         //                 become: true,
         //                 becomeUser: "root",
         //                 colorized: true,
-        //                 extras: '-u ${user} --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" --flush-cache -v',
+        //                 extras: '-u ${ansible_user} --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" --flush-cache -v',
         //                 extraVars: [
         //                     http_proxy: "${params.http_proxy}",
         //                     https_proxy: "${params.https_proxy}",
