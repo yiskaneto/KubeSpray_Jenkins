@@ -186,7 +186,7 @@ pipeline {
         )
         booleanParam(
             name: 'metrics_server_enabled',
-            defaultValue: true,
+            defaultValue: false,
             description: 'Found on inventory/mycluster/group_vars/k8s_cluster/addons.yml'
         )
         booleanParam(
