@@ -4,7 +4,15 @@ Jenkins pipeline to automate the installation of Kubernetes on RHEL distribution
 ## Requirements
 1. Python 3.9
 
-1. Create a Python virtual environment,   job will create a new python virtual environment, hence the jenkins user must have writing permission to it, you can specify where the python 
+1. This job will create a new Python environment, by default in `~/ansible2.12/` (you can change this on the Jenkins parameters), this to install the specific version of ansible and tools needed for the deployment so we need to do a fews thing prior to deployment:
+   1. if the Python ven is outside of the user's home directory then ensure it was rwx permission to such folder, you can use the following command to do so:
+      `sudo setfacl -R -m u:<username>:rwx <folder>`
+   1. Create the `/home/<sudo user running ansible>/.ansible.cg` file and add the following entry:
+   ```yaml
+   [defaults]
+   host_key_checking = False
+   private_key_file = /home/<sudo user running ansible>/.ssh/<ssh key authorized to loging into your node>
+   ```
 
 1. You must copy the public ssh key to the target nodes, it should be the key of the user that is running the Jenkins job, for example:
 
