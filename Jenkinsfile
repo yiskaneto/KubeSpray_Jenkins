@@ -276,12 +276,10 @@ pipeline {
                 //         reset_confirmation: "yes"
                 //     ]
                 // )
-                withCredentials([usernameColonPassword(credentialsId: 'ansible_pr_key', variable: 'PRKEY')]) {
+                withCredentials([file(credentialsId: 'ansible_pr_key', variable: 'PRKEY')]) {
                     sh """
                     cd ${WORKSPACE}/kubespray/ ; pwd ; echo -e "\n" ; whoami
                     source ${python_venv}/bin/activate ; echo -e "\n\n"
-                    export ANSIBLE_CONFIG=/home/${ansible_user}/.ansible.cfg
-                    echo \${ANSIBLE_CONFIG}
                     which ansible
                     until time ansible-playbook -i ${WORKSPACE}/inventory.ini reset.yml -u ${ansible_user} --become --become-user=root -e reset_confirmation=yes --private-key ${PRKEY}; do sleep 5 ; done
                     deactivate ; echo -e "\n"
