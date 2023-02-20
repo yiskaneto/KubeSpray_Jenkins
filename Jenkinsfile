@@ -297,28 +297,28 @@ pipeline {
             }
         }
 
-        stage('Reboot Nodes') {
-            when {
-                expression { params.restart_node == true }
-            }
-            steps {
-                sh """
-                echo "Rebooting nodes"
-                """
-                ansiblePlaybook(
-                    disableHostKeyChecking : true,
-                    credentialsId: "${params.private_key_credential}",
-                    playbook: "${env.WORKSPACE}/roles/Requirements/reboot_target_nodes.yaml",
-                    inventory: "${env.WORKSPACE}/inventory.ini",
-                    forks: 16,
-                    colorized: true,
-                    extras: '-u ${ansible_user} --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" --flush-cache -v',
-                    extraVars: [
-                        jenkins_workspace: "${env.WORKSPACE}/"
-                    ]
-                )
-            }
-        }
+        // stage('Reboot Nodes') {
+        //     when {
+        //         expression { params.restart_node == true }
+        //     }
+        //     steps {
+        //         sh """
+        //         echo "Rebooting nodes"
+        //         """
+        //         ansiblePlaybook(
+        //             disableHostKeyChecking : true,
+        //             credentialsId: "${params.private_key_credential}",
+        //             playbook: "${env.WORKSPACE}/roles/Requirements/reboot_target_nodes.yaml",
+        //             inventory: "${env.WORKSPACE}/inventory.ini",
+        //             forks: 16,
+        //             colorized: true,
+        //             extras: '-u ${ansible_user} --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" --flush-cache -v',
+        //             extraVars: [
+        //                 jenkins_workspace: "${env.WORKSPACE}/"
+        //             ]
+        //         )
+        //     }
+        // }
 
         // stage('Running OS requirements K8s') { 
         //     when {
