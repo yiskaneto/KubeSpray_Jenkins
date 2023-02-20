@@ -269,7 +269,7 @@ pipeline {
                 // )
                 ansiColor('xterm') {
                     sh """
-                    ANSIBLE_CONFIG=/home/ansible/.ansible.cfg
+                    export ANSIBLE_CONFIG=/home/ansible/.ansible.cfg
                     cd ${WORKSPACE}/kubespray/ ; echo -e "\n"
                     pwd ; echo -e "\n"
                     source kubespray-venv/bin/activate ; echo -e "\n\n"
