@@ -266,22 +266,42 @@ pipeline {
                 expression { params.reset_k8s_cluster == true }
             }
             steps {
-                ansiblePlaybook(
-                    // installation: "/opt/python-venvs/ansible-2.12/bin/",
-                    disableHostKeyChecking : true,
-                    credentialsId: 'ansible_private_key',
-                    playbook: "${env.WORKSPACE}/kubespray/reset.yml",
-                    inventory: "${env.WORKSPACE}/inventory.ini",
-                    become: true,
-                    colorized: true,
-                    extras: '-u ${ansible_user} --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"',
-                    extraVars: [
-                        http_proxy: "${params.http_proxy}",
-                        https_proxy: "${params.https_proxy}",
-                        no_proxy: "${params.no_proxy}",
-                        reset_confirmation: 'yes'
-                    ]
-                )
+                withCredentials([string(credentialsId: 'ansible_become', variable: 'BECOME')]) {
+                    ansiblePlaybook(
+                        // installation: "/opt/python-venvs/ansible-2.12/bin/",
+                        disableHostKeyChecking : true,
+                        credentialsId: 'ansible_private_key',
+                        playbook: "${env.WORKSPACE}/kubespray/reset.yml",
+                        inventory: "${env.WORKSPACE}/inventory.ini",
+                        become: true,
+                        colorized: true,
+                        extras: '-u ${ansible_user} --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"',
+                        extraVars: [
+                            ansible_become_password: [value: '$BECOME', hidden: true]
+                            http_proxy: "${params.http_proxy}",
+                            https_proxy: "${params.https_proxy}",
+                            no_proxy: "${params.no_proxy}",
+                            reset_confirmation: 'yes'
+                        ]
+                    )
+                }
+                // ansiblePlaybook(
+                //     // installation: "/opt/python-venvs/ansible-2.12/bin/",
+                //     disableHostKeyChecking : true,
+                //     credentialsId: 'ansible_private_key',
+                //     playbook: "${env.WORKSPACE}/kubespray/reset.yml",
+                //     inventory: "${env.WORKSPACE}/inventory.ini",
+                //     become: true,
+                //     colorized: true,
+                //     extras: '-u ${ansible_user} --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"',
+                //     extraVars: [
+                //         ansible_become_password: 
+                //         http_proxy: "${params.http_proxy}",
+                //         https_proxy: "${params.https_proxy}",
+                //         no_proxy: "${params.no_proxy}",
+                //         reset_confirmation: 'yes'
+                //     ]
+                // )
                 // withCredentials([string(credentialsId: 'ansible_become', variable: 'PRKEY')]) {
                 //     sh"""
                 //     cd ${WORKSPACE}/kubespray/ ; pwd ; echo -e "\n" ; whoami
