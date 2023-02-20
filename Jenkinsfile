@@ -289,7 +289,6 @@ pipeline {
                 // )
                 withCredentials([string(credentialsId: 'ansible_become', variable: 'PRKEY')]) {
                     sh'''
-                    set +x
                     cd ${WORKSPACE}/kubespray/ ; pwd ; echo -e "\n" ; whoami
                     source ${python_venv}/bin/activate ; echo -e "\n\n"
                     which ansible
