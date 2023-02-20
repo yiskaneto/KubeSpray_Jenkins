@@ -2,13 +2,15 @@
 
 set -e
 
+venv=${1}
+
 ANSIBLE_VERSION=2.12
 
 echo -e "\nStarting python venv kubespray-venv\n"
-python -m venv kubespray-venv && echo -e "\n"
+python -m venv ${venv} && echo -e "\n"
 
 echo "\nStarting source venv/bin/activate\n"
-source kubespray-venv/bin/activate && which python && echo -e "\n\n"
+source ${venv}bin/activate && which python && echo -e "\n\n"
 
 echo -e "\nVerifying current directory\n" && pwd
 
