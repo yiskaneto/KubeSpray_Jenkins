@@ -267,7 +267,7 @@ pipeline {
             }
             steps {
                 ansiblePlaybook(
-                    installation: "/opt/python-venvs/ansible-2.12/bin/",
+                    // installation: "/opt/python-venvs/ansible-2.12/bin/",
                     disableHostKeyChecking : true,
                     credentialsId: 'ansible_private_key',
                     playbook: "${env.WORKSPACE}/kubespray/reset.yml",
