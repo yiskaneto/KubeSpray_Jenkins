@@ -62,7 +62,7 @@ pipeline {
         string(
             name: 'python_venv',
             defaultValue: '/opt/ansible-12.2',
-            description: '<h5>Username that will run the installation, the user must have enough privileges for writing SSL keys in /etc/, installing packages and interacting with various systemd daemons</h5>'
+            description: '<h5>Folder where the Python ven will be created, the user must have rwx permission</h5>'
         )
         booleanParam(
             name: 'reset_k8s_cluster',
