@@ -287,12 +287,13 @@ pipeline {
                 //         reset_confirmation: "yes"
                 //     ]
                 // )
-                withCredentials([string(credentialsId: 'ansible_pr_key', variable: 'PRKEY')]) {
+                withCredentials([string(credentialsId: 'ansible_become', variable: 'PRKEY')]) {
                     sh'''
+                    set +x
                     cd ${WORKSPACE}/kubespray/ ; pwd ; echo -e "\n" ; whoami
                     source ${python_venv}/bin/activate ; echo -e "\n\n"
                     which ansible
-                    until time ansible-playbook -i ${WORKSPACE}/inventory.ini reset.yml -u ${ansible_user} --become --become-user=root -e reset_confirmation=yes --private-key ${params.private_key_path} -e ansible_become_pass=${become_credentials} ; do sleep 5 ; done
+                    until time ansible-playbook -i ${WORKSPACE}/inventory.ini reset.yml -u ${ansible_user} --become --become-user=root -e reset_confirmation=yes --private-key ${params.private_key_path} -e ansible_become_pass=$PRKEY ; do sleep 5 ; done
                     '''
                 }
                 // ansiColor('xterm') {
