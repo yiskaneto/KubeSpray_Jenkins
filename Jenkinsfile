@@ -57,6 +57,7 @@ pipeline {
 		
 		buildDiscarder(logRotator(daysToKeepStr: '90'))
 		}
+    
   
     parameters {
         string(
@@ -73,6 +74,16 @@ pipeline {
             name: 'private_key_path',
             defaultValue: 'REPLACE_THIS',
             description: '<h5>Path in the ansible to the private key to be able to connecto to the target nodes</h5>'
+        )
+        string(
+            name: 'vault_file',
+            defaultValue: 'REPLACE_THIS',
+            description: '<h5>jenkins credential holding the vault file</h5>'
+        )
+        string(
+            name: 'vault_decryptor',
+            defaultValue: 'REPLACE_THIS',
+            description: '<h5>Jenkins credential holding the password to decrypt the vault</h5>'
         )
         booleanParam(
             name: 'reset_k8s_cluster',
@@ -255,6 +266,11 @@ pipeline {
         }
 
         stage('Reset K8s Cluster') {
+            environment {
+                ANSIBLE_VAULT = credentials("${vault_file}")
+                DECRYPT_VAULT = credentials($${vault_decryptor})
+                    
+            }
             when {
                 expression { params.reset_k8s_cluster == true }
             }
@@ -286,13 +302,12 @@ pipeline {
                 //     """
                 // }
                 ansiColor('xterm') {
-                    sh """
-                    cd ${WORKSPACE}/kubespray/ ; pwd ; echo -e "\n" ; whoami
+                    sh"""
                     source ${python_venv}/bin/activate ; echo -e "\n\n"
                     export ANSIBLE_CONFIG=/home/${ansible_user}/.ansible.cfg
                     echo \${ANSIBLE_CONFIG}
                     which ansible
-                    until time ansible-playbook -i ${WORKSPACE}/inventory.ini reset.yml -u ${ansible_user} --become --become-user=root -e reset_confirmation=yes --private-key ${params.private_key_path} ; do sleep 5 ; done
+                    until time ansible-playbook -i ${WORKSPACE}/inventory.ini reset.yml -u ${ansible_user} --become --become-user=root -e reset_confirmation=yes --private-key ${params.private_key_path} -e '${ANSIBLE_VAULT}' --vault-password-file ${DECRYPT_VAULT} ; do sleep 5 ; done
                     deactivate ; echo -e "\n"
                     """
                 }
