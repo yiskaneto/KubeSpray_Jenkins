@@ -70,9 +70,9 @@ pipeline {
             description: '<h5>Username that will run the installation</h5>'
         )
         string(
-            name: 'private_key',
+            name: 'private_key_path',
             defaultValue: 'REPLACE_THIS',
-            description: '<h5>The Jenkins credentials holding the private key of ansible_user</h5>'
+            description: '<h5>Path in the ansible to the private key to be able to connecto to the target nodes</h5>'
         )
         booleanParam(
             name: 'reset_k8s_cluster',
@@ -267,7 +267,7 @@ pipeline {
                 //     becomeUser: "root",
                 //     forks: 8,
                 //     colorized: true,
-                //     extras: '-u ${ansible_user} --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"',
+                //     extras: '-u ${ansible_user} --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"',F
                 //     extraVars: [
                 //         jenkins_workspace: "${env.WORKSPACE}/",
                 //         http_proxy: "${params.http_proxy}",
@@ -276,26 +276,26 @@ pipeline {
                 //         reset_confirmation: "yes"
                 //     ]
                 // )
-                withCredentials([file(credentialsId: 'ansible_pr_key', variable: 'PRKEY')]) {
-                    sh """
-                    cd ${WORKSPACE}/kubespray/ ; pwd ; echo -e "\n" ; whoami
-                    source ${python_venv}/bin/activate ; echo -e "\n\n"
-                    which ansible
-                    until time ansible-playbook -i ${WORKSPACE}/inventory.ini reset.yml -u ${ansible_user} --become --become-user=root -e reset_confirmation=yes --private-key ${PRKEY}; do sleep 5 ; done
-                    deactivate ; echo -e "\n"
-                    """
-                }
-                // ansiColor('xterm') {
+                // withCredentials([file(credentialsId: 'ansible_pr_key', variable: 'PRKEY')]) {
                 //     sh """
                 //     cd ${WORKSPACE}/kubespray/ ; pwd ; echo -e "\n" ; whoami
                 //     source ${python_venv}/bin/activate ; echo -e "\n\n"
-                //     export ANSIBLE_CONFIG=/home/${ansible_user}/.ansible.cfg
-                //     echo \${ANSIBLE_CONFIG}
                 //     which ansible
-                //     until time ansible-playbook -i ${WORKSPACE}/inventory.ini reset.yml -u ${ansible_user} --become --become-user=root -e reset_confirmation=yes ; do sleep 5 ; done
+                //     until time ansible-playbook -i ${WORKSPACE}/inventory.ini reset.yml -u ${ansible_user} --become --become-user=root -e reset_confirmation=yes --private-key ${PRKEY}; do sleep 5 ; done
                 //     deactivate ; echo -e "\n"
                 //     """
                 // }
+                ansiColor('xterm') {
+                    sh """
+                    cd ${WORKSPACE}/kubespray/ ; pwd ; echo -e "\n" ; whoami
+                    source ${python_venv}/bin/activate ; echo -e "\n\n"
+                    export ANSIBLE_CONFIG=/home/${ansible_user}/.ansible.cfg
+                    echo \${ANSIBLE_CONFIG}
+                    which ansible
+                    until time ansible-playbook -i ${WORKSPACE}/inventory.ini reset.yml -u ${ansible_user} --become --become-user=root -e reset_confirmation=yes --private-key ${params.private_key_path} ; do sleep 5 ; done
+                    deactivate ; echo -e "\n"
+                    """
+                }
                 
             }
         }
