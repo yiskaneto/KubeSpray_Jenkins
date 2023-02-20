@@ -280,7 +280,7 @@ pipeline {
                     becomeUser: "root",
                     forks: 8,
                     colorized: true,
-                    extras: '-u ${ansible_user} --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"',F
+                    extras: '-u ${ansible_user} --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"',
                     extraVars: [
                         http_proxy: "${params.http_proxy}",
                         https_proxy: "${params.https_proxy}",
