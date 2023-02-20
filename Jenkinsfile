@@ -272,7 +272,6 @@ pipeline {
                     playbook: "${env.WORKSPACE}/kubespray/reset.yml",
                     inventory: "${env.WORKSPACE}/inventory.ini",
                     become: true,
-                    becomeUser: "root",
                     forks: 8,
                     colorized: true,
                     extras: '-u ${ansible_user} --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"',
