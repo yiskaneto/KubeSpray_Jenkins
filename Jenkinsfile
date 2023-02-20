@@ -76,14 +76,9 @@ pipeline {
             description: '<h5>Path in the ansible to the private key to be able to connecto to the target nodes</h5>'
         )
         string(
-            name: 'vault_file',
+            name: 'become_credentials',
             defaultValue: 'REPLACE_THIS',
             description: '<h5>jenkins credential holding the vault file</h5>'
-        )
-        string(
-            name: 'vault_decryptor',
-            defaultValue: 'REPLACE_THIS',
-            description: '<h5>Jenkins credential holding the password to decrypt the vault</h5>'
         )
         booleanParam(
             name: 'reset_k8s_cluster',
@@ -292,25 +287,23 @@ pipeline {
                 //         reset_confirmation: "yes"
                 //     ]
                 // )
-                // withCredentials([file(credentialsId: 'ansible_pr_key', variable: 'PRKEY')]) {
-                //     sh """
-                //     cd ${WORKSPACE}/kubespray/ ; pwd ; echo -e "\n" ; whoami
+                withCredentials([string(credentialsId: 'ansible_pr_key', variable: 'PRKEY')]) {
+                    sh'''
+                    cd ${WORKSPACE}/kubespray/ ; pwd ; echo -e "\n" ; whoami
+                    source ${python_venv}/bin/activate ; echo -e "\n\n"
+                    which ansible
+                    until time ansible-playbook -i ${WORKSPACE}/inventory.ini reset.yml -u ${ansible_user} --become --become-user=root -e reset_confirmation=yes --private-key ${params.private_key_path} -e ansible_become_pass=${become_credentials} ; do sleep 5 ; done
+                    '''
+                }
+                // ansiColor('xterm') {
+                //     sh"""
                 //     source ${python_venv}/bin/activate ; echo -e "\n\n"
+                //     cd ${WORKSPACE}/kubespray
                 //     which ansible
-                //     until time ansible-playbook -i ${WORKSPACE}/inventory.ini reset.yml -u ${ansible_user} --become --become-user=root -e reset_confirmation=yes --private-key ${PRKEY}; do sleep 5 ; done
+                //     until time ansible-playbook -i ${WORKSPACE}/inventory.ini reset.yml -u ${ansible_user} --become --become-user=root -e reset_confirmation=yes --private-key ${params.private_key_path} -e '${ANSIBLE_VAULT}' --vault-password-file '${DECRYPT_VAULT}' ; do sleep 5 ; done
                 //     deactivate ; echo -e "\n"
                 //     """
                 // }
-                ansiColor('xterm') {
-                    sh"""
-                    source ${python_venv}/bin/activate ; echo -e "\n\n"
-                    export ANSIBLE_CONFIG=/home/${ansible_user}/.ansible.cfg
-                    cd ${WORKSPACE}/kubespray
-                    which ansible
-                    until time ansible-playbook -i ${WORKSPACE}/inventory.ini reset.yml -u ${ansible_user} --become --become-user=root -e reset_confirmation=yes --private-key ${params.private_key_path} -e '${ANSIBLE_VAULT}' --vault-password-file '${DECRYPT_VAULT}' ; do sleep 5 ; done
-                    deactivate ; echo -e "\n"
-                    """
-                }
                 
             }
         }
