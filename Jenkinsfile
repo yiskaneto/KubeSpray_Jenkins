@@ -321,14 +321,15 @@ pipeline {
                 }
                 ansiblePlaybook(
                     playbook: "${env.WORKSPACE}/roles/Requirements/reboot_target_nodes.yaml",
-                    inventory: "${env.WORKSPACE}/inventory.ini",
+                    inventoryContent: "${params.inventory}",
+                    // inventory: "${env.WORKSPACE}/inventory.ini",
                     become: true,
                     disableHostKeyChecking : true,
                     credentialsId: "${params.private_key_credential}",
                     vaultCredentialsId: "ansible_decrypt_vault",
                     forks: 16,
                     colorized: true,
-                    extras: '--ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" --flush-cache -v',
+                    extras: '--ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" --flush-cache -vv',
                     extraVars: [
                         jenkins_workspace: "${env.WORKSPACE}/"
                     ]
