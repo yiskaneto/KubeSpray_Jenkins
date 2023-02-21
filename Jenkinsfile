@@ -276,7 +276,7 @@ pipeline {
                     ansiblePlaybook(
                         disableHostKeyChecking : true,
                         credentialsId: "${params.private_key_credential}",
-                        vaultCredentialsId: "ansible_user_vault"
+                        vaultCredentialsId: "ansible_user_vault",
                         playbook: "${env.WORKSPACE}/roles/Requirements/reset.yml",
                         inventory: "${env.WORKSPACE}/inventory.ini",
                         become: true,
