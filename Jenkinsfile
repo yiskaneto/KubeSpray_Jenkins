@@ -271,6 +271,9 @@ pipeline {
                 withCredentials([string(credentialsId: 'ansible_become', variable: 'BECOME')]) {
                     writeFile file: "${WORKSPACE}/roles/Requirements/ansible_data_vault.yaml", text: "$BECOME"
                 }
+                sh """
+                cat ${WORKSPACE}/roles/Requirements/ansible_data_vault.yaml
+                """
                 
                 withCredentials([string(credentialsId: 'ansible_become', variable: 'BECOME')]) {
                     ansiblePlaybook(
