@@ -268,7 +268,7 @@ pipeline {
             }
             steps {
                 withCredentials([string(credentialsId: 'ansible_user_vault', variable: 'VAULT')]) {
-                    writeFile file: "${WORKSPACE}/roles/Requirements/ansible_data_vault.yaml", text: '$VAULT'
+                    writeFile file: "${WORKSPACE}/roles/Requirements/ansible_data_vault.yaml", text: "$VAULT"
                 }
                 sh """
                 cat ${WORKSPACE}/roles/Requirements/ansible_data_vault.yaml
@@ -314,7 +314,7 @@ pipeline {
                 echo "Rebooting nodes"
                 """
                 withCredentials([string(credentialsId: 'ansible_user_vault', variable: 'VAULT')]) {
-                    writeFile file: "${WORKSPACE}/roles/Requirements/ansible_data_vault.yaml", text: '$VAULT'
+                    writeFile file: "${WORKSPACE}/roles/Requirements/ansible_data_vault.yaml", text: "$VAULT"
                 }
                 sh """
                 cat ${WORKSPACE}/roles/Requirements/ansible_data_vault.yaml
