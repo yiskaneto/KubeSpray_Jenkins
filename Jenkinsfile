@@ -313,7 +313,7 @@ pipeline {
                 sh """
                 echo "Rebooting nodes"
                 """
-                withCredentials([string(credentialsId: 'ansible_user_vault', variable: 'VAULT')]) {
+                withCredentials([string(credentialsId: 'ansible_vault_file', variable: 'VAULT')]) {
                     writeFile file: "${WORKSPACE}/roles/ansible_data_vault.yaml", text: "$VAULT"
                 }
                 ansiblePlaybook(
