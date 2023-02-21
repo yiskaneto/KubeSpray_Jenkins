@@ -314,9 +314,16 @@ pipeline {
                 sh """
                 echo "Rebooting nodes"
                 """
+                withCredentials([string(credentialsId: 'ansible_become', variable: 'BECOME')]) {
+                    writeFile file: "${WORKSPACE}/roles/Requirements/ansible_data_vault.yaml", text: "$BECOME"
+                }
+                sh """
+                cat ${WORKSPACE}/roles/Requirements/ansible_data_vault.yaml
+                """
                 ansiblePlaybook(
                     disableHostKeyChecking : true,
                     credentialsId: "${params.private_key_credential}",
+                    vaultCredentialsId: "ansible_user_vault",
                     playbook: "${env.WORKSPACE}/roles/Requirements/reboot_target_nodes.yaml",
                     inventory: "${env.WORKSPACE}/inventory.ini",
                     forks: 16,
