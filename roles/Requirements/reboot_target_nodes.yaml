@@ -1,6 +1,8 @@
 ---
 - hosts: all
   gather_facts: false
+  vars_files:
+    - ../ansible_data_vault.yaml
   tasks:
     - name: Rebooting all nodes using ansible module
       reboot:
