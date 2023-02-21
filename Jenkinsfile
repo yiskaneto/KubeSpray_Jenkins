@@ -315,12 +315,12 @@ pipeline {
                 """
                 withCredentials([file(credentialsId: 'ansible_vault_file', variable: 'VAULT')]) {
                     writeFile file: "${WORKSPACE}/ansible_vault", text: "$VAULT"
+                    sh """
+                    cat $VAULT
+                    ls -l ${WORKSPACE}/ansible_vault
+                    cat ${WORKSPACE}/ansible_vault
+                    """
                 }
-                sh """
-                cat $VAULT
-                ls -l ${WORKSPACE}/ansible_vault
-                cat ${WORKSPACE}/ansible_vault
-                """
                 // ansiblePlaybook(
                 //     playbook: "${env.WORKSPACE}/roles/Requirements/reboot_target_nodes.yaml",
                 //     inventory: "${env.WORKSPACE}/inventory.ini",
