@@ -328,7 +328,7 @@ pipeline {
                     vaultCredentialsId: "ansible_decrypt_vault",
                     forks: 16,
                     colorized: true,
-                    extras: '-u ${ansible_user} --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" --flush-cache -v',
+                    extras: '--ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" --flush-cache -v',
                     extraVars: [
                         jenkins_workspace: "${env.WORKSPACE}/"
                     ]
