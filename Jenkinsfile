@@ -316,23 +316,23 @@ pipeline {
                 withCredentials([file(credentialsId: 'ansible_vault_file', variable: 'VAULT')]) {
                     // writeFile file: "${WORKSPACE}/ansible_vault", text: "$VAULT"
                     sh """
-                    echo $VAULT > ${WORKSPACE}/ansible_vault
-                    cat ${WORKSPACE}/ansible_vault
+                    echo $VAULT > ${WORKSPACE}/ansible_data_vault.yml
+                    cat ${WORKSPACE}/ansible_data_vault.yml
                     """
                 }
-                // ansiblePlaybook(
-                //     playbook: "${env.WORKSPACE}/roles/Requirements/reboot_target_nodes.yaml",
-                //     inventory: "${env.WORKSPACE}/inventory.ini",
-                //     become: true,
-                //     disableHostKeyChecking : true,
-                //     credentialsId: "${params.private_key_credential}",
-                //     vaultCredentialsId: "ansible_decrypt_vault",
-                //     forks: 16,
-                //     colorized: true,
-                //     extras: '-u ${ansible_user} --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" --flush-cache -v',
-                //     extraVars: [
-                //         jenkins_workspace: "${env.WORKSPACE}/"
-                //     ]
+                ansiblePlaybook(
+                    playbook: "${env.WORKSPACE}/roles/Requirements/reboot_target_nodes.yaml",
+                    inventory: "${env.WORKSPACE}/inventory.ini",
+                    become: true,
+                    disableHostKeyChecking : true,
+                    credentialsId: "${params.private_key_credential}",
+                    vaultCredentialsId: "ansible_decrypt_vault",
+                    forks: 16,
+                    colorized: true,
+                    extras: '-u ${ansible_user} --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" --flush-cache -v',
+                    extraVars: [
+                        jenkins_workspace: "${env.WORKSPACE}/"
+                    ]
                 // )
             }
         }
