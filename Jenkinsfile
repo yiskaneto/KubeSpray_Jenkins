@@ -316,8 +316,7 @@ pipeline {
                 withCredentials([file(credentialsId: 'ansible_vault_file', variable: 'VAULT')]) {
                     // writeFile file: "${WORKSPACE}/ansible_vault", text: "$VAULT"
                     sh """
-                    cat $VAULT
-                    echo $VAULT > ${WORKSPACE}/roles/ansible_data_vault.yml
+                    cat $VAULT > ${WORKSPACE}/roles/ansible_data_vault.yml
                     cat ${WORKSPACE}/roles/ansible_data_vault.yml
                     """
                 }
