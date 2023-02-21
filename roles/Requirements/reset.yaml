@@ -1,0 +1,7 @@
+---
+- hosts: all
+  vars_files:
+    - ../ansible_data_vault.yaml
+  tasks:
+    - name: This fails because I'm inside a play already
+      ansible.builtin.import_playbook: ../../kubespray/reset.aml

@@ -17,6 +17,8 @@ node3 ansible_host=95.54.0.14  # ip=10.3.0.3 etcd_member_name=etcd3
 node4 ansible_host=95.54.0.15  # ip=10.3.0.4 etcd_member_name=etcd4
 node5 ansible_host=95.54.0.16  # ip=10.3.0.5 etcd_member_name=etcd5
 node6 ansible_host=95.54.0.17  # ip=10.3.0.6 etcd_member_name=etcd6
+[all:vars]
+ansible_become_pass='{{ ansible_become_pass }}'
 
 # ## configure a bastion host if your nodes are not directly reachable
 # [bastion]
@@ -267,10 +269,15 @@ pipeline {
             }
             steps {
                 withCredentials([string(credentialsId: 'ansible_become', variable: 'BECOME')]) {
+                    writeFile file: "${WORKSPACE}/roles/Requirements/ansible_data_vault.yaml", text: "$BECOME"
+                }
+                
+                withCredentials([string(credentialsId: 'ansible_become', variable: 'BECOME')]) {
                     ansiblePlaybook(
                         disableHostKeyChecking : true,
                         credentialsId: "${params.private_key_credential}",
-                        playbook: "${env.WORKSPACE}/kubespray/reset.yml",
+                        vaultCredentialsId: "ansible_user_vault"
+                        playbook: "${env.WORKSPACE}/roles/Requirements/reset.yml",
                         inventory: "${env.WORKSPACE}/inventory.ini",
                         become: true,
                         colorized: true,
