@@ -258,7 +258,6 @@ pipeline {
                 echo "running whoami" && whoami
                 cp ${WORKSPACE}/roles/scripts/kubeSpray_venv_install_requirements.sh .
                 bash kubeSpray_venv_install_requirements.sh ${python_venv}
-                ls -l ${WORKSPACE}/kubespray
                 """
             }
         }
