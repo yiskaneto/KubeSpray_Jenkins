@@ -273,26 +273,25 @@ pipeline {
                 sh """
                 cat ${WORKSPACE}/roles/Requirements/ansible_data_vault.yaml
                 """
-                
-                // withCredentials([string(credentialsId: 'ansible_become', variable: 'BECOME')]) {
-                //     ansiblePlaybook(
-                //         disableHostKeyChecking : true,
-                //         credentialsId: "${params.private_key_credential}",
-                //         vaultCredentialsId: "ansible_decrypt_vault",
-                //         playbook: "${env.WORKSPACE}/roles/Requirements/reset.yml",
-                //         inventory: "${env.WORKSPACE}/inventory.ini",
-                //         become: true,
-                //         colorized: true,
-                //         extras: '-u ${ansible_user} --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"',
-                //         extraVars: [
-                //             // ansible_become_password: [value: '$BECOME', hidden: true],
-                //             http_proxy: "${params.http_proxy}",
-                //             https_proxy: "${params.https_proxy}",
-                //             no_proxy: "${params.no_proxy}",
-                //             reset_confirmation: 'yes'
-                //         ]
-                //     )
-                // }
+                withCredentials([string(credentialsId: 'ansible_become', variable: 'BECOME')]) {
+                    ansiblePlaybook(
+                        disableHostKeyChecking : true,
+                        credentialsId: "${params.private_key_credential}",
+                        vaultCredentialsId: "ansible_decrypt_vault",
+                        playbook: "${env.WORKSPACE}/roles/Requirements/reset.yml",
+                        inventory: "${env.WORKSPACE}/inventory.ini",
+                        become: true,
+                        colorized: true,
+                        extras: '-u ${ansible_user} --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"',
+                        extraVars: [
+                            // ansible_become_password: [value: '$BECOME', hidden: true],
+                            http_proxy: "${params.http_proxy}",
+                            https_proxy: "${params.https_proxy}",
+                            no_proxy: "${params.no_proxy}",
+                            reset_confirmation: 'yes'
+                        ]
+                    )
+                }
                 // ansiColor('xterm') {
                 //     sh"""
                 //     source ${python_venv}/bin/activate ; echo -e "\n\n"
@@ -314,25 +313,25 @@ pipeline {
                 sh """
                 echo "Rebooting nodes"
                 """
-                withCredentials([string(credentialsId: 'ansible_become', variable: 'BECOME')]) {
-                    writeFile file: "${WORKSPACE}/roles/Requirements/ansible_data_vault.yaml", text: "$BECOME"
+                withCredentials([string(credentialsId: 'ansible_user_vault', variable: 'VAULT')]) {
+                    writeFile file: "${WORKSPACE}/roles/Requirements/ansible_data_vault.yaml", text: '$VAULT'
                 }
                 sh """
                 cat ${WORKSPACE}/roles/Requirements/ansible_data_vault.yaml
                 """
-                ansiblePlaybook(
-                    disableHostKeyChecking : true,
-                    credentialsId: "${params.private_key_credential}",
-                    vaultCredentialsId: "ansible_user_vault",
-                    playbook: "${env.WORKSPACE}/roles/Requirements/reboot_target_nodes.yaml",
-                    inventory: "${env.WORKSPACE}/inventory.ini",
-                    forks: 16,
-                    colorized: true,
-                    extras: '-u ${ansible_user} --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" --flush-cache -v',
-                    extraVars: [
-                        jenkins_workspace: "${env.WORKSPACE}/"
-                    ]
-                )
+                // ansiblePlaybook(
+                //     disableHostKeyChecking : true,
+                //     credentialsId: "${params.private_key_credential}",
+                //     vaultCredentialsId: "ansible_user_vault",
+                //     playbook: "${env.WORKSPACE}/roles/Requirements/reboot_target_nodes.yaml",
+                //     inventory: "${env.WORKSPACE}/inventory.ini",
+                //     forks: 16,
+                //     colorized: true,
+                //     extras: '-u ${ansible_user} --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" --flush-cache -v',
+                //     extraVars: [
+                //         jenkins_workspace: "${env.WORKSPACE}/"
+                //     ]
+                // )
             }
         }
 
