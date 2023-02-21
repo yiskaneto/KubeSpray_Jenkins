@@ -314,9 +314,9 @@ pipeline {
                 echo "Rebooting nodes"
                 """
                 withCredentials([file(credentialsId: 'ansible_vault_file', variable: 'VAULT')]) {
-                    writeFile file: "${WORKSPACE}/ansible_vault", text: "$VAULT"
+                    // writeFile file: "${WORKSPACE}/ansible_vault", text: "$VAULT"
                     sh """
-                    cat $VAULT
+                    echo $VAULT > ${WORKSPACE}/ansible_vault
                     cat ${WORKSPACE}/ansible_vault
                     """
                 }
