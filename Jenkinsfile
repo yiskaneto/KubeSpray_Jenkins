@@ -316,15 +316,13 @@ pipeline {
                 withCredentials([string(credentialsId: 'ansible_user_vault', variable: 'VAULT')]) {
                     writeFile file: "${WORKSPACE}/roles/Requirements/ansible_data_vault.yaml", text: "$VAULT"
                 }
-                sh """
-                cat ${WORKSPACE}/roles/Requirements/ansible_data_vault.yaml
-                """
                 ansiblePlaybook(
+                    playbook: "${env.WORKSPACE}/roles/Requirements/reboot_target_nodes.yaml",
+                    inventory: "${env.WORKSPACE}/inventory.ini",
+                    become: true,
                     disableHostKeyChecking : true,
                     credentialsId: "${params.private_key_credential}",
                     vaultCredentialsId: "ansible_decrypt_vault",
-                    playbook: "${env.WORKSPACE}/roles/Requirements/reboot_target_nodes.yaml",
-                    inventory: "${env.WORKSPACE}/inventory.ini",
                     forks: 16,
                     colorized: true,
                     extras: '-u ${ansible_user} --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" --flush-cache -v',
