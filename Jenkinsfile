@@ -273,25 +273,25 @@ pipeline {
                 sh """
                 cat ${WORKSPACE}/roles/Requirements/ansible_data_vault.yaml
                 """
-                withCredentials([string(credentialsId: 'ansible_become', variable: 'BECOME')]) {
-                    ansiblePlaybook(
-                        disableHostKeyChecking : true,
-                        credentialsId: "${params.private_key_credential}",
-                        vaultCredentialsId: "ansible_decrypt_vault",
-                        playbook: "${env.WORKSPACE}/roles/Requirements/reset.yml",
-                        inventory: "${env.WORKSPACE}/inventory.ini",
-                        become: true,
-                        colorized: true,
-                        extras: '-u ${ansible_user} --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"',
-                        extraVars: [
-                            // ansible_become_password: [value: '$BECOME', hidden: true],
-                            http_proxy: "${params.http_proxy}",
-                            https_proxy: "${params.https_proxy}",
-                            no_proxy: "${params.no_proxy}",
-                            reset_confirmation: 'yes'
-                        ]
-                    )
-                }
+                // withCredentials([string(credentialsId: 'ansible_become', variable: 'BECOME')]) {
+                //     ansiblePlaybook(
+                //         disableHostKeyChecking : true,
+                //         credentialsId: "${params.private_key_credential}",
+                //         vaultCredentialsId: "ansible_decrypt_vault",
+                //         playbook: "${env.WORKSPACE}/roles/Requirements/reset.yml",
+                //         inventory: "${env.WORKSPACE}/inventory.ini",
+                //         become: true,
+                //         colorized: true,
+                //         extras: '-u ${ansible_user} --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"',
+                //         extraVars: [
+                //             // ansible_become_password: [value: '$BECOME', hidden: true],
+                //             http_proxy: "${params.http_proxy}",
+                //             https_proxy: "${params.https_proxy}",
+                //             no_proxy: "${params.no_proxy}",
+                //             reset_confirmation: 'yes'
+                //         ]
+                //     )
+                // }
                 // ansiColor('xterm') {
                 //     sh"""
                 //     source ${python_venv}/bin/activate ; echo -e "\n\n"
