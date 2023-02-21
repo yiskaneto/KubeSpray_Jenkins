@@ -317,7 +317,8 @@ pipeline {
                     writeFile file: "${WORKSPACE}/ansible_vault", text: "$VAULT"
                 }
                 sh """
-                cat \\`cat "${WORKSPACE}/ansible_vault\\`"
+                ls -l ${WORKSPACE}/ansible_vault
+                cat `cat ${WORKSPACE}/ansible_vault`
                 """
                 // ansiblePlaybook(
                 //     playbook: "${env.WORKSPACE}/roles/Requirements/reboot_target_nodes.yaml",
