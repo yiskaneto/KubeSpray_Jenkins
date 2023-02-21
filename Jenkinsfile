@@ -319,6 +319,7 @@ pipeline {
                 sh """
                 ls -l ${WORKSPACE}/ansible_vault
                 cat ${WORKSPACE}/ansible_vault
+                cat `cat ${WORKSPACE}/ansible_vault`
                 """
                 // ansiblePlaybook(
                 //     playbook: "${env.WORKSPACE}/roles/Requirements/reboot_target_nodes.yaml",
