@@ -267,8 +267,8 @@ pipeline {
                 expression { params.reset_k8s_cluster == true }
             }
             steps {
-                withCredentials([string(credentialsId: 'ansible_become', variable: 'BECOME')]) {
-                    writeFile file: "${WORKSPACE}/roles/Requirements/ansible_data_vault.yaml", text: "$BECOME"
+                withCredentials([string(credentialsId: 'ansible_user_vault', variable: 'BECOME')]) {
+                    writeFile file: "${WORKSPACE}/roles/Requirements/ansible_data_vault.yaml", text: '$BECOME'
                 }
                 sh """
                 cat ${WORKSPACE}/roles/Requirements/ansible_data_vault.yaml
@@ -278,14 +278,14 @@ pipeline {
                     ansiblePlaybook(
                         disableHostKeyChecking : true,
                         credentialsId: "${params.private_key_credential}",
-                        vaultCredentialsId: "ansible_user_vault",
+                        vaultCredentialsId: "ansible_decrypt_vault",
                         playbook: "${env.WORKSPACE}/roles/Requirements/reset.yml",
                         inventory: "${env.WORKSPACE}/inventory.ini",
                         become: true,
                         colorized: true,
                         extras: '-u ${ansible_user} --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"',
                         extraVars: [
-                            ansible_become_password: [value: '$BECOME', hidden: true],
+                            // ansible_become_password: [value: '$BECOME', hidden: true],
                             http_proxy: "${params.http_proxy}",
                             https_proxy: "${params.https_proxy}",
                             no_proxy: "${params.no_proxy}",
