@@ -333,7 +333,7 @@ pipeline {
                     extraVars: [
                         jenkins_workspace: "${env.WORKSPACE}/"
                     ]
-                // )
+                )
             }
         }
 
