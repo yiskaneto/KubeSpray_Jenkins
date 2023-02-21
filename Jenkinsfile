@@ -267,12 +267,13 @@ pipeline {
                 expression { params.reset_k8s_cluster == true }
             }
             steps {
-                withCredentials([string(credentialsId: 'ansible_user_vault', variable: 'VAULT')]) {
-                    writeFile file: "${WORKSPACE}/roles/ansible_data_vault.yaml", text: "$VAULT"
+                withCredentials([file(credentialsId: 'ansible_vault_file', variable: 'VAULT_FILE')]) {
+                    // Passed the vault file to a file where is accessible by the roles, this info remains encrypted.
+                    sh """
+                    set -x
+                    cat $VAULT_FILE > ${WORKSPACE}/roles/ansible_data_vault.yml
+                    """
                 }
-                sh """
-                cat ${WORKSPACE}/roles/ansible_data_vault.yaml
-                """
                 // withCredentials([string(credentialsId: 'ansible_become', variable: 'BECOME')]) {
                 //     ansiblePlaybook(
                 //         disableHostKeyChecking : true,
@@ -313,12 +314,13 @@ pipeline {
                 sh """
                 echo "Rebooting nodes"
                 """
-                withCredentials([file(credentialsId: 'ansible_vault_file', variable: 'VAULT')]) {
-                    sh """
-                    set -x
-                    cat $VAULT > ${WORKSPACE}/roles/ansible_data_vault.yml
-                    """
-                }
+                // withCredentials([file(credentialsId: 'ansible_vault_file', variable: 'VAULT')]) {
+                //     // Pass the 
+                //     sh """
+                //     set -x
+                //     cat $VAULT > ${WORKSPACE}/roles/ansible_data_vault.yml
+                //     """
+                // }
                 ansiblePlaybook(
                     playbook: "${env.WORKSPACE}/roles/Requirements/reboot_target_nodes.yaml",
                     inventoryContent: "${params.inventory}",
