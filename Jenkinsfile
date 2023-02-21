@@ -322,7 +322,7 @@ pipeline {
                 ansiblePlaybook(
                     disableHostKeyChecking : true,
                     credentialsId: "${params.private_key_credential}",
-                    vaultCredentialsId: "ansible_user_vault",
+                    vaultCredentialsId: "ansible_decrypt_vault",
                     playbook: "${env.WORKSPACE}/roles/Requirements/reboot_target_nodes.yaml",
                     inventory: "${env.WORKSPACE}/inventory.ini",
                     forks: 16,
