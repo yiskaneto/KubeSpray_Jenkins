@@ -319,19 +319,19 @@ pipeline {
                 sh """
                 cat ${WORKSPACE}/roles/Requirements/ansible_data_vault.yaml
                 """
-                // ansiblePlaybook(
-                //     disableHostKeyChecking : true,
-                //     credentialsId: "${params.private_key_credential}",
-                //     vaultCredentialsId: "ansible_user_vault",
-                //     playbook: "${env.WORKSPACE}/roles/Requirements/reboot_target_nodes.yaml",
-                //     inventory: "${env.WORKSPACE}/inventory.ini",
-                //     forks: 16,
-                //     colorized: true,
-                //     extras: '-u ${ansible_user} --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" --flush-cache -v',
-                //     extraVars: [
-                //         jenkins_workspace: "${env.WORKSPACE}/"
-                //     ]
-                // )
+                ansiblePlaybook(
+                    disableHostKeyChecking : true,
+                    credentialsId: "${params.private_key_credential}",
+                    vaultCredentialsId: "ansible_user_vault",
+                    playbook: "${env.WORKSPACE}/roles/Requirements/reboot_target_nodes.yaml",
+                    inventory: "${env.WORKSPACE}/inventory.ini",
+                    forks: 16,
+                    colorized: true,
+                    extras: '-u ${ansible_user} --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" --flush-cache -v',
+                    extraVars: [
+                        jenkins_workspace: "${env.WORKSPACE}/"
+                    ]
+                )
             }
         }
 
