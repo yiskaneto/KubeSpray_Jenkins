@@ -78,9 +78,14 @@ pipeline {
             description: '<h5>Jenkins credential holding the private key to connect to the target nodes</h5>'
         )
         string(
-            name: 'become_credentials',
+            name: 'ansible_vault_credential',
             defaultValue: 'REPLACE_THIS',
-            description: '<h5>jenkins credential holding the vault file</h5>'
+            description: '<h5>Jenkins credential holding the vault</h5>'
+        )
+        string(
+            name: 'decrypt_vault_key_credential',
+            defaultValue: 'REPLACE_THIS',
+            description: '<h5>Jenkins credential holding the key to decrypt the Ansible vault</h5>'
         )
         booleanParam(
             name: 'reset_k8s_cluster',
@@ -267,7 +272,7 @@ pipeline {
                 expression { params.reset_k8s_cluster == true }
             }
             steps {
-                withCredentials([file(credentialsId: 'ansible_vault_file', variable: 'VAULT_FILE')]) {
+                withCredentials([file(credentialsId: "${params.ansible_vault_credential}", variable: 'VAULT_FILE')]) {
                     // Passed the vault file to a file where is accessible by the roles, this info remains encrypted.
                     sh """
                     set -x
@@ -282,6 +287,7 @@ pipeline {
                 //         playbook: "${env.WORKSPACE}/roles/Requirements/reset.yml",
                 //         inventory: "${env.WORKSPACE}/inventory.ini",
                 //         become: true,
+                //         forks: 15,
                 //         colorized: true,
                 //         extras: '-u ${ansible_user} --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"',
                 //         extraVars: [
@@ -311,25 +317,20 @@ pipeline {
                 expression { params.restart_node == true }
             }
             steps {
-                sh """
-                echo "Rebooting nodes"
-                """
-                // withCredentials([file(credentialsId: 'ansible_vault_file', variable: 'VAULT')]) {
-                //     // Pass the 
-                //     sh """
-                //     set -x
-                //     cat $VAULT > ${WORKSPACE}/roles/ansible_data_vault.yml
-                //     """
-                // }
+                withCredentials([file(credentialsId: "${params.ansible_vault_credential}", variable: 'VAULT_FILE')]) {
+                    // Passed the vault file to a file where is accessible by the roles, this data remains encrypted.
+                    sh """
+                    set -x
+                    cat $VAULT_FILE > ${WORKSPACE}/roles/ansible_data_vault.yml
+                    """
+                }
                 ansiblePlaybook(
                     playbook: "${env.WORKSPACE}/roles/Requirements/reboot_target_nodes.yaml",
                     inventoryContent: "${params.inventory}",
-                    // inventory: "${env.WORKSPACE}/inventory.ini",
-                    become: true,
                     disableHostKeyChecking : true,
+                    become: true,
                     credentialsId: "${params.private_key_credential}",
-                    vaultCredentialsId: "ansible_decrypt_vault",
-                    forks: 16,
+                    vaultCredentialsId: "${params.decrypt_vault_key_credential}",
                     colorized: true,
                     extras: '--ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" --flush-cache -vv',
                     extraVars: [
