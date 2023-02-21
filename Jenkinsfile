@@ -18,7 +18,7 @@ node4 ansible_host=95.54.0.15  # ip=10.3.0.4 etcd_member_name=etcd4
 node5 ansible_host=95.54.0.16  # ip=10.3.0.5 etcd_member_name=etcd5
 node6 ansible_host=95.54.0.17  # ip=10.3.0.6 etcd_member_name=etcd6
 [all:vars]
-ansible_become_pass='{{ ansible_become_pass }}'
+ansible_become_pass='{{ worker_nodes_pass }}'
 
 # ## configure a bastion host if your nodes are not directly reachable
 # [bastion]
