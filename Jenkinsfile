@@ -271,7 +271,7 @@ pipeline {
                     writeFile file: "${WORKSPACE}/roles/ansible_data_vault.yaml", text: "$VAULT"
                 }
                 sh """
-                cat ${WORKSPACE}/roles/Requirements/ansible_data_vault.yaml
+                cat ${WORKSPACE}/roles/ansible_data_vault.yaml
                 """
                 // withCredentials([string(credentialsId: 'ansible_become', variable: 'BECOME')]) {
                 //     ansiblePlaybook(
@@ -313,9 +313,6 @@ pipeline {
                 sh """
                 echo "Rebooting nodes"
                 """
-                withCredentials([string(credentialsId: 'ansible_user_vault', variable: 'VAULT')]) {
-                    writeFile file: "${WORKSPACE}/roles/Requirements/ansible_data_vault.yaml", text: "$VAULT"
-                }
                 ansiblePlaybook(
                     playbook: "${env.WORKSPACE}/roles/Requirements/reboot_target_nodes.yaml",
                     inventory: "${env.WORKSPACE}/inventory.ini",
