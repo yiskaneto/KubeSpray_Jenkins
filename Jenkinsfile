@@ -317,6 +317,7 @@ pipeline {
                     writeFile file: "${WORKSPACE}/ansible_vault", text: "$VAULT"
                 }
                 sh """
+                cat $VAULT
                 ls -l ${WORKSPACE}/ansible_vault
                 cat ${WORKSPACE}/ansible_vault
                 """
