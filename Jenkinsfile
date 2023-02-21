@@ -316,6 +316,9 @@ pipeline {
                 withCredentials([file(credentialsId: 'ansible_vault_file', variable: 'VAULT')]) {
                     writeFile file: "${WORKSPACE}/roles/ansible_data_vault.yaml", text: "$VAULT"
                 }
+                sh """
+                cat "${WORKSPACE}/roles/ansible_data_vault.yaml"
+                """
                 ansiblePlaybook(
                     playbook: "${env.WORKSPACE}/roles/Requirements/reboot_target_nodes.yaml",
                     inventory: "${env.WORKSPACE}/inventory.ini",
