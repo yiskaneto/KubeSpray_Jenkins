@@ -6,4 +6,5 @@
     - ../ansible_data_vault.yml
   tasks:
     - name: Calling the reset.yml from Kubespray
-      import_task: ../../kubespray/reset.aml
+      ansible.builtin.import_tasks: 
+        file: ../../kubespray/reset.aml
