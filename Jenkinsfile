@@ -197,9 +197,9 @@ pipeline {
             defaultValue: '8383',
             description: 'VIP port for external Load Balancer. Leave empty if not needed'
         )
-        booleanParam(
+        choice(
             name: 'dashboard_enabled',
-            defaultValue: false,
+            choices: ['False','True'],
             description: 'RBAC required. Found on inventory/mycluster/group_vars/k8s_cluster/addons.yml'
         )
         booleanParam(
@@ -414,42 +414,55 @@ pipeline {
         //     }
         // }
         
-        // stage('Running KubeSpray') {
-        //     when {
-        //         expression { params.install_kubespray == true && params.only_reset_k8s_cluster == false }
-        //     }
-        //     steps {         
-        //         // This is the recommended way of running ansible playbooks/roles from Jennkins
-        //         retry(2) {
-        //             sh """
-        //             echo "Starting KubeSpray deployment"
-        //             cd ${WORKSPACE}/kubespray/
-        //             """
-        //             ansiblePlaybook(
-        //                 installation: "${WORKSPACE}/kubespray/venv/bin",
-        //                 playbook: "${env.WORKSPACE}/kubespray/cluster.yml",
-        //                 inventory: "${env.WORKSPACE}/kubespray/inventory/mycluster/inventory.ini",
-        //                 forks: 16,
-        //                 become: true,
-        //                 becomeUser: "root",
-        //                 colorized: true,
-        //                 extras: '-u ${ansible_user} --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" --flush-cache -v',
-        //                 extraVars: [
-        //                     http_proxy: "${params.http_proxy}",
-        //                     https_proxy: "${params.https_proxy}",
-        //                     no_proxy: "${params.no_proxy}"
-        //                 ]
-        //             )
-        //         }
-        //         // This also works but doesn't show the colors on the output which could help us find error or warnings in a more visual way.
-        //         // sh '''
-        //         // cd ${WORKSPACE}/kubespray/ ; echo -e "\n"
-        //         // pwd ; echo -e "\n"
-        //         // source venv/bin/activate ; echo -e "\n\n"
-        //         // until time ansible-playbook -i ${WORKSPACE}/inventory.ini cluster.yml -u root --become --become-user=root --extra-vars "http_proxy=${http_proxy} https_proxy=${https_proxy} no_proxy=${no_proxy}" ; do sleep 5 ; done
-        //         // deactivate ; echo -e "\n"s
-        //     }
-        // }
+        stage('Running KubeSpray') {
+            when {
+                expression { params.install_kubespray == true && params.only_reset_k8s_cluster == false }
+            }
+            steps {         
+                // This is the recommended way of running ansible playbooks/roles from Jennkins
+                retry(2) {
+                    withCredentials([file(credentialsId: "${params.ansible_vault_credential}", variable: 'VAULT_FILE')]) {
+                        // Passed the vault file to a file where is accessible by the roles, this data remains encrypted.
+                        sh """
+                        set -x
+                        cat $VAULT_FILE > ${WORKSPACE}/roles/ansible_data_vault.yml
+                        """
+                    }
+                    // sh """
+                    // echo "Starting KubeSpray deployment"
+                    // cd ${WORKSPACE}/kubespray/
+                    // """
+                    ansiblePlaybook(
+                        // installation: "${WORKSPACE}/kubespray/venv/bin",
+                        playbook: "${env.WORKSPACE}/kubespray/cluster.yml",
+                        inventoryContent: "${params.inventory}",
+                        disableHostKeyChecking : true,
+                        become: true,
+                        credentialsId: "${params.private_key_credential}",
+                        vaultCredentialsId: "${params.decrypt_vault_key_credential}",
+                        forks: 20,
+                        colorized: true,
+                        extras: "-e '@${WORKSPACE}/roles/ansible_data_vault.yml' --ssh-extra-args=' -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' --flush-cache -v",
+                        extraVars: [
+                            http_proxy: "${params.http_proxy}",
+                            https_proxy: "${params.https_proxy}",
+                            no_proxy: "${params.no_proxy}",
+                            kube_version: "${params.kube_version}",
+                            cluster_name: "${params.cluster_name}",
+                            kube_proxy_mode: "${params.kube_proxy_mode}",
+                            dashboard_enabled: "${params.dashboard_enabled}",
+                        ]
+                    )
+                }
+                // This also works but doesn't show the colors on the output which could help us find error or warnings in a more visual way.
+                // sh '''
+                // cd ${WORKSPACE}/kubespray/ ; echo -e "\n"
+                // pwd ; echo -e "\n"
+                // source venv/bin/activate ; echo -e "\n\n"
+                // until time ansible-playbook -i ${WORKSPACE}/inventory.ini cluster.yml -u root --become --become-user=root --extra-vars "http_proxy=${http_proxy} https_proxy=${https_proxy} no_proxy=${no_proxy}" ; do sleep 5 ; done
+                // deactivate ; echo -e "\n"s
+            }
+        }
     }
   
     post {
