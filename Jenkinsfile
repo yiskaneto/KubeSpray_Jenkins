@@ -285,7 +285,7 @@ pipeline {
                     """
                 }
                 ansiblePlaybook(
-                    playbook: "${env.WORKSPACE}/roles/reset.yml",
+                    playbook: "${env.WORKSPACE}/kubespray/reset.yml",
                     inventoryContent: "${params.inventory}",
                     disableHostKeyChecking : true,
                     become: true,
