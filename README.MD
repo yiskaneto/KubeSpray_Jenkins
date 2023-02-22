@@ -21,6 +21,9 @@ Jenkins pipeline to automate the installation of Kubernetes on RHEL distribution
    cat /var/lib/jenkins/.ssh/id_rsa.pub | ssh <node> "mkdir -p ~/.ssh && cat >> ~/.ssh/authorized_keys"
    ```
 
+1. The no_proxy paramter should at least include:
+   `127.0.0.1,localhost,10.233.0.1,169.254.25.10`
+
 This Jenkins pipeline has 5 Stages
 
 1. Create the inventory file:
