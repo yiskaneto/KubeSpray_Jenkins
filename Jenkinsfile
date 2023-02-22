@@ -418,8 +418,7 @@ pipeline {
             when {
                 expression { params.install_kubespray == true && params.only_reset_k8s_cluster == false }
             }
-            steps {         
-                // This is the recommended way of running ansible playbooks/roles from Jennkins
+            steps {
                 withCredentials([file(credentialsId: "${params.ansible_vault_credential}", variable: 'VAULT_FILE')]) {
                     // Passed the vault file to a file where is accessible by the roles, this data remains encrypted.
                     sh """
