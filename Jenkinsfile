@@ -7,9 +7,15 @@ def setDescription() {
 setDescription()
 
 
-def inventorySample = '''# ## Configure 'ip' variable to bind kubernetes services on a
+def inventorySample = '''
+# ## Configure 'ip' variable to bind kubernetes services on a
 # ## different ip than the default iface
 # ## We should set etcd_member_name for etcd cluster. The node that is not a etcd member do not need to set the value, or can set the empty string value.
+
+[all:vars]
+## You can create a vault containing user_sudo_pass with the password of your nodes or just created a new key and replace nuser_sudo_passode_pass with such key withing the curly braces
+ansible_become_pass='{{ user_sudo_pass }}' 
+
 [all]
 node1 ansible_host=95.54.0.12  # ip=10.3.0.1 etcd_member_name=etcd1
 node2 ansible_host=95.54.0.13  # ip=10.3.0.2 etcd_member_name=etcd2
@@ -17,8 +23,7 @@ node3 ansible_host=95.54.0.14  # ip=10.3.0.3 etcd_member_name=etcd3
 node4 ansible_host=95.54.0.15  # ip=10.3.0.4 etcd_member_name=etcd4
 node5 ansible_host=95.54.0.16  # ip=10.3.0.5 etcd_member_name=etcd5
 node6 ansible_host=95.54.0.17  # ip=10.3.0.6 etcd_member_name=etcd6
-[all:vars]
-ansible_become_pass='{{ nodes_pass }}'
+
 
 # ## configure a bastion host if your nodes are not directly reachable
 # [bastion]
