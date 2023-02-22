@@ -13,7 +13,7 @@ def inventorySample = '''
 # ## We should set etcd_member_name for etcd cluster. The node that is not a etcd member do not need to set the value, or can set the empty string value.
 
 [all:vars]
-## You can create a vault containing user_sudo_pass with the password of your nodes or just created a new key and replace nuser_sudo_passode_pass with such key withing the curly braces
+## You can create a vault containing user_sudo_pass with the password of your nodes or just created a new key and replace user_sudo_pass with such key withing the curly braces
 ansible_become_pass='{{ user_sudo_pass }}' 
 
 [all]
@@ -284,26 +284,23 @@ pipeline {
                     cat $VAULT_FILE > ${WORKSPACE}/roles/ansible_data_vault.yml
                     """
                 }
-                // withCredentials([string(credentialsId: 'ansible_become', variable: 'BECOME')]) {
-                //     ansiblePlaybook(
-                //         disableHostKeyChecking : true,
-                //         credentialsId: "${params.private_key_credential}",
-                //         vaultCredentialsId: "ansible_decrypt_vault",
-                //         playbook: "${env.WORKSPACE}/roles/Requirements/reset.yml",
-                //         inventory: "${env.WORKSPACE}/inventory.ini",
-                //         become: true,
-                //         forks: 15,
-                //         colorized: true,
-                //         extras: '-u ${ansible_user} --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"',
-                //         extraVars: [
-                //             // ansible_become_password: [value: '$BECOME', hidden: true],
-                //             http_proxy: "${params.http_proxy}",
-                //             https_proxy: "${params.https_proxy}",
-                //             no_proxy: "${params.no_proxy}",
-                //             reset_confirmation: 'yes'
-                //         ]
-                //     )
-                // }
+                ansiblePlaybook(
+                    playbook: "${env.WORKSPACE}/roles/Requirements/reset.yml",
+                    inventoryContent: "${params.inventory}",
+                    disableHostKeyChecking : true,
+                    become: true,
+                    credentialsId: "${params.private_key_credential}",
+                    vaultCredentialsId: "${params.decrypt_vault_key_credential}",
+                    forks: 20,
+                    colorized: true,
+                    extras: '--ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" --flush-cache -vv',
+                    extraVars: [
+                        http_proxy: "${params.http_proxy}",
+                        https_proxy: "${params.https_proxy}",
+                        no_proxy: "${params.no_proxy}",
+                        reset_confirmation: 'yes'
+                    ]
+                )
                 // ansiColor('xterm') {
                 //     sh"""
                 //     source ${python_venv}/bin/activate ; echo -e "\n\n"
