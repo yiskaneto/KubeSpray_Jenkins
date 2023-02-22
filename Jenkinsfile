@@ -320,7 +320,6 @@ pipeline {
             }
             steps {
                 withCredentials([file(credentialsId: "${params.ansible_vault_credential}", variable: 'VAULT_FILE')]) {
-                    // Passed the vault file to a file where is accessible by the roles, this data remains encrypted.
                     sh """
                     set -x
                     cat $VAULT_FILE > ${WORKSPACE}/roles/ansible_data_vault.yml
@@ -420,7 +419,6 @@ pipeline {
             }
             steps {
                 withCredentials([file(credentialsId: "${params.ansible_vault_credential}", variable: 'VAULT_FILE')]) {
-                    // Passed the vault file to a file where is accessible by the roles, this data remains encrypted.
                     sh """
                     set -x
                     cat $VAULT_FILE > ${WORKSPACE}/roles/ansible_data_vault.yml
