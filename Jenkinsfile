@@ -428,10 +428,6 @@ pipeline {
                     """
                 }
                 retry(1) {
-                    // sh """
-                    // echo "Starting KubeSpray deployment"
-                    // cd ${WORKSPACE}/kubespray/
-                    // """
                     ansiblePlaybook(
                         // installation: "${WORKSPACE}/kubespray/venv/bin",
                         playbook: "${env.WORKSPACE}/kubespray/cluster.yml",
