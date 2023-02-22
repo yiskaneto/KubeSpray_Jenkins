@@ -259,18 +259,18 @@ pipeline {
         //     }
         // }
 
-        // stage('Clonning KubeSpray project') {
-        //     steps {
-        //         sh """
-        //         cd ${WORKSPACE}/
-        //         git clone -b v2.21.0 https://github.com/kubernetes-sigs/kubespray.git
-        //         cd kubespray
-        //         echo "running whoami" && whoami
-        //         cp ${WORKSPACE}/roles/scripts/kubeSpray_venv_install_requirements.sh .
-        //         bash kubeSpray_venv_install_requirements.sh ${python_venv}
-        //         """
-        //     }
-        // }
+        stage('Clonning KubeSpray project') {
+            steps {
+                sh """
+                cd ${WORKSPACE}/
+                git clone -b v2.21.0 https://github.com/kubernetes-sigs/kubespray.git
+                cd kubespray
+                echo "running whoami" && whoami
+                cp ${WORKSPACE}/roles/scripts/kubeSpray_venv_install_requirements.sh .
+                bash kubeSpray_venv_install_requirements.sh ${python_venv}
+                """
+            }
+        }
 
         stage('Reset K8s Cluster') {
             when {

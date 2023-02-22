@@ -6,5 +6,5 @@
     - ../ansible_data_vault.yml
   tasks:
     - name: Calling the reset.yml from Kubespray
-      import_tasks: 
+      ansible.builtin.import_playbook: 
         file: ../../kubespray/reset.yml
