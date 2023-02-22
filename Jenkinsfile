@@ -420,14 +420,14 @@ pipeline {
             }
             steps {         
                 // This is the recommended way of running ansible playbooks/roles from Jennkins
-                retry(2) {
-                    withCredentials([file(credentialsId: "${params.ansible_vault_credential}", variable: 'VAULT_FILE')]) {
+                withCredentials([file(credentialsId: "${params.ansible_vault_credential}", variable: 'VAULT_FILE')]) {
                         // Passed the vault file to a file where is accessible by the roles, this data remains encrypted.
                         sh """
                         set -x
                         cat $VAULT_FILE > ${WORKSPACE}/roles/ansible_data_vault.yml
                         """
                     }
+                retry(2) {
                     // sh """
                     // echo "Starting KubeSpray deployment"
                     // cd ${WORKSPACE}/kubespray/
