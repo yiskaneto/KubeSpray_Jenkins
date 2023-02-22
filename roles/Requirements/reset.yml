@@ -6,4 +6,4 @@
     - ../ansible_data_vault.yml
   tasks:
     - name: This fails because I'm inside a play already
-      ansible.builtin.import_playbook: ../../kubespray/reset.aml
+      import_playbook: ../../kubespray/reset.aml
