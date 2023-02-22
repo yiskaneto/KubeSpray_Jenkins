@@ -426,7 +426,6 @@ pipeline {
                 }
                 retry(1) {
                     ansiblePlaybook(
-                        // installation: "${WORKSPACE}/kubespray/venv/bin",
                         playbook: "${env.WORKSPACE}/kubespray/cluster.yml",
                         inventoryContent: "${params.inventory}",
                         disableHostKeyChecking : true,
