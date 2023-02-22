@@ -4,5 +4,6 @@
     - worker_nodes_pass: "{{ worker_nodes_pass }}"
   vars_files:
     - ../ansible_data_vault.yml
-  import_playbook: ../../kubespray/reset.aml
-      
+  tasks:
+    - name: Calling the reset.yml from Kubespray
+      import_playbook: ../../kubespray/reset.aml
