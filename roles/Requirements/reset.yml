@@ -7,4 +7,4 @@
   tasks:
     - name: Calling the reset.yml from Kubespray
       ansible.builtin.import_tasks: 
-        file: ../../kubespray/reset.aml
+        file: ../../kubespray/reset.yml
