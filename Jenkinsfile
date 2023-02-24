@@ -27,7 +27,7 @@ node6 ansible_host=95.54.0.17  # ip=10.3.0.6 etcd_member_name=etcd6
 
 # ## configure a bastion host if your nodes are not directly reachable
 # [bastion]
-# bastion ansible_host=x.x.x.x ansible_user=some_user
+# bastion ansible_host=x.x.x.x installation_user=some_user
 
 [kube_control_plane]
 node1
@@ -73,7 +73,7 @@ pipeline {
             description: '<h5>Folder where the Python ven will be created, the user must have rwx permission</h5>'
         )
         string(
-            name: 'ansible_user',
+            name: 'installation_user',
             defaultValue: 'REPLACE_THIS',
             description: '<h5>Username that will run the installation</h5>'
         )
@@ -197,9 +197,9 @@ pipeline {
             defaultValue: '8383',
             description: 'VIP port for external Load Balancer. Leave empty if not needed'
         )
-        choice(
+        booleanParam(
             name: 'dashboard_enabled',
-            choices: ['False','True'],
+            defaultValue: false,
             description: 'RBAC required. Found on inventory/mycluster/group_vars/k8s_cluster/addons.yml'
         )
         booleanParam(
@@ -247,18 +247,6 @@ pipeline {
 			}
 		}
 
-        // stage('SSH Key Pair Tasks') {
-        //     steps {
-        //         ansiblePlaybook(
-        //             playbook: "${env.WORKSPACE}/roles/playbooks/ssh_keys_tasks.yaml",
-        //             inventory: "${env.WORKSPACE}/inventory.ini",
-        //             forks: 16,
-        //             colorized: true,
-        //             extras: '-u ${ansible_user} --ssh-extra-args="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" --flush-cache -v'
-        //         )
-        //     }
-        // }
-
         stage('Clonning KubeSpray project') {
             steps {
                 sh """
@@ -300,17 +288,7 @@ pipeline {
                         no_proxy: "${params.no_proxy}",
                         reset_confirmation: 'yes'
                     ]
-                )
-                // ansiColor('xterm') {
-                //     sh"""
-                //     source ${python_venv}/bin/activate ; echo -e "\n\n"
-                //     cd ${WORKSPACE}/kubespray
-                //     which ansible
-                //     until time ansible-playbook -i ${WORKSPACE}/inventory.ini reset.yml -u ${ansible_user} -K --become --become-user=root -e reset_confirmation=yes --private-key ${params.private_key_path} ; do sleep 5 ; done
-                //     deactivate ; echo -e "\n"
-                //     """
-                // }
-                
+                )                
             }
         }
 
@@ -341,27 +319,27 @@ pipeline {
             }
         }
 
-        // stage('Running OS requirements K8s') { 
-        //     when {
-        //         expression { params.run_requirements == true && params.only_reset_k8s_cluster == false }
-        //     }
-        //     steps {
-        //         ansiblePlaybook(
-        //             playbook: "${env.WORKSPACE}/roles/Requirements/main.yaml",
-        //             inventory: "${env.WORKSPACE}/inventory.ini",
-        //             forks: 16,
-        //             colorized: true,
-        //             extras: '-u ${ansible_user} --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" --flush-cache -v',
-        //             extraVars: [
-        //                 jenkins_workspace: "${env.WORKSPACE}/",
-        //                 http_proxy: "${params.http_proxy}",
-        //                 https_proxy: "${params.https_proxy}",
-        //                 no_proxy: "${params.no_proxy}",
-        //                 local_release_dir: "${params.local_release_dir}"
-        //             ]
-        //         )
-        //     }
-        // }  
+        stage('Running OS requirements K8s') { 
+            when {
+                expression { params.run_requirements == true && params.only_reset_k8s_cluster == false }
+            }
+            steps {
+                ansiblePlaybook(
+                    playbook: "${env.WORKSPACE}/roles/Requirements/main.yaml",
+                    inventory: "${env.WORKSPACE}/inventory.ini",
+                    forks: 16,
+                    colorized: true,
+                    extras: '-u ${installation_user} --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" --flush-cache -v',
+                    extraVars: [
+                        jenkins_workspace: "${env.WORKSPACE}/",
+                        http_proxy: "${params.http_proxy}",
+                        https_proxy: "${params.https_proxy}",
+                        no_proxy: "${params.no_proxy}",
+                        local_release_dir: "${params.local_release_dir}"
+                    ]
+                )
+            }
+        }  
 
         // stage('Setting KubeSpray Env') {
         //     when {
@@ -384,7 +362,7 @@ pipeline {
         //             inventory: "${env.WORKSPACE}/inventory.ini",
         //             forks: 16,
         //             colorized: true,
-        //             extras: '-u ${ansible_user} --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" --flush-cache -v',
+        //             extras: '-u ${installation_user} --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" --flush-cache -v',
         //             extraVars: [
         //                 jenkins_workspace: "${env.WORKSPACE}/",
         //                 kube_version: "${params.kube_version}",
@@ -443,16 +421,22 @@ pipeline {
                             cluster_name: "${params.cluster_name}",
                             kube_proxy_mode: "${params.kube_proxy_mode}",
                             dashboard_enabled: "${params.dashboard_enabled}",
+                            helm_enabled: "${params.helm_enabled}",
+                            registry_enabled: "${params.registry_enabled}",
+                            metrics_server_enabled: "${params.metrics_server_enabled}",
+                            ingress_nginx_enabled: "${params.ingress_nginx_enabled}",
+                            cert_manager_enabled: "${params.cert_manager_enabled}"
                         ]
                     )
                 }
                 // This also works but doesn't show the colors on the output which could help us find error or warnings in a more visual way.
-                // sh '''
+                // sh """
                 // cd ${WORKSPACE}/kubespray/ ; echo -e "\n"
                 // pwd ; echo -e "\n"
                 // source venv/bin/activate ; echo -e "\n\n"
-                // until time ansible-playbook -i ${WORKSPACE}/inventory.ini cluster.yml -u root --become --become-user=root --extra-vars "http_proxy=${http_proxy} https_proxy=${https_proxy} no_proxy=${no_proxy}" ; do sleep 5 ; done
+                // until time ansible-playbook -i ${WORKSPACE}/inventory.ini cluster.yml -u ${params.installation_user} --become --extra-vars "http_proxy=${http_proxy} https_proxy=${https_proxy} no_proxy=${no_proxy} kube_version=${params.kube_version} cluster_name=${params.cluster_name} kube_proxy_mode=${params.kube_proxy_mode} dashboard_enabled=${params.dashboard_enabled} helm_enabled=${params.helm_enabled} registry_enabled=${params.registry_enabled} metrics_server_enabled=${params.metrics_server_enabled} ingress_nginx_enabled=${params.ingress_nginx_enabled} cert_manager_enabled=${params.cert_manager_enabled}"; do sleep 5 ; done
                 // deactivate ; echo -e "\n"s
+                // """
             }
         }
     }
