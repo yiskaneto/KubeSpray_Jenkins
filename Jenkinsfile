@@ -326,9 +326,12 @@ pipeline {
             steps {
                 ansiblePlaybook(
                     playbook: "${env.WORKSPACE}/roles/Requirements/main.yaml",
-                    inventory: "${env.WORKSPACE}/inventory.ini",
-                    forks: 16,
-                    colorized: true,
+                    inventoryContent: "${params.inventory}",
+                    disableHostKeyChecking : true,
+                    become: true,
+                    credentialsId: "${params.private_key_credential}",
+                    vaultCredentialsId: "${params.decrypt_vault_key_credential}",
+                    forks: 20,
                     extras: '-u ${installation_user} --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" --flush-cache -v',
                     extraVars: [
                         jenkins_workspace: "${env.WORKSPACE}/",
