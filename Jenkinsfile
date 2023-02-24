@@ -414,8 +414,8 @@ pipeline {
                             cert_manager_enabled: "${params.cert_manager_enabled}",
                             use_localhost_as_kubeapi_loadbalancer: "${params.use_localhost_as_kubeapi_loadbalancer}",
                             apiserver_loadbalancer_domain_name: "${params.apiserver_loadbalancer_domain_name}",
-                            apiserver_loadbalancer_domain_name[loadbalancer_apiserver][address]: "${params.apiserver_loadbalancer_address}",
-                            apiserver_loadbalancer_domain_name[loadbalancer_apiserver][port]: "${params.apiserver_loadbalancer_port}"
+                            apiserver_loadbalancer_domain_name["loadbalancer_apiserver"]["address"]: "${params.apiserver_loadbalancer_address}",
+                            apiserver_loadbalancer_domain_name["loadbalancer_apiserver"]["port"]: "${params.apiserver_loadbalancer_port}"
                         ]
                     )
                 }
