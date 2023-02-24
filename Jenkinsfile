@@ -344,38 +344,38 @@ pipeline {
             }
         }  
 
-        // stage('Setting KubeSpray Env') {
-        //     when {
-        //         expression { params.only_reset_k8s_cluster == false }
-        //     }
-        //     steps {
-        //         sh """
-        //         cd ${WORKSPACE}/kubespray
-        //         rm -rf inventory/mycluster/
-        //         cp -rfp ${WORKSPACE}/kubespray/inventory/sample/ ${WORKSPACE}/kubespray/inventory/mycluster/
-        //         """
-        //         ansiblePlaybook(
-        //             playbook: "${env.WORKSPACE}/roles/Requirements/populate_vars.yaml",
-        //             inventoryContent: "${params.inventory}",
-        //             disableHostKeyChecking : true,
-                    // become: true,
-                    // credentialsId: "${params.private_key_credential}",
-                    // vaultCredentialsId: "${params.decrypt_vault_key_credential}",
-                    // forks: 20,
-                    // colorized: true,
-        //             extras: "-e '@${WORKSPACE}/roles/ansible_data_vault.yml' --ssh-extra-args=' -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' --flush-cache -v",
-        //             extraVars: [
-        //                 jenkins_workspace: "${env.WORKSPACE}/",
-        //                 http_proxy: "${params.http_proxy}",
-        //                 https_proxy: "${params.https_proxy}",
-        //                 no_proxy: "${params.no_proxy}",
-        //                 apiserver_loadbalancer_domain_name: "${params.apiserver_loadbalancer_domain_name}",
-        //                 apiserver_loadbalancer_address: "${params.apiserver_loadbalancer_address}",
-        //                 apiserver_loadbalancer_port: "${params.apiserver_loadbalancer_port}",
-        //             ]
-        //         )
-        //     }
-        // }
+        stage('Setting KubeSpray Env') {
+            when {
+                expression { params.only_reset_k8s_cluster == false }
+            }
+            steps {
+                sh """
+                cd ${WORKSPACE}/kubespray
+                rm -rf inventory/mycluster/
+                cp -rfp ${WORKSPACE}/kubespray/inventory/sample/ ${WORKSPACE}/kubespray/inventory/mycluster/
+                """
+                ansiblePlaybook(
+                    playbook: "${env.WORKSPACE}/roles/Requirements/populate_vars.yaml",
+                    inventoryContent: "${params.inventory}",
+                    disableHostKeyChecking : true,
+                    become: true,
+                    credentialsId: "${params.private_key_credential}",
+                    vaultCredentialsId: "${params.decrypt_vault_key_credential}",
+                    forks: 20,
+                    colorized: true,
+                    extras: "-e '@${WORKSPACE}/roles/ansible_data_vault.yml' --ssh-extra-args=' -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' --flush-cache -v",
+                    extraVars: [
+                        jenkins_workspace: "${env.WORKSPACE}/",
+                        http_proxy: "${params.http_proxy}",
+                        https_proxy: "${params.https_proxy}",
+                        no_proxy: "${params.no_proxy}",
+                        apiserver_loadbalancer_domain_name: "${params.apiserver_loadbalancer_domain_name}",
+                        apiserver_loadbalancer_address: "${params.apiserver_loadbalancer_address}",
+                        apiserver_loadbalancer_port: "${params.apiserver_loadbalancer_port}",
+                    ]
+                )
+            }
+        }
         
         stage('Running KubeSpray') {
             when {
@@ -412,10 +412,7 @@ pipeline {
                             metrics_server_enabled: "${params.metrics_server_enabled}",
                             ingress_nginx_enabled: "${params.ingress_nginx_enabled}",
                             cert_manager_enabled: "${params.cert_manager_enabled}",
-                            use_localhost_as_kubeapi_loadbalancer: "${params.use_localhost_as_kubeapi_loadbalancer}",
-                            apiserver_loadbalancer_domain_name: "${params.apiserver_loadbalancer_domain_name}",
-                            apiserver_loadbalancer_domain_name.loadbalancer_apiserver.address: "${params.apiserver_loadbalancer_address}",
-                            apiserver_loadbalancer_domain_name.loadbalancer_apiserver.port: "${params.apiserver_loadbalancer_port}"
+                            use_localhost_as_kubeapi_loadbalancer: "${params.use_localhost_as_kubeapi_loadbalancer}"
                         ]
                     )
                 }
