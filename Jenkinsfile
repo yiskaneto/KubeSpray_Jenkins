@@ -354,6 +354,12 @@ pipeline {
                 expression { params.only_reset_k8s_cluster == false }
             }
             steps {
+                withCredentials([file(credentialsId: "${params.ansible_vault_credential}", variable: 'VAULT_FILE')]) {
+                    sh """
+                    set -x
+                    cat $VAULT_FILE > ${WORKSPACE}/roles/ansible_data_vault.yml
+                    """
+                }
                 sh """
                 cd ${WORKSPACE}/kubespray
                 rm -rf inventory/mycluster/
@@ -368,6 +374,7 @@ pipeline {
                     vaultCredentialsId: "${params.decrypt_vault_key_credential}",
                     forks: 20,
                     colorized: true,
+                    extras: "-e '@${WORKSPACE}/roles/ansible_data_vault.yml' --ssh-extra-args=' -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' --flush-cache -v",
                     extraVars: [
                         jenkins_workspace: "${env.WORKSPACE}/",
                         http_proxy: "${params.http_proxy}",
