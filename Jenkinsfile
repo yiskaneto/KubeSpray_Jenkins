@@ -347,45 +347,28 @@ pipeline {
         //     }
         //     steps {
         //         sh """
-        //         echo "Setting KubeSpray Env"
         //         cd ${WORKSPACE}/kubespray
-        //         cp ${WORKSPACE}/roles/scripts/kubeSpray_venv_install_requirements.sh .
-        //         chmod +x kubeSpray_venv_install_requirements.sh
-        //         ./kubeSpray_venv_install_requirements.sh
         //         rm -rf inventory/mycluster/
         //         cp -rfp ${WORKSPACE}/kubespray/inventory/sample/ ${WORKSPACE}/kubespray/inventory/mycluster/
-        //         rm -rf ${WORKSPACE}/kubespray/inventory/mycluster/inventory.ini
-        //         cp ${WORKSPACE}/inventory.ini ${WORKSPACE}/kubespray/inventory/mycluster/inventory.ini
         //         """
         //         ansiblePlaybook(
         //             playbook: "${env.WORKSPACE}/roles/Requirements/populate_vars.yaml",
-        //             inventory: "${env.WORKSPACE}/inventory.ini",
-        //             forks: 16,
-        //             colorized: true,
-        //             extras: '-u ${installation_user} --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" --flush-cache -v',
+        //             inventoryContent: "${params.inventory}",
+        //             disableHostKeyChecking : true,
+                    // become: true,
+                    // credentialsId: "${params.private_key_credential}",
+                    // vaultCredentialsId: "${params.decrypt_vault_key_credential}",
+                    // forks: 20,
+                    // colorized: true,
+        //             extras: "-e '@${WORKSPACE}/roles/ansible_data_vault.yml' --ssh-extra-args=' -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' --flush-cache -v",
         //             extraVars: [
         //                 jenkins_workspace: "${env.WORKSPACE}/",
-        //                 kube_version: "${params.kube_version}",
-        //                 cluster_name: "${params.cluster_name}",
         //                 http_proxy: "${params.http_proxy}",
         //                 https_proxy: "${params.https_proxy}",
         //                 no_proxy: "${params.no_proxy}",
         //                 apiserver_loadbalancer_domain_name: "${params.apiserver_loadbalancer_domain_name}",
         //                 apiserver_loadbalancer_address: "${params.apiserver_loadbalancer_address}",
         //                 apiserver_loadbalancer_port: "${params.apiserver_loadbalancer_port}",
-        //                 dashboard_enabled: "${params.dashboard_enabled}",
-        //                 ingress_nginx_enabled: "${params.ingress_nginx_enabled}",
-        //                 metrics_server_enabled: "${params.metrics_server_enabled}",
-        //                 helm_enabled: "${params.helm_enabled}",
-        //                 cert_manager_enabled: "${params.cert_manager_enabled}",
-        //                 loadbalancer_apiserver_localhost: "${params.loadbalancer_apiserver_localhost}",
-        //                 loadbalancer_apiserver_type: "${params.loadbalancer_apiserver_type}",
-        //                 use_localhost_as_kubeapi_loadbalancer: "${params.use_localhost_as_kubeapi_loadbalancer}",
-        //                 kube_network_plugin: "${params.kube_network_plugin}",
-        //                 container_manager: "${params.container_manager}",
-        //                 resolvconf_mode: "${params.resolvconf_mode}",
-        //                 kube_proxy_mode: "${params.kube_proxy_mode}",
-        //                 local_release_dir: "${params.local_release_dir}"
         //             ]
         //         )
         //     }
@@ -402,7 +385,7 @@ pipeline {
                     cat $VAULT_FILE > ${WORKSPACE}/roles/ansible_data_vault.yml
                     """
                 }
-                retry(1) {
+                retry(2) {
                     ansiblePlaybook(
                         playbook: "${env.WORKSPACE}/kubespray/cluster.yml",
                         inventoryContent: "${params.inventory}",
@@ -425,7 +408,11 @@ pipeline {
                             registry_enabled: "${params.registry_enabled}",
                             metrics_server_enabled: "${params.metrics_server_enabled}",
                             ingress_nginx_enabled: "${params.ingress_nginx_enabled}",
-                            cert_manager_enabled: "${params.cert_manager_enabled}"
+                            cert_manager_enabled: "${params.cert_manager_enabled}",
+                            use_localhost_as_kubeapi_loadbalancer: "${params.use_localhost_as_kubeapi_loadbalancer}",
+                            apiserver_loadbalancer_domain_name: "${params.apiserver_loadbalancer_domain_name}",
+                            apiserver_loadbalancer_domain_name[loadbalancer_apiserver][address]: "${params.apiserver_loadbalancer_address}",
+                            apiserver_loadbalancer_domain_name[loadbalancer_apiserver][port]: "${params.apiserver_loadbalancer_port}"
                         ]
                     )
                 }
