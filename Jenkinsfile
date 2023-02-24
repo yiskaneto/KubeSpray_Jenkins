@@ -182,6 +182,11 @@ pipeline {
             defaultValue: true,
             description: 'Found on inventory/mycluster/group_vars/all/all.yml'
         )
+        booleanParam(
+            name: 'use_external_load_balancer',
+            defaultValue: false,
+            description: 'Custom parameter to determine if LB will be used'
+        )
         string(
             name: 'apiserver_loadbalancer_domain_name',
             defaultValue: '',
@@ -371,6 +376,7 @@ pipeline {
                         apiserver_loadbalancer_domain_name: "${params.apiserver_loadbalancer_domain_name}",
                         apiserver_loadbalancer_address: "${params.apiserver_loadbalancer_address}",
                         apiserver_loadbalancer_port: "${params.apiserver_loadbalancer_port}",
+                        use_external_load_balancer: "${params.use_external_load_balancer}"
                     ]
                 )
             }

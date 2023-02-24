@@ -1,7 +1,8 @@
 ---
+use_external_load_balancer: "{{ use_external_load_balancer }}"
+
 # # File from KubeSpray kubeSpray/inventory/mycluster/group_vars/all/all.yml
 # etcd_data_dir: "{{ etcd_data_dir }}"
-# use_external_load_balancer: "{{ use_external_load_balancer }}"
 # apiserver_loadbalancer_domain_name: "{{ apiserver_loadbalancer_domain_name }}"
 # apiserver_loadbalancer_address: "{{ apiserver_loadbalancer_address }}"
 # apiserver_loadbalancer_port: "{{ apiserver_loadbalancer_port }}"
