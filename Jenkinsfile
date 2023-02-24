@@ -344,7 +344,7 @@ pipeline {
             }
         }  
 
-        stage('Setting KubeSpray Env') {
+        stage('LB env conf') {
             when {
                 expression { params.only_reset_k8s_cluster == false }
             }
