@@ -368,7 +368,7 @@ pipeline {
                         vaultCredentialsId: "${params.decrypt_vault_key_credential}",
                         forks: 20,
                         colorized: true,
-                        extras: "-e '@${WORKSPACE}/roles/ansible_data_vault.yml' -e '@${WORKSPACE}/roles/external_lb_vars.yml' --ssh-extra-args=' -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' --flush-cache -v",
+                        extras: "-e '@${WORKSPACE}/roles/ansible_data_vault.yml' -e '@${WORKSPACE}/external_lb_vars.yml' --ssh-extra-args=' -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' --flush-cache -v",
                         extraVars: [
                             jenkins_workspace: "${env.WORKSPACE}/",
                             http_proxy: "${params.http_proxy}",
