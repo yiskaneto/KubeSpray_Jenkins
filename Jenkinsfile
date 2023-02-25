@@ -10,8 +10,8 @@ def externalLB = '''
 ## Only fill this if you will use a external load balancer
 apiserver_loadbalancer_domain_name: "elb.some.domain"
  loadbalancer_apiserver:
-   address: 1.2.3.4
-   port: 1234
+   address: <ip address>
+   port: <port number>
 '''
 
 def inventorySample = '''
@@ -64,11 +64,7 @@ calico_rr'''
 pipeline {
 	agent { label 'ansible' }
 	options {
-		ansiColor('gnome-terminal')
-		// ansiColor('vga')
-		// ansiColor('css')
-		// ansiColor('gnome-terminal')
-		
+		ansiColor('gnome-terminal')		
 		buildDiscarder(logRotator(daysToKeepStr: '90'))
 		}
     
