@@ -358,7 +358,7 @@ pipeline {
                     sh """
                     set -x
                     cat $VAULT_FILE > ${WORKSPACE}/roles/ansible_data_vault.yml
-                    cat ${WORKSPACE}/external_lb_vars.yml
+                    cat ${WORKSPACE}/external_lb_vars.yml > ${WORKSPACE}/external_lb_vars.yml
                     """
                     ansiblePlaybook(
                         playbook: "${env.WORKSPACE}/roles/Requirements/populate_vars.yaml",
