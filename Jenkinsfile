@@ -399,11 +399,11 @@ pipeline {
             steps {
                 script {
                      withCredentials([file(credentialsId: "${params.ansible_vault_credential}", variable: 'VAULT_FILE')]) {
+                        writeFile file: "${WORKSPACE}/external_lb_vars.yml", text: "${params.externalLB}"
                         sh """
                         set -x
                         cat $VAULT_FILE > ${WORKSPACE}/roles/ansible_data_vault.yml
-                        echo ${params.externalLB}
-                        echo ${params.externalLB} > ${WORKSPACE}/external_lb_vars.yml
+                        cat ${WORKSPACE}/external_lb_vars.yml
                         """
                     }
                     retry(2) {
