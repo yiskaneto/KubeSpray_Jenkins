@@ -6,7 +6,7 @@ def setDescription() {
 
 setDescription()
 
-def externalLB = '''
+def externalLB = '''---
 ## Only fill this if you will use a external load balancer
 apiserver_loadbalancer_domain_name: "elb.some.domain"
  loadbalancer_apiserver:
