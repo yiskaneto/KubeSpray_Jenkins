@@ -358,7 +358,6 @@ pipeline {
                     sh """
                     set -x
                     cat $VAULT_FILE > ${WORKSPACE}/roles/ansible_data_vault.yml
-                    cat ${WORKSPACE}/external_lb_vars.yml > ${WORKSPACE}/external_lb_vars.yml
                     """
                     ansiblePlaybook(
                         playbook: "${env.WORKSPACE}/roles/Requirements/populate_vars.yaml",
@@ -369,7 +368,7 @@ pipeline {
                         vaultCredentialsId: "${params.decrypt_vault_key_credential}",
                         forks: 20,
                         colorized: true,
-                        extras: "-e '@${WORKSPACE}/roles/ansible_data_vault.yml' -e '@${WORKSPACE}/external_lb_vars.yml' --ssh-extra-args=' -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' --flush-cache -v",
+                        extras: "-e '@${WORKSPACE}/roles/ansible_data_vault.yml' --ssh-extra-args=' -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' --flush-cache -v",
                         extraVars: [
                             jenkins_workspace: "${env.WORKSPACE}/",
                             http_proxy: "${params.http_proxy}",
