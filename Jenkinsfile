@@ -361,11 +361,11 @@ pipeline {
                 """
                 ansiblePlaybook(
                     playbook: "${env.WORKSPACE}/roles/Requirements/populate_vars.yaml",
-                    inventoryContent: "${params.inventory}",
+                    // inventoryContent: "${params.inventory}",
                     disableHostKeyChecking : true,
                     become: true,
-                    credentialsId: "${params.private_key_credential}",
-                    vaultCredentialsId: "${params.decrypt_vault_key_credential}",
+                    // credentialsId: "${params.private_key_credential}",
+                    // vaultCredentialsId: "${params.decrypt_vault_key_credential}",
                     forks: 20,
                     colorized: true,
                     extras: "--ssh-extra-args=' -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' --flush-cache -vv",
