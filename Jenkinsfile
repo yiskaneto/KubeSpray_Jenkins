@@ -406,7 +406,7 @@ pipeline {
                         if (params.use_external_load_balancer) {
                             sh 'echo Running with use_external_load_balancer'
                             ansiblePlaybook(
-                                installation: "${params.python_venv}/bin/ansible",
+                                installation: "${params.python_venv}/bin/",
                                 inventoryContent: "${params.inventory}",
                                 disableHostKeyChecking : true,
                                 become: true,
@@ -433,7 +433,7 @@ pipeline {
                             )
                         } else {
                             ansiblePlaybook(
-                                installation: "${params.python_venv}/bin/ansible",
+                                installation: "${params.python_venv}/bin/",
                                 playbook: "${env.WORKSPACE}/kubespray/cluster.yml",
                                 inventoryContent: "${params.inventory}",
                                 disableHostKeyChecking : true,
