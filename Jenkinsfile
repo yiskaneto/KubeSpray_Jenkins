@@ -290,7 +290,7 @@ pipeline {
                     cat $VAULT_FILE > ${WORKSPACE}/roles/ansible_data_vault.yml
                     """
                     ansiblePlaybook(
-                        installation: "${params.python_venv}/bin",
+                        installation: "${params.python_venv}/bin/",
                         playbook: "${env.WORKSPACE}/kubespray/reset.yml",
                         inventoryContent: "${params.inventory}",
                         disableHostKeyChecking : true,
