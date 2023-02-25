@@ -195,21 +195,21 @@ pipeline {
             defaultValue: "${externalLB}",
             description: ''
         )
-        string(
-            name: 'apiserver_loadbalancer_domain_name',
-            defaultValue: '',
-            description: 'Found on inventory/mycluster/group_vars/all/all.yml'
-        )
-        string(
-            name: 'apiserver_loadbalancer_address',
-            defaultValue: '',
-            description: 'Found on inventory/mycluster/group_vars/all/all.yml'
-        )
-        string(
-            name: 'apiserver_loadbalancer_port',
-            defaultValue: '8383',
-            description: 'VIP port for external Load Balancer. Leave empty if not needed'
-        )
+        // string(
+        //     name: 'apiserver_loadbalancer_domain_name',
+        //     defaultValue: '',
+        //     description: 'Found on inventory/mycluster/group_vars/all/all.yml'
+        // )
+        // string(
+        //     name: 'apiserver_loadbalancer_address',
+        //     defaultValue: '',
+        //     description: 'Found on inventory/mycluster/group_vars/all/all.yml'
+        // )
+        // string(
+        //     name: 'apiserver_loadbalancer_port',
+        //     defaultValue: '8383',
+        //     description: 'VIP port for external Load Balancer. Leave empty if not needed'
+        // )
         booleanParam(
             name: 'dashboard_enabled',
             defaultValue: false,
