@@ -75,7 +75,6 @@ pipeline {
     parameters {
         string(
             name: 'ansible_installation',
-            defaultValue: 'REPLACE',
             description: '<h5>Name of the Ansible installation, this is set on the "Global Tool Configuration" on Jenkins</h5>'
         )
         string(
