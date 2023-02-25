@@ -400,11 +400,38 @@ pipeline {
                         sh """
                         set -x
                         cat $VAULT_FILE > ${WORKSPACE}/roles/ansible_data_vault.yml
-                        cat ${WORKSPACE}/external_lb_vars.yml
                         """
                     }
                     retry(1) {
-                        if (params.use_external_load_balancer == false) {
+                        if (params.use_external_load_balancer) {
+                            sh 'echo Running with use_external_load_balancer'
+                            ansiblePlaybook(
+                                installation: "${params.python_venv}/bin/ansible",
+                                inventoryContent: "${params.inventory}",
+                                disableHostKeyChecking : true,
+                                become: true,
+                                credentialsId: "${params.private_key_credential}",
+                                vaultCredentialsId: "${params.decrypt_vault_key_credential}",
+                                forks: 20,
+                                colorized: true,
+                                extras: "-e '@${WORKSPACE}/roles/ansible_data_vault.yml' -e '@${WORKSPACE}/external_lb_vars.yml' --ssh-extra-args=' -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' --flush-cache -vv",
+                                extraVars: [
+                                    http_proxy: "${params.http_proxy}",
+                                    https_proxy: "${params.https_proxy}",
+                                    no_proxy: "${params.no_proxy}",
+                                    kube_version: "${params.kube_version}",
+                                    cluster_name: "${params.cluster_name}",
+                                    kube_proxy_mode: "${params.kube_proxy_mode}",
+                                    dashboard_enabled: "${params.dashboard_enabled}",
+                                    helm_enabled: "${params.helm_enabled}",
+                                    registry_enabled: "${params.registry_enabled}",
+                                    metrics_server_enabled: "${params.metrics_server_enabled}",
+                                    ingress_nginx_enabled: "${params.ingress_nginx_enabled}",
+                                    cert_manager_enabled: "${params.cert_manager_enabled}",
+                                    use_localhost_as_kubeapi_loadbalancer: "${params.use_localhost_as_kubeapi_loadbalancer}",
+                                ]
+                            )
+                        } else {
                             ansiblePlaybook(
                                 installation: "${params.python_venv}/bin/ansible",
                                 playbook: "${env.WORKSPACE}/kubespray/cluster.yml",
@@ -432,33 +459,7 @@ pipeline {
                                     use_localhost_as_kubeapi_loadbalancer: "${params.use_localhost_as_kubeapi_loadbalancer}"
                                 ]
                             )
-                        } else {
-                            ansiblePlaybook(
-                                playbook: "${env.WORKSPACE}/kubespray/cluster.yml",
-                                inventoryContent: "${params.inventory}",
-                                disableHostKeyChecking : true,
-                                become: true,
-                                credentialsId: "${params.private_key_credential}",
-                                vaultCredentialsId: "${params.decrypt_vault_key_credential}",
-                                forks: 20,
-                                colorized: true,
-                                extras: "-e '@${WORKSPACE}/roles/ansible_data_vault.yml' -e '@${WORKSPACE}/external_lb_vars.yml' --ssh-extra-args=' -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' --flush-cache -v",
-                                extraVars: [
-                                    http_proxy: "${params.http_proxy}",
-                                    https_proxy: "${params.https_proxy}",
-                                    no_proxy: "${params.no_proxy}",
-                                    kube_version: "${params.kube_version}",
-                                    cluster_name: "${params.cluster_name}",
-                                    kube_proxy_mode: "${params.kube_proxy_mode}",
-                                    dashboard_enabled: "${params.dashboard_enabled}",
-                                    helm_enabled: "${params.helm_enabled}",
-                                    registry_enabled: "${params.registry_enabled}",
-                                    metrics_server_enabled: "${params.metrics_server_enabled}",
-                                    ingress_nginx_enabled: "${params.ingress_nginx_enabled}",
-                                    cert_manager_enabled: "${params.cert_manager_enabled}",
-                                    use_localhost_as_kubeapi_loadbalancer: "${params.use_localhost_as_kubeapi_loadbalancer}",
-                                ]
-                            )
+                            
                         }
                     }
 
