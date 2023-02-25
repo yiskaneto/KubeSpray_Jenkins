@@ -1,5 +1,6 @@
 ---
 - hosts: localhost
+  gather_facts: false
   connection: local
   tasks:
     - name: Updating apiserver_loadbalancer_domain_name on inventory/mycluster/group_vars/all/all.yml
