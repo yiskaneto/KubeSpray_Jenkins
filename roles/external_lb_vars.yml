@@ -1,0 +1,6 @@
+---
+## External LB example config
+## apiserver_loadbalancer_domain_name: "elb.some.domain"
+# loadbalancer_apiserver:
+#   address: 1.2.3.4
+#   port: 1234
