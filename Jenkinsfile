@@ -406,7 +406,7 @@ pipeline {
                     retry(1) {
                         if (params.use_external_load_balancer == false) {
                             ansiblePlaybook(
-                                installation: "${params.python_venv}/bin/ansible"
+                                installation: "${params.python_venv}/bin/ansible",
                                 playbook: "${env.WORKSPACE}/kubespray/cluster.yml",
                                 inventoryContent: "${params.inventory}",
                                 disableHostKeyChecking : true,
