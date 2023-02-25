@@ -290,6 +290,7 @@ pipeline {
                     cat $VAULT_FILE > ${WORKSPACE}/roles/ansible_data_vault.yml
                     """
                     ansiblePlaybook(
+                        instalaltion: "Ansible-2.12",
                         playbook: "${env.WORKSPACE}/kubespray/reset.yml",
                         inventoryContent: "${params.inventory}",
                         disableHostKeyChecking : true,
