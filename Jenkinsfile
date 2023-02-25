@@ -9,9 +9,9 @@ setDescription()
 def externalLB = '''---
 ## Only fill this if you will use a external load balancer
 apiserver_loadbalancer_domain_name: "elb.some.domain"
- loadbalancer_apiserver:
-   address: 1.2.3.4
-   port: 8383
+loadbalancer_apiserver:
+  address: 1.2.3.4
+  port: 8383
 '''
 
 def inventorySample = '''
