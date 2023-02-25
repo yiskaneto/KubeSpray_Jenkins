@@ -337,7 +337,7 @@ pipeline {
                     credentialsId: "${params.private_key_credential}",
                     vaultCredentialsId: "${params.decrypt_vault_key_credential}",
                     forks: 20,
-                    extras: '-u ${installation_user} --ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" --flush-cache -v',
+                    extras: '--ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" --flush-cache -v',
                     extraVars: [
                         jenkins_workspace: "${env.WORKSPACE}/",
                         http_proxy: "${params.http_proxy}",
@@ -361,14 +361,14 @@ pipeline {
                 """
                 ansiblePlaybook(
                     playbook: "${env.WORKSPACE}/roles/Requirements/populate_vars.yaml",
-                    // inventoryContent: "${params.inventory}",
+                    inventoryContent: "${params.inventory}",
                     disableHostKeyChecking : true,
                     become: true,
-                    // credentialsId: "${params.private_key_credential}",
-                    // vaultCredentialsId: "${params.decrypt_vault_key_credential}",
+                    credentialsId: "${params.private_key_credential}",
+                    vaultCredentialsId: "${params.decrypt_vault_key_credential}",
                     forks: 20,
                     colorized: true,
-                    extras: "--ssh-extra-args=' -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' --flush-cache -vv",
+                    extras: "-e '@${WORKSPACE}/roles/ansible_data_vault.yml'  --ssh-extra-args=' -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' --flush-cache -vv",
                     extraVars: [
                         jenkins_workspace: "${env.WORKSPACE}/",
                         http_proxy: "${params.http_proxy}",
