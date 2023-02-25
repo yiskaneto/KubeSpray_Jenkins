@@ -290,7 +290,6 @@ pipeline {
                     cat $VAULT_FILE > ${WORKSPACE}/roles/ansible_data_vault.yml
                     """
                     ansiblePlaybook(
-                        installation: "${params.python_venv}/bin/",
                         playbook: "${env.WORKSPACE}/kubespray/reset.yml",
                         inventoryContent: "${params.inventory}",
                         disableHostKeyChecking : true,
@@ -416,7 +415,6 @@ pipeline {
                         if (params.use_external_load_balancer) {
                             sh 'echo Running with use_external_load_balancer'
                             ansiblePlaybook(
-                                installation: "${params.python_venv}/bin",
                                 inventoryContent: "${params.inventory}",
                                 disableHostKeyChecking : true,
                                 become: true,
@@ -443,7 +441,6 @@ pipeline {
                             )
                         } else {
                             ansiblePlaybook(
-                                installation: "${params.python_venv}/bin",
                                 playbook: "${env.WORKSPACE}/kubespray/cluster.yml",
                                 inventoryContent: "${params.inventory}",
                                 disableHostKeyChecking : true,
