@@ -6,16 +6,7 @@ def setDescription() {
 
 setDescription()
 
-def externalLB = '''---
-## Only fill this if you will use a external load balancer
-apiserver_loadbalancer_domain_name: "elb.some.domain"
-loadbalancer_apiserver:
-  address: 1.2.3.4
-  port: 8383
-'''
-
-def inventorySample = '''
-# ## Configure 'ip' variable to bind kubernetes services on a
+def inventorySample = '''# ## Configure 'ip' variable to bind kubernetes services on a
 # ## different ip than the default iface
 # ## We should set etcd_member_name for etcd cluster. The node that is not a etcd member do not need to set the value, or can set the empty string value.
 
@@ -27,9 +18,6 @@ ansible_become_pass='{{ user_sudo_pass }}'
 node1 ansible_host=95.54.0.12  # ip=10.3.0.1 etcd_member_name=etcd1
 node2 ansible_host=95.54.0.13  # ip=10.3.0.2 etcd_member_name=etcd2
 node3 ansible_host=95.54.0.14  # ip=10.3.0.3 etcd_member_name=etcd3
-node4 ansible_host=95.54.0.15  # ip=10.3.0.4 etcd_member_name=etcd4
-node5 ansible_host=95.54.0.16  # ip=10.3.0.5 etcd_member_name=etcd5
-node6 ansible_host=95.54.0.17  # ip=10.3.0.6 etcd_member_name=etcd6
 
 
 # ## configure a bastion host if your nodes are not directly reachable
@@ -47,8 +35,6 @@ node2
 node3
 
 [kube_node]
-node2
-node3
 node4
 node5
 node6
@@ -60,6 +46,23 @@ node6
 kube_control_plane
 kube_node
 calico_rr'''
+
+def externalLB = '''---
+## Only fill this if you will use a external load balancer
+apiserver_loadbalancer_domain_name: "elb.some.domain"
+loadbalancer_apiserver:
+  address: 1.2.3.4
+  port: 8383
+'''
+def addons = '''---
+## More configurations can be found at inventory/mycluster/group_vars/k8s_cluster/addons.yml
+dashboard_enabled: false
+helm_enabled: false
+registry_enabled: false
+metrics_server_enabled: false
+ingress_nginx_enabled: false
+cert_manager_enabled: false
+'''
 
 pipeline {
 	agent { label 'ansible' }
@@ -210,36 +213,41 @@ pipeline {
         //     defaultValue: '8383',
         //     description: 'VIP port for external Load Balancer. Leave empty if not needed'
         // )
-        choice(
-            name: 'dashboard_enabled',
-            choices: ['False','True'],
-            description: 'RBAC required. Found on inventory/mycluster/group_vars/k8s_cluster/addons.yml'
+        text(
+            name: 'K8sAddons',
+            defaultValue: "${addons}",
+            description: ''
         )
-        choice(
-            name: 'helm_enabled',
-            choices: ['False','True'],
-            description: 'Found on inventory/mycluster/group_vars/k8s_cluster/addons.yml'
-        )
-        choice(
-            name: 'registry_enabled',
-            choices: ['False','True'],
-            description: 'Found on inventory/mycluster/group_vars/k8s_cluster/addons.yml'
-        )
-        choice(
-            name: 'metrics_server_enabled',
-            choices: ['False','True'],
-            description: 'Found on inventory/mycluster/group_vars/k8s_cluster/addons.yml'
-        )
-        choice(
-            name: 'ingress_nginx_enabled',
-            choices: ['False','True'],
-            description: 'Found on inventory/mycluster/group_vars/k8s_cluster/addons.yml'
-        )
-        choice(
-            name: 'cert_manager_enabled',
-            choices: ['False','True'],
-            description: 'Found on inventory/mycluster/group_vars/k8s_cluster/addons.yml'
-        )
+        // choice(
+        //     name: 'dashboard_enabled',
+        //     choices: ['False','True'],
+        //     description: 'RBAC required. Found on inventory/mycluster/group_vars/k8s_cluster/addons.yml'
+        // )
+        // choice(
+        //     name: 'helm_enabled',
+        //     choices: ['False','True'],
+        //     description: 'Found on inventory/mycluster/group_vars/k8s_cluster/addons.yml'
+        // )
+        // choice(
+        //     name: 'registry_enabled',
+        //     choices: ['False','True'],
+        //     description: 'Found on inventory/mycluster/group_vars/k8s_cluster/addons.yml'
+        // )
+        // choice(
+        //     name: 'metrics_server_enabled',
+        //     choices: ['False','True'],
+        //     description: 'Found on inventory/mycluster/group_vars/k8s_cluster/addons.yml'
+        // )
+        // choice(
+        //     name: 'ingress_nginx_enabled',
+        //     choices: ['False','True'],
+        //     description: 'Found on inventory/mycluster/group_vars/k8s_cluster/addons.yml'
+        // )
+        // choice(
+        //     name: 'cert_manager_enabled',
+        //     choices: ['False','True'],
+        //     description: 'Found on inventory/mycluster/group_vars/k8s_cluster/addons.yml'
+        // )
         string(
             name: 'local_release_dir',
             defaultValue: '/tmp/local_release_dir',
@@ -397,6 +405,7 @@ pipeline {
                 script {
                      withCredentials([file(credentialsId: "${params.ansible_vault_credential}", variable: 'VAULT_FILE')]) {
                         writeFile file: "${WORKSPACE}/external_lb_vars.yml", text: "${params.externalLB}"
+                        writeFile file: "${WORKSPACE}/K8sAddons.yml", text: "${params.K8sAddons}"
                         sh """
                         set -x
                         cat $VAULT_FILE > ${WORKSPACE}/roles/ansible_data_vault.yml
@@ -406,7 +415,7 @@ pipeline {
                         if (params.use_external_load_balancer) {
                             sh 'echo Running with use_external_load_balancer'
                             ansiblePlaybook(
-                                installation: "${params.python_venv}/bin/",
+                                installation: "${params.python_venv}/bin",
                                 inventoryContent: "${params.inventory}",
                                 disableHostKeyChecking : true,
                                 become: true,
@@ -414,7 +423,7 @@ pipeline {
                                 vaultCredentialsId: "${params.decrypt_vault_key_credential}",
                                 forks: 20,
                                 colorized: true,
-                                extras: "-e '@${WORKSPACE}/roles/ansible_data_vault.yml' -e '@${WORKSPACE}/external_lb_vars.yml' --ssh-extra-args=' -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' --flush-cache -vv",
+                                extras: "-e '@${WORKSPACE}/external_lb_vars.yml' -e '@${WORKSPACE}/roles/ansible_data_vault.yml' -e '@${WORKSPACE}/K8sAddons.yml' --ssh-extra-args=' -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' --flush-cache -vv",
                                 extraVars: [
                                     http_proxy: "${params.http_proxy}",
                                     https_proxy: "${params.https_proxy}",
@@ -433,7 +442,7 @@ pipeline {
                             )
                         } else {
                             ansiblePlaybook(
-                                installation: "${params.python_venv}/bin/",
+                                installation: "${params.python_venv}/bin",
                                 playbook: "${env.WORKSPACE}/kubespray/cluster.yml",
                                 inventoryContent: "${params.inventory}",
                                 disableHostKeyChecking : true,
@@ -442,7 +451,7 @@ pipeline {
                                 vaultCredentialsId: "${params.decrypt_vault_key_credential}",
                                 forks: 20,
                                 colorized: true,
-                                extras: "-e '@${WORKSPACE}/roles/ansible_data_vault.yml' --ssh-extra-args=' -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' --flush-cache -v",
+                                extras: "-e '@${WORKSPACE}/roles/ansible_data_vault.yml' -e '@${WORKSPACE}/K8sAddons.yml' --ssh-extra-args=' -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' --flush-cache -v",
                                 extraVars: [
                                     http_proxy: "${params.http_proxy}",
                                     https_proxy: "${params.https_proxy}",
@@ -450,12 +459,6 @@ pipeline {
                                     kube_version: "${params.kube_version}",
                                     cluster_name: "${params.cluster_name}",
                                     kube_proxy_mode: "${params.kube_proxy_mode}",
-                                    dashboard_enabled: "${params.dashboard_enabled}",
-                                    helm_enabled: "${params.helm_enabled}",
-                                    registry_enabled: "${params.registry_enabled}",
-                                    metrics_server_enabled: "${params.metrics_server_enabled}",
-                                    ingress_nginx_enabled: "${params.ingress_nginx_enabled}",
-                                    cert_manager_enabled: "${params.cert_manager_enabled}",
                                     use_localhost_as_kubeapi_loadbalancer: "${params.use_localhost_as_kubeapi_loadbalancer}"
                                 ]
                             )
