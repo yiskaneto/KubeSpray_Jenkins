@@ -212,32 +212,32 @@ pipeline {
         // )
         booleanParam(
             name: 'dashboard_enabled',
-            defaultValue: false,
+            defaultValue: False,
             description: 'RBAC required. Found on inventory/mycluster/group_vars/k8s_cluster/addons.yml'
         )
         booleanParam(
             name: 'helm_enabled',
-            defaultValue: false,
+            defaultValue: False,
             description: 'Found on inventory/mycluster/group_vars/k8s_cluster/addons.yml'
         )
         booleanParam(
             name: 'registry_enabled',
-            defaultValue: false,
+            defaultValue: False,
             description: 'Found on inventory/mycluster/group_vars/k8s_cluster/addons.yml'
         )
         booleanParam(
             name: 'metrics_server_enabled',
-            defaultValue: false,
+            defaultValue: False,
             description: 'Found on inventory/mycluster/group_vars/k8s_cluster/addons.yml'
         )
         booleanParam(
             name: 'ingress_nginx_enabled',
-            defaultValue: false,
+            defaultValue: False,
             description: 'Found on inventory/mycluster/group_vars/k8s_cluster/addons.yml'
         )
         booleanParam(
             name: 'cert_manager_enabled',
-            defaultValue: false,
+            defaultValue: False,
             description: 'Found on inventory/mycluster/group_vars/k8s_cluster/addons.yml'
         )
         string(
@@ -250,9 +250,6 @@ pipeline {
     stages {
         stage('Creating Inventory File') {
 			steps {
-                sh """
-                echo "" > ${WORKSPACE}/inventory.ini
-                """
                 writeFile file: "${WORKSPACE}/inventory.ini", text: "${inventory}"
                 sh """
                 cat ${WORKSPACE}/inventory.ini
@@ -284,24 +281,24 @@ pipeline {
                     set -x
                     cat $VAULT_FILE > ${WORKSPACE}/roles/ansible_data_vault.yml
                     """
+                    ansiblePlaybook(
+                        playbook: "${env.WORKSPACE}/kubespray/reset.yml",
+                        inventoryContent: "${params.inventory}",
+                        disableHostKeyChecking : true,
+                        become: true,
+                        credentialsId: "${params.private_key_credential}",
+                        vaultCredentialsId: "${params.decrypt_vault_key_credential}",
+                        forks: 20,
+                        colorized: true,
+                        extras: "-e '@${WORKSPACE}/roles/ansible_data_vault.yml' --ssh-extra-args='-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' --flush-cache -vv",
+                        extraVars: [
+                            http_proxy: "${params.http_proxy}",
+                            https_proxy: "${params.https_proxy}",
+                            no_proxy: "${params.no_proxy}",
+                            reset_confirmation: 'yes'
+                        ]
+                    )
                 }
-                ansiblePlaybook(
-                    playbook: "${env.WORKSPACE}/kubespray/reset.yml",
-                    inventoryContent: "${params.inventory}",
-                    disableHostKeyChecking : true,
-                    become: true,
-                    credentialsId: "${params.private_key_credential}",
-                    vaultCredentialsId: "${params.decrypt_vault_key_credential}",
-                    forks: 20,
-                    colorized: true,
-                    extras: "-e '@${WORKSPACE}/roles/ansible_data_vault.yml' --ssh-extra-args='-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' --flush-cache -vv",
-                    extraVars: [
-                        http_proxy: "${params.http_proxy}",
-                        https_proxy: "${params.https_proxy}",
-                        no_proxy: "${params.no_proxy}",
-                        reset_confirmation: 'yes'
-                    ]
-                )                
             }
         }
 
@@ -315,20 +312,20 @@ pipeline {
                     set -x
                     cat $VAULT_FILE > ${WORKSPACE}/roles/ansible_data_vault.yml
                     """
+                    ansiblePlaybook(
+                        playbook: "${env.WORKSPACE}/roles/Requirements/reboot_target_nodes.yaml",
+                        inventoryContent: "${params.inventory}",
+                        disableHostKeyChecking : true,
+                        become: true,
+                        credentialsId: "${params.private_key_credential}",
+                        vaultCredentialsId: "${params.decrypt_vault_key_credential}",
+                        colorized: true,
+                        extras: '--ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" --flush-cache',
+                        extraVars: [
+                            jenkins_workspace: "${env.WORKSPACE}/"
+                        ]
+                    )
                 }
-                ansiblePlaybook(
-                    playbook: "${env.WORKSPACE}/roles/Requirements/reboot_target_nodes.yaml",
-                    inventoryContent: "${params.inventory}",
-                    disableHostKeyChecking : true,
-                    become: true,
-                    credentialsId: "${params.private_key_credential}",
-                    vaultCredentialsId: "${params.decrypt_vault_key_credential}",
-                    colorized: true,
-                    extras: '--ssh-extra-args=" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" --flush-cache',
-                    extraVars: [
-                        jenkins_workspace: "${env.WORKSPACE}/"
-                    ]
-                )
             }
         }
 
@@ -355,7 +352,7 @@ pipeline {
                     ]
                 )
             }
-        }  
+        }
 
         // stage('LB env conf') {
         //     when {
@@ -462,8 +459,7 @@ pipeline {
                                 ]
                             )
                         }
-                           
-                }
+                    }
 
                 }
                 
