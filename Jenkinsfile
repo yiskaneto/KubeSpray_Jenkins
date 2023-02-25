@@ -1,6 +1,6 @@
 def setDescription() {
     def item = Jenkins.instance.getItemByFullName(env.JOB_NAME)
-    item.setDescription("<h5><span style=\"color:#138D75\">KubeSpray Automation v2.21.0 https://github.com/kubernetes-sigs/kubespray/releases/tag/v2.21.0. Before running this pipeline, make sure to read the README.MD from <a href='https://github.com/escanoru/KubeSpray_Jenkins'>https://github.com/escanoru/KubeSpray_Jenkins</a></span></h5>")
+    item.setDescription("<h5><span style=\"color:#138D75\">KubeSpray Automation v2.21.0 <a href='https://github.com/kubernetes-sigs/kubespray/releases/tag/v2.21.0'>https://github.com/kubernetes-sigs/kubespray/releases/tag/v2.21.0'</a>. Before running this pipeline, make sure to read the README.MD from <a href='https://github.com/escanoru/KubeSpray_Jenkins'>https://github.com/escanoru/KubeSpray_Jenkins</a></span></h5>")
     item.save()
 }
 
