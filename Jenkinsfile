@@ -10,8 +10,8 @@ def externalLB = '''---
 ## Only fill this if you will use a external load balancer
 apiserver_loadbalancer_domain_name: "elb.some.domain"
  loadbalancer_apiserver:
-   address: <ip address>
-   port: <port number>
+   address: 1.2.3.4
+   port: 8383
 '''
 
 def inventorySample = '''
