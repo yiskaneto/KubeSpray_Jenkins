@@ -403,7 +403,7 @@ pipeline {
                         cat ${WORKSPACE}/external_lb_vars.yml
                         """
                     }
-                    retry(2) {
+                    retry(1) {
                         if (params.use_external_load_balancer == false) {
                             ansiblePlaybook(
                                 playbook: "${env.WORKSPACE}/kubespray/cluster.yml",
