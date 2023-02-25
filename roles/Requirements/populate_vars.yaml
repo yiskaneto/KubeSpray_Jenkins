@@ -26,16 +26,16 @@
     
     - name: Tar kubespray directory
       shell: |
-        cd {{ jenkins_workspace }} ; tar -czvf kubespray_Jenkins_Copy.tar.gz kubespray/
+        cd {{ jenkins_workspace }} ; tar -czvf kubespray_Jenkins_Copy.tar.gz {{ jenkins_workspace }}/kubespray/
 
-# - hosts: kube_control_plane[0]
-#   gather_facts: false
-#   tasks:
-#     - name: Cloning project on master node
-#       shell: |
-#         rm -rf /opt/kubespray_Jenkins_Copy.tar.gz
+- hosts: kube_control_plane[0]
+  gather_facts: false
+  tasks:
+    - name: Cloning project on master node
+      shell: |
+        rm -rf /opt/kubespray_Jenkins_Copy.tar.gz
 
-#     - name: Making a copy of the kubespray project on one of the control plane nodes
-#       copy:
-#         src: "{{ jenkins_workspace }}kubespray_Jenkins_Copy.tar.gz"
-#         dest: /opt/
+    - name: Making a copy of the kubespray project on one of the control plane nodes
+      copy:
+        src: "{{ jenkins_workspace }}kubespray_Jenkins_Copy.tar.gz"
+        dest: /opt/
