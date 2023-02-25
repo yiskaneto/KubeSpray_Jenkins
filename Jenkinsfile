@@ -74,9 +74,9 @@ pipeline {
   
     parameters {
         string(
-            name: 'python_venv',
-            defaultValue: '/opt/python-venvs/ansible-2.12',
-            description: '<h5>Folder where the Python ven will be created, the user must have rwx permission</h5>'
+            name: 'ansible_installation',
+            defaultValue: 'REPLACE',
+            description: '<h5>Name of the Ansible installation, this is set on the "Global Tool Configuration" on Jenkins</h5>'
         )
         string(
             name: 'installation_user',
@@ -273,7 +273,7 @@ pipeline {
                 cd kubespray
                 echo "running whoami" && whoami
                 cp ${WORKSPACE}/roles/scripts/kubeSpray_venv_install_requirements.sh .
-                bash kubeSpray_venv_install_requirements.sh ${python_venv}
+                bash kubeSpray_venv_install_requirements.sh ${ansible_installation}
                 '''
             }
         }
@@ -290,7 +290,7 @@ pipeline {
                     cat $VAULT_FILE > ${WORKSPACE}/roles/ansible_data_vault.yml
                     """
                     ansiblePlaybook(
-                        installation: "Ansible-2.12",
+                        installation: "${params.ansible_installation}",
                         playbook: "${env.WORKSPACE}/kubespray/reset.yml",
                         inventoryContent: "${params.inventory}",
                         disableHostKeyChecking : true,
@@ -322,6 +322,7 @@ pipeline {
                     cat $VAULT_FILE > ${WORKSPACE}/roles/ansible_data_vault.yml
                     """
                     ansiblePlaybook(
+                        installation: "${params.ansible_installation}",
                         playbook: "${env.WORKSPACE}/roles/Requirements/reboot_target_nodes.yaml",
                         inventoryContent: "${params.inventory}",
                         disableHostKeyChecking : true,
@@ -344,6 +345,7 @@ pipeline {
             }
             steps {
                 ansiblePlaybook(
+                    installation: "${params.ansible_installation}",
                     playbook: "${env.WORKSPACE}/roles/Requirements/main.yaml",
                     inventoryContent: "${params.inventory}",
                     disableHostKeyChecking : true,
@@ -416,6 +418,7 @@ pipeline {
                         if (params.use_external_load_balancer) {
                             sh 'echo Running with use_external_load_balancer'
                             ansiblePlaybook(
+                                installation: "${params.ansible_installation}",
                                 inventoryContent: "${params.inventory}",
                                 disableHostKeyChecking : true,
                                 become: true,
@@ -442,6 +445,7 @@ pipeline {
                             )
                         } else {
                             ansiblePlaybook(
+                                installation: "${params.ansible_installation}",
                                 playbook: "${env.WORKSPACE}/kubespray/cluster.yml",
                                 inventoryContent: "${params.inventory}",
                                 disableHostKeyChecking : true,
