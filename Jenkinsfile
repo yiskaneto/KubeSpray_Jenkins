@@ -210,34 +210,34 @@ pipeline {
         //     defaultValue: '8383',
         //     description: 'VIP port for external Load Balancer. Leave empty if not needed'
         // )
-        booleanParam(
+        choice(
             name: 'dashboard_enabled',
-            defaultValue: False,
+            choices: ['False','True'],
             description: 'RBAC required. Found on inventory/mycluster/group_vars/k8s_cluster/addons.yml'
         )
-        booleanParam(
+        choice(
             name: 'helm_enabled',
-            defaultValue: False,
+            choices: ['False','True'],
             description: 'Found on inventory/mycluster/group_vars/k8s_cluster/addons.yml'
         )
-        booleanParam(
+        choice(
             name: 'registry_enabled',
-            defaultValue: False,
+            choices: ['False','True'],
             description: 'Found on inventory/mycluster/group_vars/k8s_cluster/addons.yml'
         )
-        booleanParam(
+        choice(
             name: 'metrics_server_enabled',
-            defaultValue: False,
+            choices: ['False','True'],
             description: 'Found on inventory/mycluster/group_vars/k8s_cluster/addons.yml'
         )
-        booleanParam(
+        choice(
             name: 'ingress_nginx_enabled',
-            defaultValue: False,
+            choices: ['False','True'],
             description: 'Found on inventory/mycluster/group_vars/k8s_cluster/addons.yml'
         )
-        booleanParam(
+        choice(
             name: 'cert_manager_enabled',
-            defaultValue: False,
+            choices: ['False','True'],
             description: 'Found on inventory/mycluster/group_vars/k8s_cluster/addons.yml'
         )
         string(
