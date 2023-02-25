@@ -290,6 +290,7 @@ pipeline {
                     cat $VAULT_FILE > ${WORKSPACE}/roles/ansible_data_vault.yml
                     """
                     ansiblePlaybook(
+                        installation: "${params.python_venv}/bin",
                         playbook: "${env.WORKSPACE}/kubespray/reset.yml",
                         inventoryContent: "${params.inventory}",
                         disableHostKeyChecking : true,
@@ -451,7 +452,7 @@ pipeline {
                                 vaultCredentialsId: "${params.decrypt_vault_key_credential}",
                                 forks: 20,
                                 colorized: true,
-                                extras: "-e '@${WORKSPACE}/roles/ansible_data_vault.yml' -e '@${WORKSPACE}/K8sAddons.yml' --ssh-extra-args=' -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' --flush-cache -v",
+                                extras: "-e '@${WORKSPACE}/roles/ansible_data_vault.yml' -e '@${WORKSPACE}/K8sAddons.yml' --ssh-extra-args=' -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' --flush-cache -vv",
                                 extraVars: [
                                     http_proxy: "${params.http_proxy}",
                                     https_proxy: "${params.https_proxy}",
