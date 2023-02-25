@@ -402,8 +402,8 @@ pipeline {
                         sh """
                         set -x
                         cat $VAULT_FILE > ${WORKSPACE}/roles/ansible_data_vault.yml
-                        cat ${params.externalLB}
-                        cat ${params.externalLB} > ${WORKSPACE}/external_lb_vars.yml
+                        echo ${params.externalLB}
+                        echo ${params.externalLB} > ${WORKSPACE}/external_lb_vars.yml
                         """
                     }
                     retry(2) {
