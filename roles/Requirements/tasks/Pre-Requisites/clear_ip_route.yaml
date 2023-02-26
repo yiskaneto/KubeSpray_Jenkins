@@ -3,4 +3,6 @@
   shell: |
     ip route flush table main
     ip route flush cache
-  ignore_errors: True  
+  async: 60
+  poll: 10
+  ignore_errors: True
