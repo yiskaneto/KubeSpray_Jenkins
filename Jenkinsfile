@@ -65,7 +65,7 @@ cert_manager_enabled: false
 '''
 
 pipeline {
-	agent { label 'linux' }
+	agent { label 'ansible' }
 	options {
 		ansiColor('gnome-terminal')		
 		buildDiscarder(logRotator(daysToKeepStr: '90'))
