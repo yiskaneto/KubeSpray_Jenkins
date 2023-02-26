@@ -150,7 +150,12 @@ pipeline {
         string(
             name: 'no_proxy',
             defaultValue: '127.0.0.1,localhost,10.233.0.1,10.233.0.10,169.254.25.10',
-            description: 'list of to exclude from the proxy, found on inventory/mycluster/group_vars/all/all.yml'
+            description: 'Default is the minimum requiered, found on inventory/mycluster/group_vars/all/all.yml'
+        )
+        string(
+            name: 'nodelocaldns_ip',
+            defaultValue: '10.233.0.10',
+            description: 'The recommended value for clusterDNS in "KubeletConfiguration" is: 10.233.0.10, found on inventory/mycluster/group_vars/k8s_cluster/k8s-cluster.yml'
         )
         choice(
             name: 'kube_network_plugin',
@@ -187,11 +192,6 @@ pipeline {
             defaultValue: true,
             description: 'Found on inventory/mycluster/group_vars/all/all.yml'
         )
-        string(
-            name: 'nodelocaldns_ip',
-            defaultValue: '10.233.0.10',
-            description: 'The recommended value for clusterDNS in "KubeletConfiguration" is: 10.233.0.10, found on inventory/mycluster/group_vars/k8s_cluster/k8s-cluster.yml'
-        )
         booleanParam(
             name: 'use_external_load_balancer',
             defaultValue: false,
@@ -202,56 +202,11 @@ pipeline {
             defaultValue: "${externalLB}",
             description: ''
         )
-        // string(
-        //     name: 'apiserver_loadbalancer_domain_name',
-        //     defaultValue: '',
-        //     description: 'Found on inventory/mycluster/group_vars/all/all.yml'
-        // )
-        // string(
-        //     name: 'apiserver_loadbalancer_address',
-        //     defaultValue: '',
-        //     description: 'Found on inventory/mycluster/group_vars/all/all.yml'
-        // )
-        // string(
-        //     name: 'apiserver_loadbalancer_port',
-        //     defaultValue: '8383',
-        //     description: 'VIP port for external Load Balancer. Leave empty if not needed'
-        // )
         text(
             name: 'K8sAddons',
             defaultValue: "${addons}",
             description: ''
         )
-        // choice(
-        //     name: 'dashboard_enabled',
-        //     choices: ['False','True'],
-        //     description: 'RBAC required. Found on inventory/mycluster/group_vars/k8s_cluster/addons.yml'
-        // )
-        // choice(
-        //     name: 'helm_enabled',
-        //     choices: ['False','True'],
-        //     description: 'Found on inventory/mycluster/group_vars/k8s_cluster/addons.yml'
-        // )
-        // choice(
-        //     name: 'registry_enabled',
-        //     choices: ['False','True'],
-        //     description: 'Found on inventory/mycluster/group_vars/k8s_cluster/addons.yml'
-        // )
-        // choice(
-        //     name: 'metrics_server_enabled',
-        //     choices: ['False','True'],
-        //     description: 'Found on inventory/mycluster/group_vars/k8s_cluster/addons.yml'
-        // )
-        // choice(
-        //     name: 'ingress_nginx_enabled',
-        //     choices: ['False','True'],
-        //     description: 'Found on inventory/mycluster/group_vars/k8s_cluster/addons.yml'
-        // )
-        // choice(
-        //     name: 'cert_manager_enabled',
-        //     choices: ['False','True'],
-        //     description: 'Found on inventory/mycluster/group_vars/k8s_cluster/addons.yml'
-        // )
         string(
             name: 'local_release_dir',
             defaultValue: '/tmp/local_release_dir',
