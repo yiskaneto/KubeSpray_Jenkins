@@ -187,17 +187,16 @@ pipeline {
             defaultValue: true,
             description: 'Found on inventory/mycluster/group_vars/all/all.yml'
         )
-        booleanParam(
-            name: 'use_external_load_balancer',
-            defaultValue: false,
-            description: 'Custom parameter to determine if LB will be used'
-        )
         string(
             name: 'nodelocaldns_ip',
             defaultValue: '10.233.0.10',
             description: 'The recommended value for clusterDNS in "KubeletConfiguration" is: 10.233.0.10, found on inventory/mycluster/group_vars/k8s_cluster/k8s-cluster.yml'
         )
-        
+        booleanParam(
+            name: 'use_external_load_balancer',
+            defaultValue: false,
+            description: 'Custom parameter to determine if LB will be used'
+        )
         text(
             name: 'externalLB',
             defaultValue: "${externalLB}",
