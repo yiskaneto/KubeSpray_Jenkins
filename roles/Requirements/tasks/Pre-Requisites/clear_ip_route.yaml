@@ -1,0 +1,6 @@
+---
+- name: clear ip route
+  shell: |
+    ip route flush table main
+    ip route flush cache
+  ignore_errors: True  
