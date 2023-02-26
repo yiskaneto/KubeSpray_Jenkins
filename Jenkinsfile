@@ -71,7 +71,6 @@ pipeline {
 		buildDiscarder(logRotator(daysToKeepStr: '90'))
 		}
     
-  
     parameters {
         string(
             name: 'ansible_installation',
