@@ -352,7 +352,6 @@ pipeline {
                             http_proxy: "${params.http_proxy}",
                             https_proxy: "${params.https_proxy}",
                             no_proxy: "${params.no_proxy}",
-                            local_release_dir: "${params.local_release_dir}"
                         ]
                     )
                 }
