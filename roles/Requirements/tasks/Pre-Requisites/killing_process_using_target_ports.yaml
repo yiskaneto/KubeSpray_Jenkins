@@ -18,7 +18,7 @@
     - {port: "10259", proto: "tcp" }
   ignore_errors: True
 
-  # 54321 rc does not exist but we're using this force 3 retries to avoid makinga convoluted loop
+  # 54321 rc does not exist but we're using this to force 3 retries to avoid makinga a convoluted loop
   register: result
   until: result.rc == 54321
   retries: 3
