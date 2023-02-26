@@ -428,7 +428,7 @@ pipeline {
                                     kube_version: "${params.kube_version}",
                                     cluster_name: "${params.cluster_name}",
                                     kube_proxy_mode: "${params.kube_proxy_mode}",
-                                    use_localhost_as_kubeapi_loadbalancer: "${params.use_localhost_as_kubeapi_loadbalancer}"
+                                    use_localhost_as_kubeapi_loadbalancer: "${params.use_localhost_as_kubeapi_loadbalancer}",
                                     nodelocaldns_ip: "${params.nodelocaldns_ip}"
                                 ]
                             )
