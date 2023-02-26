@@ -418,8 +418,9 @@ pipeline {
                             sh 'echo Running with use_external_load_balancer'
                             ansiblePlaybook(
                                 installation: "${params.ansible_installation}",
+                                playbook: "${env.WORKSPACE}/kubespray/cluster.yml",
                                 inventoryContent: "${params.inventory}",
-                                disableHostKeyChecking : true,
+                                disableHostKeyChecking: true,
                                 become: true,
                                 credentialsId: "${params.private_key_credential}",
                                 vaultCredentialsId: "${params.decrypt_vault_key_credential}",
@@ -447,7 +448,7 @@ pipeline {
                                 installation: "${params.ansible_installation}",
                                 playbook: "${env.WORKSPACE}/kubespray/cluster.yml",
                                 inventoryContent: "${params.inventory}",
-                                disableHostKeyChecking : true,
+                                disableHostKeyChecking: true,
                                 become: true,
                                 credentialsId: "${params.private_key_credential}",
                                 vaultCredentialsId: "${params.decrypt_vault_key_credential}",
