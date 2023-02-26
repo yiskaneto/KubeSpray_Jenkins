@@ -65,7 +65,7 @@ cert_manager_enabled: false
 '''
 
 pipeline {
-	agent { label 'ansible' }
+	agent { label 'linux' }
 	options {
 		ansiColor('gnome-terminal')		
 		buildDiscarder(logRotator(daysToKeepStr: '90'))
@@ -255,15 +255,6 @@ pipeline {
     }
             	
     stages {
-        stage('Creating Inventory File') {
-			steps {
-                writeFile file: "${WORKSPACE}/inventory.ini", text: "${inventory}"
-                sh """
-                cat ${WORKSPACE}/inventory.ini
-                """
-			}
-		}
-
         stage('Clonning KubeSpray project') {
             steps {
                 sh '''
@@ -272,8 +263,6 @@ pipeline {
                 cd kubespray
                 echo "running whoami" && whoami
                 '''
-                // cp ${WORKSPACE}/roles/scripts/kubeSpray_venv_install_requirements.sh .
-                // bash kubeSpray_venv_install_requirements.sh ${ansible_installation}
             }
         }
 
@@ -363,41 +352,6 @@ pipeline {
                 )
             }
         }
-
-        // stage('LB env conf') {
-        //     when {
-        //         expression { params.only_reset_k8s_cluster == false }
-        //     }
-        //     steps {
-        //         withCredentials([file(credentialsId: "${params.ansible_vault_credential}", variable: 'VAULT_FILE')]) {
-        //             sh """
-        //             set -x
-        //             cat $VAULT_FILE > ${WORKSPACE}/roles/ansible_data_vault.yml
-        //             """
-        //             ansiblePlaybook(
-        //                 playbook: "${env.WORKSPACE}/roles/Requirements/populate_vars.yaml",
-        //                 inventoryContent: "${params.inventory}",
-        //                 disableHostKeyChecking : true,
-        //                 become: true,
-        //                 credentialsId: "${params.private_key_credential}",
-        //                 vaultCredentialsId: "${params.decrypt_vault_key_credential}",
-        //                 forks: 20,
-        //                 colorized: true,
-        //                 extras: "-e '@${WORKSPACE}/roles/ansible_data_vault.yml' --ssh-extra-args=' -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' --flush-cache -v",
-        //                 extraVars: [
-        //                     jenkins_workspace: "${env.WORKSPACE}/",
-        //                     http_proxy: "${params.http_proxy}",
-        //                     https_proxy: "${params.https_proxy}",
-        //                     no_proxy: "${params.no_proxy}",
-        //                     apiserver_loadbalancer_domain_name: "${params.apiserver_loadbalancer_domain_name}",
-        //                     apiserver_loadbalancer_address: "${params.apiserver_loadbalancer_address}",
-        //                     apiserver_loadbalancer_port: "${params.apiserver_loadbalancer_port}",
-        //                     use_external_load_balancer: "${params.use_external_load_balancer}"
-        //                 ]
-        //             )
-        //         }
-        //     }
-        // }
         
         stage('Running KubeSpray') {
             when {
@@ -470,16 +424,6 @@ pipeline {
                     }
 
                 }
-                
-                
-                // This also works but doesn't show the colors on the output which could help us find error or warnings in a more visual way.
-                // sh """
-                // cd ${WORKSPACE}/kubespray/ ; echo -e "\n"
-                // pwd ; echo -e "\n"
-                // source venv/bin/activate ; echo -e "\n\n"
-                // until time ansible-playbook -i ${WORKSPACE}/inventory.ini cluster.yml -u ${params.installation_user} --become --extra-vars "http_proxy=${http_proxy} https_proxy=${https_proxy} no_proxy=${no_proxy} kube_version=${params.kube_version} cluster_name=${params.cluster_name} kube_proxy_mode=${params.kube_proxy_mode} dashboard_enabled=${params.dashboard_enabled} helm_enabled=${params.helm_enabled} registry_enabled=${params.registry_enabled} metrics_server_enabled=${params.metrics_server_enabled} ingress_nginx_enabled=${params.ingress_nginx_enabled} cert_manager_enabled=${params.cert_manager_enabled}"; do sleep 5 ; done
-                // deactivate ; echo -e "\n"s
-                // """
             }
         }
     }

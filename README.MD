@@ -8,11 +8,6 @@ Jenkins pipeline to automate the installation of Kubernetes on RHEL distribution
    1. The jenkins user and the sudo user must have rwx permsion on the Python venv folder, you can use the following command to do so:
       `sudo setfacl -R -m u:<sudo username>:rwx <folder>`
       `sudo setfacl -R -m u:jenkins:rwx <folder>`
-   1. Create the `/home/<sudo user running ansible>/.ansible.cg` file and add the following entry:
-   ```yaml
-   [defaults]
-   host_key_checking = False
-   private_key_file = /home/<sudo user running ansible>/.ssh/<ssh key authorized to loging into your node>
    ```
 
 1. You must copy the public ssh key to the target nodes, it should be the key of the user that is running the Jenkins job, for example:
