@@ -149,7 +149,7 @@ pipeline {
         )
         string(
             name: 'no_proxy',
-            defaultValue: '127.0.0.1,localhost,10.233.0.1,169.254.25.10',
+            defaultValue: '127.0.0.1,localhost,10.233.0.1,10.233.0.10,169.254.25.10',
             description: 'list of to exclude from the proxy, found on inventory/mycluster/group_vars/all/all.yml'
         )
         choice(
@@ -192,6 +192,12 @@ pipeline {
             defaultValue: false,
             description: 'Custom parameter to determine if LB will be used'
         )
+        string(
+            name: 'nodelocaldns_ip',
+            defaultValue: '10.233.0.10',
+            description: 'The recommended value for clusterDNS in "KubeletConfiguration" is: 10.233.0.10, found on inventory/mycluster/group_vars/k8s_cluster/k8s-cluster.yml'
+        )
+        
         text(
             name: 'externalLB',
             defaultValue: "${externalLB}",
@@ -400,6 +406,7 @@ pipeline {
                                     ingress_nginx_enabled: "${params.ingress_nginx_enabled}",
                                     cert_manager_enabled: "${params.cert_manager_enabled}",
                                     use_localhost_as_kubeapi_loadbalancer: "${params.use_localhost_as_kubeapi_loadbalancer}",
+                                    nodelocaldns_ip: "${params.nodelocaldns_ip}"
                                 ]
                             )
                         } else {
@@ -422,6 +429,7 @@ pipeline {
                                     cluster_name: "${params.cluster_name}",
                                     kube_proxy_mode: "${params.kube_proxy_mode}",
                                     use_localhost_as_kubeapi_loadbalancer: "${params.use_localhost_as_kubeapi_loadbalancer}"
+                                    nodelocaldns_ip: "${params.nodelocaldns_ip}"
                                 ]
                             )
                             

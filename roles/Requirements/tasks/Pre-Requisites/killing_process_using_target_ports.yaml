@@ -16,5 +16,4 @@
     - {port: "10255", proto: "tcp" }
     - {port: "10257", proto: "tcp" }
     - {port: "10259", proto: "tcp" }
-  with_sequence: count=3
   ignore_errors: True
