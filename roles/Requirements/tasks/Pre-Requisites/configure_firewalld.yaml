@@ -36,7 +36,7 @@
     - http
     - https
 
-- name: Restart Firewalld
+- name: Restart FirewallD
   ansible.builtin.service:
     name: firewalld
     state: restarted
