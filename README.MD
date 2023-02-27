@@ -1,40 +1,69 @@
 # KubeSpray Jenkins Automation Pipeline
+
 Jenkins pipeline to automate the installation of Kubernetes on RHEL distribution systems by using the Kubespray project
 
 ## Requirements
+
 1. Python 3.9
+1. [Jenkins Ansible Plugin](https://plugins.jenkins.io/ansible/)
 
-1. This job will create a new Python environment, by default in `/opt/python-venvs/ansible-2.12` (you can change this on the Jenkins parameters), this to install the specific version of ansible and tools needed for the deployment so we need to do a fews thing prior to deployment:
-   1. The jenkins user and the sudo user must have rwx permsion on the Python venv folder, you can use the following command to do so:
-      `sudo setfacl -R -m u:<sudo username>:rwx <folder>`
-      `sudo setfacl -R -m u:jenkins:rwx <folder>`
-   ```
+1. Make sure you have a sudo user on your target nodes and that is able to write to `/opt`, to ensure this you can run:
+      `sudo setfacl -R -m u:<sudo username>:rwx /opt/`
 
-1. You must copy the public ssh key to the target nodes, it should be the key of the user that is running the Jenkins job, for example:
+1. On the Ansible control node(s) create a new Python virtual environment to download and install the specific version of Ansible and its dependencies for Kubespray to work, this will also be the ansible installation that the pipeline will use, this is helpful as it won't interfere with other ansible installation the system may have.
+   1. Clone the Kubespray repo:
+
+      ```bash
+      git clone -b tags/v2.21.0 https://github.com/kubernetes-sigs/kubespray.git
+      cd kubespray
+      ```
+
+   1. Create a Python virtual environment,  for this example we'll be creating the venv under /opt/
+
+      ```bash
+      python -m venv /opt/python-venvs/ansible-2.12/
+      ```
+
+   1. Activate the virtual environment:
+
+      ```bash
+      source  /opt/python-venvs/ansible-2.12/bin/activate
+      ```
+
+   1. Install the specific Ansible version along with its dependencies:
+
+      ```bash
+      python -m pip install -r requirements-2.12.txt
+      ```
+   
+   1. On the Jenkins UI:
+      1. Go to "Manage Jenkins > Global Tool Configuration"
+      1. Scroll down to Ansible, expand the "Ansible Installation" option.
+      1. Add a `Name` for the Anible installation we just did above, this is the name that will be used on the `ansible_installation` parameter.
+      1. Add to the path to the Ansible executable, in our case that would be  `/opt/python-venvs/ansible-2.12/bin/`
+
+1. You must copy the public ssh key (You can user the default one or create one specific for these installations) to the target nodes, it should be the key of the user that is running the Jenkins job, for example:
 
    ```bash
-   cat /var/lib/jenkins/.ssh/id_rsa.pub | ssh <node> "mkdir -p ~/.ssh && cat >> ~/.ssh/authorized_keys"
+   ssh-copy-id -i ~/.ssh/<pub key name>.pub <user>@${node}
+   or
+   cat /var/lib/<user>/.ssh/id_rsa.pub | ssh <node> "mkdir -p ~/.ssh && cat >> ~/.ssh/authorized_keys"
    ```
 
-1. The no_proxy paramter should at least include:
-   `127.0.0.1,localhost,10.233.0.1,169.254.25.10`
+   Or you can use this helper command to copy the key to multiple nodes:
+   ```bash
+   NODOS="<nodeIP> <nodeIP> <nodeIP>" && for node in ${NODOS} ; do ssh-copy-id -i ~/.ssh/<pub key name>.pub <user>@${node} -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ; done
+   ```
+
+1. The no_proxy parameter at bear minimum include:
+   `127.0.0.1,localhost,10.233.0.1,10.233.0.10,169.254.25.10`
 
 This Jenkins pipeline has 5 Stages
 
-1. Create the inventory file:
-   - Takes the passed hostname on the host parameters and fills a pre-built inventory file
-2. Running requirements:
-   - SElinux_disable
-   - disable_firewalld
-   - docker_uninstall
-   - k8s_uninstall
-   - uninstall_calico
-4. Setting KubeSpray Env:
-   - Clones the Kubespray project in the Jenking the ${env.WORKSPACE}/roles/tmp/
-   - Creates a venv on the ${env.WORKSPACE}/roles/tmp/kubespray/ directory and installs the kubespray requirements
-   - Populates the inventory/mycluster/group_vars/all/all.yml with the pass values from the Jenkins user input section
-   - Populates the inventory/mycluster/group_vars/k8s_cluster/k8s-cluster.yml with the pass values from the Jenkins user input section
-5. Running KubeSpray:
+1. Clones the Kubespray repo
+1. Running requirements:
+   - Set SElinux to permissive mode.
+1. Running KubeSpray:
    - This section runs the installation of K8s using KubeSpray, it could take from 7 to 30 mins, this will depend on the connection speed and the number of control plane and worker nodes.
 
 If metrics-server is enabled, once installed you can run the following command to get all the metrics-server options:

@@ -232,10 +232,10 @@ pipeline {
             steps {
                 withCredentials([file(credentialsId: "${params.ansible_vault_credential}", variable: 'VAULT_FILE')]) {
                     // Pass the vault file to a file where is accessible by the roles, this info remains encrypted.
-                    sh """
+                    sh '''
                     set -x
                     cat $VAULT_FILE > ${WORKSPACE}/roles/ansible_data_vault.yml
-                    """
+                    '''
                     ansiblePlaybook(
                         installation: "${params.ansible_installation}",
                         playbook: "${env.WORKSPACE}/kubespray/reset.yml",
@@ -264,10 +264,10 @@ pipeline {
             }
             steps {
                 withCredentials([file(credentialsId: "${params.ansible_vault_credential}", variable: 'VAULT_FILE')]) {
-                    sh """
+                    sh '''
                     set -x
                     cat $VAULT_FILE > ${WORKSPACE}/roles/ansible_data_vault.yml
-                    """
+                    '''
                     ansiblePlaybook(
                         installation: "${params.ansible_installation}",
                         playbook: "${env.WORKSPACE}/roles/Requirements/reboot_target_nodes.yaml",
@@ -292,10 +292,10 @@ pipeline {
             }
             steps {
                 withCredentials([file(credentialsId: "${params.ansible_vault_credential}", variable: 'VAULT_FILE')]) {
-                    sh """
+                    sh '''
                     set -x
                     cat $VAULT_FILE > ${WORKSPACE}/roles/ansible_data_vault.yml
-                    """
+                    '''
                     ansiblePlaybook(
                         installation: "${params.ansible_installation}",
                         playbook: "${env.WORKSPACE}/roles/Requirements/main.yaml",
@@ -327,10 +327,10 @@ pipeline {
                      withCredentials([file(credentialsId: "${params.ansible_vault_credential}", variable: 'VAULT_FILE')]) {
                         writeFile file: "${WORKSPACE}/external_lb_vars.yml", text: "${params.externalLB}"
                         writeFile file: "${WORKSPACE}/K8sAddons.yml", text: "${params.K8sAddons}"
-                        sh """
+                        sh '''
                         set -x
                         cat $VAULT_FILE > ${WORKSPACE}/roles/ansible_data_vault.yml
-                        """
+                        '''
                     }
                     retry(1) {
                         if (params.use_external_load_balancer) {
