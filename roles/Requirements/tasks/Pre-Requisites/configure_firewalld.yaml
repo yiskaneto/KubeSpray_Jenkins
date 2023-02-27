@@ -13,18 +13,18 @@
     zone: "{{ item.zone }}"
   with_items:
     # Source: https://kubernetes.io/docs/reference/networking/ports-and-protocols/
-    - {port: "8080-8081", proto: "tcp", state: "disabled", zone: "public" }
-    - {port: "2379-2380", proto: "tcp", state: "disabled", zone: "public" }
-    - {port: "30000-32767", proto: "tcp", state: "disabled", zone: "public" }
-    - {port: "6443", proto: "tcp", state: "disabled", zone: "public" }
-    - {port: "16443", proto: "tcp", state: "disabled", zone: "public" }
-    - {port: "8383", proto: "tcp", state: "disabled", zone: "public" }
-    - {port: "9254", proto: "tcp", state: "disabled", zone: "public" }
-    - {port: "9256", proto: "tcp", state: "disabled", zone: "public" }
-    - {port: "10250", proto: "tcp", state: "disabled", zone: "public" }
-    - {port: "10255", proto: "tcp", state: "disabled", zone: "public" }
-    - {port: "10257", proto: "tcp", state: "disabled", zone: "public" }
-    - {port: "10259", proto: "tcp", state: "disabled", zone: "public" }
+    - {port: "8080-8081", proto: "tcp", state: "enabled", zone: "public" }
+    - {port: "2379-2380", proto: "tcp", state: "enabled", zone: "public" }
+    - {port: "30000-32767", proto: "tcp", state: "enabled", zone: "public" }
+    - {port: "6443", proto: "tcp", state: "enabled", zone: "public" }
+    - {port: "16443", proto: "tcp", state: "enabled", zone: "public" }
+    - {port: "8383", proto: "tcp", state: "enabled", zone: "public" }
+    - {port: "9254", proto: "tcp", state: "enabled", zone: "public" }
+    - {port: "9256", proto: "tcp", state: "enabled", zone: "public" }
+    - {port: "10250", proto: "tcp", state: "enabled", zone: "public" }
+    - {port: "10255", proto: "tcp", state: "enabled", zone: "public" }
+    - {port: "10257", proto: "tcp", state: "enabled", zone: "public" }
+    - {port: "10259", proto: "tcp", state: "enabled", zone: "public" }
       
 - name: FirewallD services rules
   ansible.posix.firewalld:
