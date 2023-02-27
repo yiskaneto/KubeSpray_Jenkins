@@ -25,6 +25,8 @@
     - {port: "10255", proto: "tcp", state: "enabled", zone: "public" }
     - {port: "10257", proto: "tcp", state: "enabled", zone: "public" }
     - {port: "10259", proto: "tcp", state: "enabled", zone: "public" }
+    - {port: "53", proto: "tcp", state: "enabled", zone: "public" }
+    - {port: "4443", proto: "tcp", state: "enabled", zone: "public" }
       
 - name: FirewallD services rules
   ansible.posix.firewalld:
