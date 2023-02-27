@@ -1,6 +1,6 @@
 ---
-- import_tasks: Pre-Requisites/SElinux_disable.yaml
-- import_tasks: Pre-Requisites/clear_ip_route.yaml
+# - import_tasks: Pre-Requisites/SElinux_disable.yaml
+# - import_tasks: Pre-Requisites/clear_ip_route.yaml
 - import_tasks: Pre-Requisites/configure_firewalld.yaml
-- import_tasks: Pre-Requisites/killing_process_using_target_ports.yaml
-- import_tasks: Pre-Requisites/reload_daemon.yaml
+# - import_tasks: Pre-Requisites/killing_process_using_target_ports.yaml
+# - import_tasks: Pre-Requisites/reload_daemon.yaml
