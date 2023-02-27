@@ -148,7 +148,7 @@ pipeline {
         )
         string(
             name: 'no_proxy',
-            defaultValue: '127.0.0.1,localhost,10.233.0.1,10.233.0.10,169.254.25.10',
+            defaultValue: '127.0.0.1,localhost,10.233.0.1,10.233.0.3,10.233.0.10,169.254.25.10',
             description: 'Default is the minimum requiered, found on inventory/mycluster/group_vars/all/all.yml'
         )
         string(
