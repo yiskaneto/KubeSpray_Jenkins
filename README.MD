@@ -1,6 +1,6 @@
 # KubeSpray Jenkins Automation Pipeline
 
-Jenkins pipeline to automate the installation of Kubernetes on RHEL distribution systems by using the Kubespray project
+Jenkins pipeline to automate the installation of Kubernetes on RHEL distribution systems by using the [Kubespray](https://github.com/kubernetes-sigs/kubespray) project
 
 ## Requirements
 
@@ -8,7 +8,10 @@ Jenkins pipeline to automate the installation of Kubernetes on RHEL distribution
 1. [Jenkins Ansible Plugin](https://plugins.jenkins.io/ansible/)
 
 1. Make sure you have a sudo user on your target nodes and that is able to write to `/opt`, to ensure this you can run:
-      `sudo setfacl -R -m u:<sudo username>:rwx /opt/`
+
+   ```bash
+   sudo setfacl -R -m u:<sudo username>:rwx /opt/
+   ```
 
 1. On the Ansible control node(s) create a new Python virtual environment to download and install the specific version of Ansible and its dependencies for Kubespray to work, this will also be the ansible installation that the pipeline will use, this is helpful as it won't interfere with other ansible installation the system may have.
    1. Clone the Kubespray repo:
@@ -42,7 +45,7 @@ Jenkins pipeline to automate the installation of Kubernetes on RHEL distribution
       1. Add a `Name` for the Anible installation we just did above, this is the name that will be used on the `ansible_installation` parameter.
       1. Add to the path to the Ansible executable, in our case that would be  `/opt/python-venvs/ansible-2.12/bin/`
 
-1. You must copy the public ssh key (You can user the default one or create one specific for these installations) to the target nodes, it should be the key of the user that is running the Jenkins job, for example:
+1. You must copy the public ssh key (You can use the default one or create one specific for these installations) to the target nodes, it should be the key of the user that is running the Jenkins job, for example:
 
    ```bash
    ssh-copy-id -i ~/.ssh/<pub key name>.pub <user>@${node}
@@ -56,7 +59,7 @@ Jenkins pipeline to automate the installation of Kubernetes on RHEL distribution
    NODOS="<nodeIP> <nodeIP> <nodeIP>" && for node in ${NODOS} ; do ssh-copy-id -i ~/.ssh/<pub key name>.pub <user>@${node} -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ; done
    ```
 
-1. The no_proxy parameter at bear minimum include:
+1. The no_proxy parameter at bear minimum should include:
    `127.0.0.1,localhost,10.233.0.1,10.233.0.10,169.254.25.10`
 
 This Jenkins pipeline has 5 Stages
