@@ -180,7 +180,7 @@ pipeline {
         booleanParam(
             name: 'use_localhost_as_kubeapi_loadbalancer',
             defaultValue: true,
-            description: 'Set it to false if use_external_load_balancer is set to true. Found on inventory/mycluster/group_vars/all/all.yml'
+            description: '<h5>Set it to false <span style=\"color:red\">if use_external_load_balancer is set to true</span>. Found on inventory/mycluster/group_vars/all/all.yml</h5>'
         )
         booleanParam(
             name: 'use_external_load_balancer',
