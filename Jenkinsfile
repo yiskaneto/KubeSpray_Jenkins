@@ -178,19 +178,9 @@ pipeline {
             description: 'Found on inventory/mycluster/group_vars/k8s_cluster/k8s-cluster.yml'
 		)
         booleanParam(
-            name: 'loadbalancer_apiserver_localhost',
-            defaultValue: true,
-            description: 'Found on inventory/mycluster/group_vars/all/all.yml'
-        )
-        choice(
-            name: 'loadbalancer_apiserver_type',
-            choices: ['nginx','haproxy'],
-            description: 'Found on inventory/mycluster/group_vars/all/all.yml'
-		)
-        booleanParam(
             name: 'use_localhost_as_kubeapi_loadbalancer',
             defaultValue: true,
-            description: 'Found on inventory/mycluster/group_vars/all/all.yml'
+            description: 'Set it to false if use_external_load_balancer is set to true. Found on inventory/mycluster/group_vars/all/all.yml'
         )
         booleanParam(
             name: 'use_external_load_balancer',
@@ -359,7 +349,7 @@ pipeline {
                                         metrics_server_enabled: "${params.metrics_server_enabled}",
                                         ingress_nginx_enabled: "${params.ingress_nginx_enabled}",
                                         cert_manager_enabled: "${params.cert_manager_enabled}",
-                                        use_localhost_as_kubeapi_loadbalancer: "${params.use_localhost_as_kubeapi_loadbalancer}",
+                                        use_localhost_as_kubeapi_loadbalancer: false,
                                         nodelocaldns_ip: "${params.nodelocaldns_ip}"
                                     ]
                                 )
@@ -382,7 +372,7 @@ pipeline {
                                         kube_version: "${params.kube_version}",
                                         cluster_name: "${params.cluster_name}",
                                         kube_proxy_mode: "${params.kube_proxy_mode}",
-                                        use_localhost_as_kubeapi_loadbalancer: "${params.use_localhost_as_kubeapi_loadbalancer}",
+                                        use_localhost_as_kubeapi_loadbalancer: true,
                                         nodelocaldns_ip: "${params.nodelocaldns_ip}"
                                     ]
                                 )
