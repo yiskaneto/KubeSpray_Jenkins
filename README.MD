@@ -35,7 +35,7 @@ Jenkins pipeline to automate the installation of Kubernetes on RHEL distribution
       ```bash
       python -m pip install -r requirements-2.12.txt
       ```
-   
+
    1. On the Jenkins UI:
       1. Go to "Manage Jenkins > Global Tool Configuration"
       1. Scroll down to Ansible, expand the "Ansible Installation" option.
@@ -51,6 +51,7 @@ Jenkins pipeline to automate the installation of Kubernetes on RHEL distribution
    ```
 
    Or you can use this helper command to copy the key to multiple nodes:
+
    ```bash
    NODOS="<nodeIP> <nodeIP> <nodeIP>" && for node in ${NODOS} ; do ssh-copy-id -i ~/.ssh/<pub key name>.pub <user>@${node} -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ; done
    ```
@@ -73,7 +74,9 @@ docker run --rm k8s.gcr.io/metrics-server/metrics-server:<tag> --help
 ```
 
 ## Ansible Commands
+
 In general we're invoking the ansible plugin to run the equivalent of the commands below:
+
 - Base command, no external load balancer:
 
    ```bash
