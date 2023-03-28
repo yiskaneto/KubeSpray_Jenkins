@@ -180,7 +180,7 @@ pipeline {
         booleanParam(
             name: 'use_localhost_as_kubeapi_loadbalancer',
             defaultValue: true,
-            description: '<h5>Set it to false <span style=\"color:red\">if use_external_load_balancer is set to true</span>. Found on inventory/mycluster/group_vars/all/all.yml</h5>'
+            description: 'Found on inventory/mycluster/group_vars/all/all.yml'
         )
         booleanParam(
             name: 'use_external_load_balancer',
@@ -349,7 +349,8 @@ pipeline {
                                         metrics_server_enabled: "${params.metrics_server_enabled}",
                                         ingress_nginx_enabled: "${params.ingress_nginx_enabled}",
                                         cert_manager_enabled: "${params.cert_manager_enabled}",
-                                        use_localhost_as_kubeapi_loadbalancer: false,
+                                        loadbalancer_apiserver_localhost: false,
+                                        use_localhost_as_kubeapi_loadbalancer: "${params.use_localhost_as_kubeapi_loadbalancer}",
                                         nodelocaldns_ip: "${params.nodelocaldns_ip}"
                                     ]
                                 )
@@ -372,7 +373,8 @@ pipeline {
                                         kube_version: "${params.kube_version}",
                                         cluster_name: "${params.cluster_name}",
                                         kube_proxy_mode: "${params.kube_proxy_mode}",
-                                        use_localhost_as_kubeapi_loadbalancer: true,
+                                        loadbalancer_apiserver_localhost: true,
+                                        use_localhost_as_kubeapi_loadbalancer: "${params.use_localhost_as_kubeapi_loadbalancer}",
                                         nodelocaldns_ip: "${params.nodelocaldns_ip}"
                                     ]
                                 )
