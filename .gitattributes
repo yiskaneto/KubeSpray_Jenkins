@@ -1,0 +1,12 @@
+# Force all text files to LF by default
+text=lf
+
+# Explicitly ensure that all standared file types have the right type and EOL set.
+*.hcl text eol=lf
+*.txt text eol=lf
+*.json text eol=lf
+*.yaml text eol=lf
+*.py text eol=lf
+*.go text eol=lf
+*.md text eol=lf
+*.sh text eol=lf
