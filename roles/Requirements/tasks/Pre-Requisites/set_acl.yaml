@@ -1,0 +1,7 @@
+- name: "Grant user {{ ansible_user }} read and write access to /var/run/containerd/containerd.sock"
+  ansible.posix.acl:
+    path: /var/run/containerd/containerd.sock
+    entity: "{{ ansible_user }}"
+    etype: user
+    permissions: rw
+    state: present

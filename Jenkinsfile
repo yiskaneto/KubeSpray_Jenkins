@@ -237,7 +237,7 @@ pipeline {
                         vaultCredentialsId: "${params.decrypt_vault_key_credential}",
                         forks: 20,
                         colorized: true,
-                        extras: "-e '@${WORKSPACE}/roles/ansible_data_vault.yml' --ssh-extra-args='-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' --flush-cache -vv",
+                        extras: "--user ${params.installation_user} -e '@${WORKSPACE}/roles/ansible_data_vault.yml' --ssh-extra-args='-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' --flush-cache -vv",
                         extraVars: [
                             http_proxy: "${params.http_proxy}",
                             https_proxy: "${params.https_proxy}",
@@ -268,7 +268,7 @@ pipeline {
                         credentialsId: "${params.private_key_credential}",
                         vaultCredentialsId: "${params.decrypt_vault_key_credential}",
                         colorized: true,
-                        extras: "-e '@${WORKSPACE}/roles/ansible_data_vault.yml' --ssh-extra-args=' -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' --flush-cache -v",
+                        extras: "--user ${params.installation_user} -e '@${WORKSPACE}/roles/ansible_data_vault.yml' --ssh-extra-args=' -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' --flush-cache -v",
                         extraVars: [
                             jenkins_workspace: "${env.WORKSPACE}/"
                         ]
@@ -297,9 +297,10 @@ pipeline {
                         vaultCredentialsId: "${params.decrypt_vault_key_credential}",
                         forks: 20,
                         colorized: true,
-                        extras: "-e '@${WORKSPACE}/roles/ansible_data_vault.yml' --ssh-extra-args=' -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' --flush-cache -v",
+                        extras: "--user ${params.installation_user} -e '@${WORKSPACE}/roles/ansible_data_vault.yml' --ssh-extra-args=' -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' --flush-cache -v",
                         extraVars: [
                             jenkins_workspace: "${env.WORKSPACE}/",
+                            ansible_user: "${params.installation_user}",
                             http_proxy: "${params.http_proxy}",
                             https_proxy: "${params.https_proxy}",
                             no_proxy: "${params.no_proxy}",
@@ -335,7 +336,7 @@ pipeline {
                                     vaultCredentialsId: "${params.decrypt_vault_key_credential}",
                                     forks: 20,
                                     colorized: true,
-                                    extras: "-e '@${WORKSPACE}/external_lb_vars.yml' -e '@${WORKSPACE}/roles/ansible_data_vault.yml' -e '@${WORKSPACE}/K8sAddons.yml' --ssh-extra-args=' -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' --flush-cache -vv",
+                                    extras: "--user ${params.installation_user} -e '@${WORKSPACE}/external_lb_vars.yml' -e '@${WORKSPACE}/roles/ansible_data_vault.yml' -e '@${WORKSPACE}/K8sAddons.yml' --ssh-extra-args=' -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' --flush-cache -vv",
                                     extraVars: [
                                         http_proxy: "${params.http_proxy}",
                                         https_proxy: "${params.https_proxy}",
@@ -351,7 +352,8 @@ pipeline {
                                         cert_manager_enabled: "${params.cert_manager_enabled}",
                                         loadbalancer_apiserver_localhost: false,
                                         use_localhost_as_kubeapi_loadbalancer: "${params.use_localhost_as_kubeapi_loadbalancer}",
-                                        nodelocaldns_ip: "${params.nodelocaldns_ip}"
+                                        nodelocaldns_ip: "${params.nodelocaldns_ip}",
+                                        local_release_dir: "${params.local_release_dir}"
                                     ]
                                 )
                             } else {
@@ -365,7 +367,7 @@ pipeline {
                                     vaultCredentialsId: "${params.decrypt_vault_key_credential}",
                                     forks: 20,
                                     colorized: true,
-                                    extras: "-e '@${WORKSPACE}/roles/ansible_data_vault.yml' -e '@${WORKSPACE}/K8sAddons.yml' --ssh-extra-args=' -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' --flush-cache -vv",
+                                    extras: "--user ${params.installation_user} -e '@${WORKSPACE}/roles/ansible_data_vault.yml' -e '@${WORKSPACE}/K8sAddons.yml' --ssh-extra-args=' -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' --flush-cache -vv",
                                     extraVars: [
                                         http_proxy: "${params.http_proxy}",
                                         https_proxy: "${params.https_proxy}",
@@ -375,7 +377,8 @@ pipeline {
                                         kube_proxy_mode: "${params.kube_proxy_mode}",
                                         loadbalancer_apiserver_localhost: true,
                                         use_localhost_as_kubeapi_loadbalancer: "${params.use_localhost_as_kubeapi_loadbalancer}",
-                                        nodelocaldns_ip: "${params.nodelocaldns_ip}"
+                                        nodelocaldns_ip: "${params.nodelocaldns_ip}",
+                                        local_release_dir: "${params.local_release_dir}"
                                     ]
                                 )
                             }

@@ -59,21 +59,22 @@ Jenkins pipeline to automate the installation of Kubernetes on RHEL distribution
    NODOS="<nodeIP> <nodeIP> <nodeIP>" && for node in ${NODOS} ; do ssh-copy-id -i ~/.ssh/<pub key name>.pub <user>@${node} -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ; done
    ```
 
-1. The no_proxy parameter at bear minimum should include:
+1. (Optional) The no_proxy parameter at bear minimum should include:
    `127.0.0.1,localhost,10.233.0.1,10.233.0.10,169.254.25.10`
 
-This Jenkins pipeline has 5 Stages
+This Jenkins pipeline has 5 Stages, all of them optional.
 
-1. Clones the Kubespray repo
-1. Running requirements:
-   - Set SElinux to permissive mode.
-1. Running KubeSpray:
-   - This section runs the installation of K8s using KubeSpray, it could take from 7 to 30 mins, this will depend on the connection speed and the number of control plane and worker nodes.
+1. "Clonning KubeSpray project": clones repo on the Ansible plane node.
+1. "Reset K8s Cluster": recommended to run if a previous installation was performed.
+1. "Reboot Nodes": recommended after selecting the "Reset K8s Cluster" option.
+1. "Running OS requirements K8s": recommended to run for 1st time installations or after reseting the cluster.
+1. "Running KubeSpray":
+   - This stage runs the installation of K8s using KubeSpray.
 
 If metrics-server is enabled, once installed you can run the following command to get all the metrics-server options:
 
 ```bash
-docker run --rm k8s.gcr.io/metrics-server/metrics-server:<tag> --help
+[docker|podman|crictl] run --rm k8s.gcr.io/metrics-server/metrics-server:<tag> --help
 ```
 
 ## Ansible Commands
