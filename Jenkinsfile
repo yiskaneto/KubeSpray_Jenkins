@@ -118,6 +118,11 @@ pipeline {
             description: 'Set OS requirements'
         )
         booleanParam(
+            name: 'set_firewalld',
+            defaultValue: true,
+            description: 'if set to false firewalld will be stopped and disable'
+        )
+        booleanParam(
             name: 'install_kubespray',
             defaultValue: true,
             description: 'Set OS requirements'
@@ -223,6 +228,7 @@ pipeline {
             steps {
                 withCredentials([file(credentialsId: "${params.ansible_vault_credential}", variable: 'VAULT_FILE')]) {
                     // Pass the vault file to a file where is accessible by the roles, this info remains encrypted.
+                    // Using the "writeFile file" function helper won't work as we would only write the name of the file itsel instead of the contents of it.
                     sh '''
                     set -x
                     cat $VAULT_FILE > ${WORKSPACE}/roles/ansible_data_vault.yml
@@ -304,6 +310,7 @@ pipeline {
                             http_proxy: "${params.http_proxy}",
                             https_proxy: "${params.https_proxy}",
                             no_proxy: "${params.no_proxy}",
+                            set_firewalld: "${params.set_firewalld}"
                         ]
                     )
                 }
