@@ -5,3 +5,4 @@
     etype: user
     permissions: rw
     state: present
+  ignore_errors: True
