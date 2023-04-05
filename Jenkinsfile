@@ -60,7 +60,7 @@ def addons = '''---
 dashboard_enabled: false
 helm_enabled: false
 registry_enabled: false
-metrics_server_enabled: false
+metrics_server_enabled: true
 ingress_nginx_enabled: false
 cert_manager_enabled: false
 '''
