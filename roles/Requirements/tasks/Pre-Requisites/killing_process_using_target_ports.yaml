@@ -1,42 +1,27 @@
 ---
-- name: Killing process using target ports Run 1
+- name: Killing process using K8s ports
   shell: |
-    fuser -k 6443/tcp
-    fuser -k 8080/tcp
-    fuser -k 8081/tcp
-    fuser -k 8383/tcp
-    fuser -k 9254/tcp
-    fuser -k 9256/tcp
-    fuser -k 10250/tcp
-    fuser -k 10255/tcp
-    fuser -k 10257/tcp
-    fuser -k 10259/tcp
+    fuser -k "{{ item.port }}/{{ item.proto }}"
+  with_items:
+    # Source: https://kubernetes.io/docs/reference/networking/ports-and-protocols/
+    - {port: "8080", proto: "tcp" }
+    - {port: "8081", proto: "tcp" }
+    - {port: "2379", proto: "tcp" }
+    - {port: "2380", proto: "tcp" }
+    - {port: "30000-32767", proto: "tcp" }
+    - {port: "6443", proto: "tcp" }
+    - {port: "16443", proto: "tcp" }
+    - {port: "8383", proto: "tcp" }
+    - {port: "9254", proto: "tcp" }
+    - {port: "9256", proto: "tcp" }
+    - {port: "10250", proto: "tcp" }
+    - {port: "10255", proto: "tcp" }
+    - {port: "10257", proto: "tcp" }
+    - {port: "10259", proto: "tcp" }
   ignore_errors: True
 
-- name: Killing process using target ports Run 2
-  shell: |
-    fuser -k 6443/tcp
-    fuser -k 8080/tcp
-    fuser -k 8081/tcp
-    fuser -k 8383/tcp
-    fuser -k 9254/tcp
-    fuser -k 9256/tcp
-    fuser -k 10250/tcp
-    fuser -k 10255/tcp
-    fuser -k 10257/tcp
-    fuser -k 10259/tcp
-  ignore_errors: True
-
-- name: Killing process using target ports Run 3
-  shell: |
-    fuser -k 6443/tcp
-    fuser -k 8080/tcp
-    fuser -k 8081/tcp
-    fuser -k 8383/tcp
-    fuser -k 9254/tcp
-    fuser -k 9256/tcp
-    fuser -k 10250/tcp
-    fuser -k 10255/tcp
-    fuser -k 10257/tcp
-    fuser -k 10259/tcp
-  ignore_errors: True
+  # 54321 rc does not exist but we're using this to force 3 retries to avoid makinga a convoluted loop
+  register: result
+  until: result.rc == 54321
+  retries: 2
+  delay: 1

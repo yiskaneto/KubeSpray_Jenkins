@@ -1,0 +1,7 @@
+---
+- name: ip route flush cache
+  shell: |
+    ip route flush cache
+  async: 60
+  poll: 10
+  ignore_errors: True

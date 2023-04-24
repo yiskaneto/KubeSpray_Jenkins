@@ -1,0 +1,57 @@
+- name: Starting and enabling Firewalld
+  ansible.builtin.systemd:
+    name: firewalld
+    state: started
+    masked: no
+    enabled: true
+  when: set_firewalld | bool
+
+- name: FirewallD port rules
+  ansible.posix.firewalld:
+    permanent: yes
+    immediate: yes
+    port: "{{ item.port }}/{{ item.proto }}"
+    state: "{{ item.state }}"
+    zone: "{{ item.zone }}"
+  with_items:
+    # Source: https://kubernetes.io/docs/reference/networking/ports-and-protocols/
+    - {port: "8080-8081", proto: "tcp", state: "enabled", zone: "public" }
+    - {port: "2379-2380", proto: "tcp", state: "enabled", zone: "public" }
+    - {port: "30000-32767", proto: "tcp", state: "enabled", zone: "public" }
+    - {port: "6443", proto: "tcp", state: "enabled", zone: "public" }
+    - {port: "16443", proto: "tcp", state: "enabled", zone: "public" }
+    - {port: "8383", proto: "tcp", state: "enabled", zone: "public" }
+    - {port: "9254", proto: "tcp", state: "enabled", zone: "public" }
+    - {port: "9256", proto: "tcp", state: "enabled", zone: "public" }
+    - {port: "10250", proto: "tcp", state: "enabled", zone: "public" }
+    - {port: "10255", proto: "tcp", state: "enabled", zone: "public" }
+    - {port: "10257", proto: "tcp", state: "enabled", zone: "public" }
+    - {port: "10259", proto: "tcp", state: "enabled", zone: "public" }
+    - {port: "53", proto: "tcp", state: "enabled", zone: "public" }
+    - {port: "4443", proto: "tcp", state: "enabled", zone: "public" }
+  when: set_firewalld | bool
+      
+- name: FirewallD services rules
+  ansible.posix.firewalld:
+    permanent: yes
+    immediate: yes
+    service: "{{ item }}"
+    state: enabled
+  with_items:
+    - http
+    - https
+  when: set_firewalld | bool
+
+- name: Restart FirewallD
+  ansible.builtin.service:
+    name: firewalld
+    state: restarted
+  when: set_firewalld | bool
+
+- name: Stopping and disabling Firewalld
+  ansible.builtin.systemd:
+    name: firewalld
+    state: stopped
+    masked: true
+    enabled: false
+  when: not set_firewalld
